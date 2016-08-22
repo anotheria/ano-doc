@@ -24,7 +24,7 @@ public class ShowPageJspGenerator extends AbstractJSPGenerator {
 	private MetaSection currentSection;
 	
 	public GeneratedJSPFile generate(MetaModuleSection section, MetaView view){
-		
+
 		currentSection = section;
 		
 		GeneratedJSPFile jsp = new GeneratedJSPFile();
@@ -240,7 +240,7 @@ public class ShowPageJspGenerator extends AbstractJSPGenerator {
 				            MetaViewElement element = elements.get(i);
 
 							if (element instanceof MetaFunctionElement && opened == false){
-								appendString("<td class=\"no_wrap\">"); 
+								appendString("<td class=\"no_wrap\">");
 								opened = true;
 							}
 
@@ -406,7 +406,7 @@ public class ShowPageJspGenerator extends AbstractJSPGenerator {
 			return getFunction(entryName, (MetaFunctionElement)element,doc,section);
 		if (element instanceof MetaCustomFunctionElement)
 			return getCustomFunction(entryName, (MetaCustomFunctionElement)element);
-		
+
 		return "";
 	}
 	
@@ -473,13 +473,16 @@ public class ShowPageJspGenerator extends AbstractJSPGenerator {
         if (element.getName().equals("unlock") && StorageType.CMS.equals(doc.getParentModule().getStorageType()))
             return getUnLockFunction(entryName, element);
 
+		if (element.getName().equals("transfer")) {
+			return getTransferFunction(entryName, element);
+		}
+
         if (element.getName().equals("showUsages")){
             if (isShowUsagesElementAllowed(section)){
                 return getShowUsagesFunction();
             }
             return "";
         }
-
 
         return "";
 		//return "<td><ano:write name="+quote(entryName)+" property=\""+element.getName()+"\"/></td>";
@@ -496,6 +499,18 @@ public class ShowPageJspGenerator extends AbstractJSPGenerator {
         return "<a class=\"display_all_usages\" href=\"" + CMSMappingsConfiguratorGenerator.ACTION_SHOW_USAGES + "\"><img src=\"/cms_static/img/usage.png\" alt=\"show usage\" title=\"show usage\"></a>" ;
     }
 
+
+	/**
+	 * Transfer to prod link for List show!
+	 */
+	private String getTransferFunction(String entryName, MetaFunctionElement element){
+		String path = CMSMappingsConfiguratorGenerator.getPath(((MetaModuleSection)currentSection).getDocument(), CMSMappingsConfiguratorGenerator.ACTION_TRANSFER);
+		path += "?pId=<ano:write name="+quote(entryName)+" property=\"plainId\"/>";
+
+		return "<a href="+quote("<ano:tslink>"+path+"</ano:tslink>")+" style=\"position: relative; top:2px;\">" +
+				"<img src=\"/cms_static/img/transfer.png\" alt=\"transfer document to prod\" title=\"transfer document to prod\">" +
+				"</a>" ;
+	}
 
 	/**
      * Lock link for List show!

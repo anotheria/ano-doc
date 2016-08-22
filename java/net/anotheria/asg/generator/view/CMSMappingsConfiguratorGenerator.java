@@ -64,6 +64,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		PREVIEW("Preview", "Show", OperationType.MULTIPLE_DIALOG),
 		LOCK("Lock", "EditBoxDialog", OperationType.MULTIPLE_DIALOG),
 		UNLOCK("UnLock", "EditBoxDialog", OperationType.MULTIPLE_DIALOG),
+		TRANSFER("Transfer", "Show", OperationType.SINGLE),
 		COPYLANG("CopyLang", "EditBoxDialog", OperationType.MULTIPLE_DIALOG),
 		SWITCHMULTILANG("SwitchMultilang", "EditBoxDialog", OperationType.MULTIPLE_DIALOG),
 		VERSIONINFO("Versioninfo", "EditBoxDialog", OperationType.MULTIPLE_DIALOG),
@@ -446,6 +447,10 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	 */
     public static final String ACTION_UNLOCK = "unLock";
     public static final String ACTION_CLOSE = "close";
+	/**
+	 * Transfers current document to prod.
+	 */
+	public static final String ACTION_TRANSFER = "transfer";
 	
 	public static final String getPath(MetaDocument doc, String action){
 		return doc.getParentModule().getName().toLowerCase()+StringUtils.capitalize(doc.getName())+StringUtils.capitalize(action);
