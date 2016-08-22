@@ -19,6 +19,10 @@ public class GeneratedClass extends GeneratedArtefact{
 	 * Lists of implemented interfaces.
 	 */
 	private List<String> interfaces;
+	/**
+	 * Lists of annotations.
+	 */
+	private List<String> annotations;
 	
 	/**
 	 * The body of the class.
@@ -84,6 +88,7 @@ public class GeneratedClass extends GeneratedArtefact{
 		
 		imports = new ArrayList<String>();
 		interfaces = new ArrayList<String>();
+		annotations = new ArrayList<String>();
 	}
 	
 	public String createClassFileContent(){
@@ -113,7 +118,11 @@ public class GeneratedClass extends GeneratedArtefact{
 			ret.append(" */").append(CRLF);
 		}
 
-		
+		for (String annotation : annotations) {
+			ret.append(annotation);
+		}
+		ret.append(CRLF);
+
 		String nameDeclaration = "public "+(isAbstractClass()?"abstract ":"")+type.toJava()+" "+getName();
 		
 		if(!StringUtils.isEmpty(getGeneric()))
@@ -164,7 +173,12 @@ public class GeneratedClass extends GeneratedArtefact{
 		if (!imports.contains(anImport))
 			imports.add(anImport);
 	}
-	
+
+	public void addAnnotation(String annotation){
+		if (!annotations.contains(annotation))
+			annotations.add(annotation);
+	}
+
 	/**
 	 * @return list of imports
 	 */
@@ -202,6 +216,13 @@ public class GeneratedClass extends GeneratedArtefact{
 		body = aBody;
 	}
 
+	public List<String> getAnnotations() {
+		return annotations;
+	}
+
+	public void setAnnotations(List<String> annotations) {
+		this.annotations = annotations;
+	}
 
 	@Override
 	public String createFileContent() {
