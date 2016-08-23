@@ -1972,6 +1972,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("org.apache.http.*");
 		clazz.addImport("org.apache.commons.codec.binary.Base64");
 		clazz.addImport("net.anotheria.anosite.config.DocumentTransferConfig");
+		clazz.addImport("org.configureme.ConfigurationManager");
+		clazz.addImport("org.json.JSONException");
+		clazz.addImport("net.anotheria.maf.json.JSONResponse");
 		clazz.setName(getTransferActionName(section));
 		clazz.setParent(getBaseActionName(section));
 
@@ -1996,6 +1999,17 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendString(getExecuteDeclaration(methodName));
 		increaseIdent();
 		emptyline();
+
+		appendStatement("JSONResponse response = new JSONResponse()");
+
+		append("		if (ConfigurationManager.INSTANCE.getDefaultEnvironment().expandedStringForm().equals(\"prod\")) {");
+		increaseIdent();
+		emptyline();
+		appendStatement("response.addError(\"UNSUPPORTED_ENVIRONMENT\", \"Environment is prod\")");
+		appendStatement("writeTextToResponse(res, response)");
+		appendStatement("return null");
+		closeBlockNEW();
+
 		openTry();
 		appendStatement("String id = getStringParameter(req, PARAM_ID)");
 		appendStatement("HttpClient client = HttpClients.createDefault()");
@@ -2011,7 +2025,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		emptyline();
 		appendStatement("post.setEntity(new StringEntity(Base64.encodeBase64String(baos.toByteArray())))");
 		appendStatement("post.setHeader(\"Content-type\", \"text/plain\")");
-		appendStatement("HttpResponse response = client.execute(post)");
+		appendStatement("HttpResponse httpResponse = client.execute(post)");
 		appendStatement("res.sendRedirect(" + getShowActionRedirect(doc) + ")");
 		appendCatch("MalformedURLException");
 		appendStatement("e.printStackTrace()");
@@ -2019,6 +2033,14 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlockNEW();
 		appendStatement("return null");
 		closeBlockNEW();
+
+		append("	private void writeTextToResponse(final HttpServletResponse res, final JSONResponse jsonResponse) throws IOException, JSONException {\n" +
+				"        res.setCharacterEncoding(\"UTF-8\");\n" +
+				"        res.setContentType(\"application/json\");\n" +
+				"        PrintWriter writer = res.getWriter();\n" +
+				"        writer.write(jsonResponse.toString());\n" +
+				"        writer.flush();\n" +
+				"    }");
 	}
 
 	/**

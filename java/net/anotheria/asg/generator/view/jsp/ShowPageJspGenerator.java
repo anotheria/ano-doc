@@ -505,14 +505,20 @@ public class ShowPageJspGenerator extends AbstractJSPGenerator {
 	 */
 	private String getTransferFunction(String entryName, MetaFunctionElement element){
 		String path = CMSMappingsConfiguratorGenerator.getPath(((MetaModuleSection)currentSection).getDocument(), CMSMappingsConfiguratorGenerator.ACTION_TRANSFER);
-		path += "?pId=<ano:write name="+quote(entryName)+" property=\"plainId\"/>";
+	/*	path += "?pId=<ano:write name="+quote(entryName)+" property=\"plainId\"/>";*/
 
-		return "<a href="+quote("<ano:tslink>"+path+"</ano:tslink>")+" style=\"position: relative; top:2px;\">" +
+		return "<a href=\"#\" style=\"position: relative; top:2px;\" onclick=\"" +
+				"$.post('"+path+"', {pId:<ano:write name="+quote(entryName)+" property=\"plainId\"/>}, function(response) {\n" +
+				"\n" +
+				"\t\t\tif (response.errors != undefined && response.errors.length != 0) {\n" +
+				"\t\t\t\tnotification('Current environment does not support this operation');\n" +
+				"\t\t\t} else {location.reload(true);}\n" +
+				"\t\t});" + "\">" +
 				"<img src=\"/cms_static/img/transfer.png\" alt=\"transfer document to prod\" title=\"transfer document to prod\">" +
 				"</a>" ;
 	}
 
-	/**
+	/*
      * Lock link for List show!
      */
     private String getUnLockFunction(String entryName, MetaFunctionElement element) {
