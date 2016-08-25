@@ -1929,7 +1929,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		openTry();
 		appendStatement("ObjectInputStream ois = new ObjectInputStream(bis)");
 		appendStatement(doc.getName().toLowerCase() + " = (" + doc.getName() + ") ois.readObject()");
-		appendStatement(moduleName.toLowerCase() + "Service.create" + doc.getName() + "(" + doc.getName().toLowerCase() + ")");
+		appendStatement(moduleName.toLowerCase() + "Service.import" + doc.getName() + "(" + doc.getName().toLowerCase() + ")");
 		appendCatch(moduleName + "ServiceException");
 		appendStatement("return Response.status(500).build()");
 		appendCatch("IOException");
