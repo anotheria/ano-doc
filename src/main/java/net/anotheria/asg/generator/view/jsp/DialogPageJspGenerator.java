@@ -900,16 +900,19 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 			return getUpdateAndCloseFunction(doc, element);
 		}
 
+		/*
 		if (element.getName().equals("lock") && StorageType.CMS.equals(doc.getParentModule().getStorageType())) {
 			//For now we dont draw Lock and Unlock functions here
 			//return getLockFunctionLink(doc, element);
 		}
+		*/
 
+		/*
 		if (element.getName().equals("unlock") && StorageType.CMS.equals(doc.getParentModule().getStorageType())) {
 			//For now we dont draw Lock and Unlock functions here
 			//return getUnLockFunctionLink(doc, element);
 		}
-
+		*/
 
 		return "";
 	}
