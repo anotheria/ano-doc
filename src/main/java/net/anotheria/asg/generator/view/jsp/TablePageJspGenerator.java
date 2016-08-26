@@ -13,12 +13,22 @@ import net.anotheria.util.StringUtils;
 
 /**
  * Generates the jsps for the edit view.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class TablePageJspGenerator extends AbstractJSPGenerator {
 	
 	
 	
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param table a {@link net.anotheria.asg.generator.meta.MetaTableProperty} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedJSPFile} object.
+	 */
 	public GeneratedJSPFile generate(MetaModuleSection section, MetaDocument doc, MetaTableProperty table){
 		
 		GeneratedJSPFile jsp = new GeneratedJSPFile();

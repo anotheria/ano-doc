@@ -15,8 +15,15 @@ import net.anotheria.asg.generator.meta.MetaModule;
 import net.anotheria.asg.generator.model.AbstractServiceGenerator;
 import net.anotheria.asg.generator.model.DataFacadeGenerator;
 
+/**
+ * <p>CMSBasedServiceGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class CMSBasedServiceGenerator extends AbstractServiceGenerator implements IGenerator{
 
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable gmodule){
 
 		MetaModule mod = (MetaModule)gmodule;
@@ -684,6 +691,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	    return getModuleGetterMethod(module)+"()";
 	}
 
+	/** {@inheritDoc} */
 	@Override protected String getMoskitoSubsystem(){
 		return super.getMoskitoSubsystem()+"-cms";
 	}

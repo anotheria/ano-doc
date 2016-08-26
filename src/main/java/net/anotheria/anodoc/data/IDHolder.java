@@ -3,7 +3,9 @@ package net.anotheria.anodoc.data;
 
 /**
  * Utility class to for unique document ids.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class IDHolder extends Document{
 	/**
@@ -20,13 +22,15 @@ public class IDHolder extends Document{
 	public static final String TYPE_IDENTIFIER = "type.id.holder"; 
 	/**
 	 * Creates a new idholder object with given id.
-	 * @param id
+	 *
+	 * @param id a {@link java.lang.String} object.
 	 */
 	public IDHolder(String id){
 		super(id);
 		setTypeIdentifier(TYPE_IDENTIFIER);
 	}
 	/**
+	 * <p>getNextIdString.</p>
 	 *
 	 * @return next id as string. The id is unique
 	 */
@@ -38,7 +42,8 @@ public class IDHolder extends Document{
 	}
 	/**
 	 * Returns the next id. Increased and saves the internal value.
-	 * @return
+	 *
+	 * @return a int.
 	 */
 	public int getNextIdInt(){
 		int id = getInt(ATT_LAST_ID);
@@ -49,18 +54,29 @@ public class IDHolder extends Document{
 	}
 	/**
 	 * Returns the next id without increasing it.
-	 * @return
+	 *
+	 * @return a int.
 	 */
 	public int getNextIdToGive(){
 		return getInt(ATT_LAST_ID)+1;
 	}
 	
+	/**
+	 * <p>adjustTill.</p>
+	 *
+	 * @param value a int.
+	 */
 	public void adjustTill(int value){
 		int id = getInt(ATT_LAST_ID);
 		if (id<value)
 			setInt(ATT_LAST_ID, value);
 	}
  
+	/**
+	 * <p>adjustTill.</p>
+	 *
+	 * @param value a {@link java.lang.String} object.
+	 */
 	public void adjustTill(String value){
 		adjustTill(Integer.parseInt(value));
 	}

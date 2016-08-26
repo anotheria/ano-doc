@@ -13,23 +13,42 @@ import net.anotheria.anodoc.query2.DocumentQuery;
 import net.anotheria.anodoc.query2.QueryResultEntry;
 import net.anotheria.asg.data.DataObject;
 
+/**
+ * <p>SimpleContainsStringQuery class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class SimpleContainsStringQuery implements DocumentQuery{
 	
+	/** Constant <code>OFFSET=40</code> */
 	public static final int OFFSET = 40;
 
 	private String criteria;
 	private Set<String> propertiesToSearch = Collections.emptySet();
 	
+	/**
+	 * <p>Constructor for SimpleContainsStringQuery.</p>
+	 *
+	 * @param aCriteria a {@link java.lang.String} object.
+	 */
 	public SimpleContainsStringQuery(String aCriteria){
 		this(aCriteria, null);
 	}
 	
+	/**
+	 * <p>Constructor for SimpleContainsStringQuery.</p>
+	 *
+	 * @param aCriteria a {@link java.lang.String} object.
+	 * @param aPropertiesToSearch a {@link java.util.Collection} object.
+	 */
 	public SimpleContainsStringQuery(String aCriteria, Collection<String> aPropertiesToSearch){
 		criteria = aCriteria.toLowerCase();
 		Set<String> emptyProperties = Collections.emptySet();
 		propertiesToSearch = aPropertiesToSearch != null? new HashSet<String>(aPropertiesToSearch): emptyProperties;
 	}
   
+	/** {@inheritDoc} */
 	public List<QueryResultEntry> match(DataObject obj) {
 		
 		List<QueryResultEntry> ret = new ArrayList<QueryResultEntry>();
@@ -65,6 +84,11 @@ public class SimpleContainsStringQuery implements DocumentQuery{
 		return ret;
 	}
 	
+	/**
+	 * <p>toString.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String toString(){
 		return criteria;
 	}

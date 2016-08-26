@@ -4,6 +4,9 @@ import org.configureme.ConfigurationManager;
 
 /**
  * The factory for the RMIConfig.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class RMIConfigFactory {
 	
@@ -19,7 +22,8 @@ public class RMIConfigFactory {
 	
 	/**
 	 * Returns the RMIConfig.
-	 * @return
+	 *
+	 * @return a {@link net.anotheria.asg.util.rmi.RMIConfig} object.
 	 */
 	public static final RMIConfig getRMIConfig(){
 		return instance;

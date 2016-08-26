@@ -8,7 +8,9 @@ import java.util.List;
 
 /**
  * A MetaSection which is tied to a module and a document.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class MetaModuleSection extends MetaSection{
 	/**
@@ -38,7 +40,8 @@ public class MetaModuleSection extends MetaSection{
 	
 	/**
 	 * Creates a new MetaModuleSection with the given title.
-	 * @param title
+	 *
+	 * @param title a {@link java.lang.String} object.
 	 */
 	public MetaModuleSection(String title){
 		super(title);
@@ -58,6 +61,8 @@ public class MetaModuleSection extends MetaSection{
 	}
 	
 	/**
+	 * <p>Getter for the field <code>module</code>.</p>
+	 *
 	 * @return target module
 	 */
 	public MetaModule getModule() {
@@ -66,28 +71,36 @@ public class MetaModuleSection extends MetaSection{
 
 	/**
 	 * Sets target module.
+	 *
 	 * @param module module to set
 	 */
 	public void setModule(MetaModule module) {
 		this.module = module;
 	}
 
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return super.toString()+" "+module+" elements: "+elements+" D: "+dialogs;
 	}
     /**
+     * <p>Getter for the field <code>document</code>.</p>
+     *
      * @return Returns the document.
      */
     public MetaDocument getDocument() {
         return document;
     }
     /**
+     * <p>Setter for the field <code>document</code>.</p>
+     *
      * @param document The document to set.
      */
     public void setDocument(MetaDocument document) {
         this.document = document;
     }
 	/**
+	 * <p>Getter for the field <code>elements</code>.</p>
+	 *
 	 * @return elements of the view
 	 */
 	public List<MetaViewElement> getElements() {
@@ -96,6 +109,7 @@ public class MetaModuleSection extends MetaSection{
 
 	/**
 	 * Sets elements to view.
+	 *
 	 * @param list elements
 	 */
 	public void setElements(List<MetaViewElement> list) {
@@ -103,6 +117,7 @@ public class MetaModuleSection extends MetaSection{
 	}
 	/**
 	 * Adds element to view.
+	 *
 	 * @param element element to add
 	 */
 	public void addElement(MetaViewElement element){
@@ -110,6 +125,8 @@ public class MetaModuleSection extends MetaSection{
 	}
 
 	/**
+	 * <p>Getter for the field <code>dialogs</code>.</p>
+	 *
 	 * @return dialogs list
 	 */
 	public List<MetaDialog> getDialogs() {
@@ -118,6 +135,7 @@ public class MetaModuleSection extends MetaSection{
 
 	/**
 	 * Sets dialogs.
+	 *
 	 * @param list dialogs to set
 	 */
 	public void setDialogs(List<MetaDialog> list) {
@@ -125,6 +143,8 @@ public class MetaModuleSection extends MetaSection{
 	}
 
 	/**
+	 * <p>Getter for the field <code>defaultSortable</code>.</p>
+	 *
 	 * @return default sortable element
 	 */
 	public MetaViewElement getDefaultSortable() {
@@ -133,12 +153,18 @@ public class MetaModuleSection extends MetaSection{
 
 	/**
 	 * Sets default sortable element.
+	 *
 	 * @param element element to set
 	 */
 	public void setDefaultSortable(MetaViewElement element) {
 		defaultSortable = element;
 	}
 
+	/**
+	 * <p>containsComparable.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean containsComparable(){
 		for (MetaViewElement element : elements){
 			if (element.isComparable())
@@ -149,6 +175,7 @@ public class MetaModuleSection extends MetaSection{
 
 	/**
 	 * Adds filter in the view part of this section.
+	 *
 	 * @param aFilter filter to add
 	 */
 	public void addMetaFilter(MetaFilter aFilter){
@@ -156,6 +183,8 @@ public class MetaModuleSection extends MetaSection{
 	}
 
 	/**
+	 * <p>Getter for the field <code>filters</code>.</p>
+	 *
 	 * @return filters in the view part of this section.
 	 */
 	public List<MetaFilter> getFilters() {
@@ -164,12 +193,18 @@ public class MetaModuleSection extends MetaSection{
 
 	/**
 	 * Sets filters in the view part of this section.
+	 *
 	 * @param filters filter to set
 	 */
 	public void setFilters(List<MetaFilter> filters) {
 		this.filters = filters;
 	}
 	
+	/**
+	 * <p>isValidatedOnSave.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isValidatedOnSave() {
 		if (dialogs != null && dialogs.size() > 0){
 			List<MetaViewElement> dialogElements = dialogs.get(0).getElements(); 
@@ -184,6 +219,7 @@ public class MetaModuleSection extends MetaSection{
 		return false;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean equals(Object o) {
 		return super.equals(o);

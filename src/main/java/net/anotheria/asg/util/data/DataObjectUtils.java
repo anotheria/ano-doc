@@ -10,9 +10,9 @@ import net.anotheria.util.ArrayUtils;
 
 /**
  * Utilities for handling and manipulating single or multiple objects of any subclass of DataObject.
- * 
- * @author denis
  *
+ * @author denis
+ * @version $Id: $Id
  */
 public class DataObjectUtils {
 
@@ -21,8 +21,7 @@ public class DataObjectUtils {
 
 	/**
 	 * Creates for the List of dataObjects same ordered List of dataObjects' IDs except the case when null id was happened.
-	 * 
-	 * @param <T> - type of dataObjects that extends DataObject
+	 *
 	 * @param dataObjects - objects for which IDs List is created
 	 * @return List of ID's
 	 */
@@ -35,8 +34,7 @@ public class DataObjectUtils {
 	
 	/**
 	 * Returns for the dataObjects the List that is filled with specified property values of each dataObject.
-	 * 
-	 * @param <T> - type of dataObjects that extends DataObject 
+	 *
 	 * @param <P> - type of dataObject property
 	 * @param propertyName - name of the property to get from dataObjects
 	 * @param propertyClass - class of the property
@@ -52,8 +50,7 @@ public class DataObjectUtils {
 	
 	/**
 	 * Creates Map of dataObjects by their IDs.
-	 * 
-	 * @param <T> - type of dataObjects that extends DataObject
+	 *
 	 * @param dataObjects - dataObjects to create map.
 	 * @return Map of pairs ID -> dataObject
 	 */
@@ -67,15 +64,13 @@ public class DataObjectUtils {
 	/**
 	 * Creates Map of dataObjects by specified property. Property value must be unique (key property) for each dataObject.
 	 * In other case only one dataObject with not unique property will be added to the map.
-	 * 
-	 * @param <T> - type of dataObjects that extends DataObject 
+	 *
 	 * @param <P> - type of the dataObject property
 	 * @param propertyName - name of the property by which Map is created
 	 * @param propertyClass - class of the property
 	 * @param dataObjects - dataObjects to create map.
 	 * @return Map of pairs Property Value -> dataObject
 	 */
-	
 	public static <T extends DataObject, P> Map<P,T> createMapByKeyProperty(String propertyName, Class<P> propertyClass, List<T> dataObjects){
 		Map<P,T> ret = new HashMap<P, T>();
 		for(T d: dataObjects)
@@ -85,15 +80,13 @@ public class DataObjectUtils {
 	
 	/**
 	 * Creates Map of groups (arrays) of dataObjects by specified property. DataObjects with equal property values are put to the same group.
-	 * 
-	 * @param <T> - type of dataObjects that extends DataObject 
+	 *
 	 * @param <P> - type of the dataObject property
 	 * @param propertyName - name of the property by which Map is created
 	 * @param propertyClass - class of the property
 	 * @param dataObjects - dataObjects to create map.
 	 * @return Map of pairs Property Value -> dataObjects group
 	 */
-	
 	@SuppressWarnings("unchecked")
 	public static <T extends DataObject, P> Map<P,T[]> createMapByProperty(String propertyName, Class<P> propertyClass, List<T> dataObjects){
 		Map<P,T[]> ret = new HashMap<P, T[]>();

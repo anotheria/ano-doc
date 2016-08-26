@@ -16,7 +16,9 @@ import net.anotheria.asg.generator.types.meta.EnumerationType;
 
 /**
  * TODO please remind another to comment this class.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class EnumerationGenerator extends AbstractGenerator implements IGenerator{
 	/**
@@ -27,6 +29,7 @@ public class EnumerationGenerator extends AbstractGenerator implements IGenerato
 	/* (non-Javadoc)
 	 * @see net.anotheria.anodoc.generator.IGenerator#generate(net.anotheria.anodoc.generator.IGenerateable, net.anotheria.anodoc.generator.Context)
 	 */
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable g) {
 		EnumerationType type = (EnumerationType)g;
 		List<FileEntry> ret = new ArrayList<FileEntry>();
@@ -36,22 +39,51 @@ public class EnumerationGenerator extends AbstractGenerator implements IGenerato
 		return ret;
 	}
 	
+	/**
+	 * <p>getDefinitionClassName.</p>
+	 *
+	 * @param type a {@link net.anotheria.asg.generator.types.meta.EnumerationType} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDefinitionClassName(EnumerationType type){
 		return "I"+type.getName()+"Definition";
 	}
 	
+	/**
+	 * <p>getUtilsClassName.</p>
+	 *
+	 * @param type a {@link net.anotheria.asg.generator.types.meta.EnumerationType} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getUtilsClassName(EnumerationType type){
 		return type.getName()+"Utils";
 	}
 
+	/**
+	 * <p>getUtilsImport.</p>
+	 *
+	 * @param type a {@link net.anotheria.asg.generator.types.meta.EnumerationType} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getUtilsImport(EnumerationType type){
 		return getPackageName(GeneratorDataRegistry.getInstance().getContext())+"."+getUtilsClassName(type);
 	}
 
+	/**
+	 * <p>getPackageName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public final String getPackageName(){
 		return getPackageName(GeneratorDataRegistry.getInstance().getContext());
 	}
 	
+	/**
+	 * <p>getPackageName.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackageName(Context context){
 		return context.getPackageName(MetaModule.SHARED)+".data";
 	}

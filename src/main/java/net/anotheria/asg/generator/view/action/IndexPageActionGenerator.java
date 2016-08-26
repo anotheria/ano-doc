@@ -14,12 +14,19 @@ import net.anotheria.util.Date;
 
 /**
  * Generator class for the index page action in cms.
- * 
+ *
  * @author abolbat
+ * @version $Id: $Id
  */
 public class IndexPageActionGenerator extends AbstractGenerator {
 
 	
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param views a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<FileEntry> generate(List<MetaView> views) {
 		List<FileEntry> files = new ArrayList<FileEntry>();
 		files.add(new FileEntry(generateBaseAction(views)));
@@ -27,30 +34,66 @@ public class IndexPageActionGenerator extends AbstractGenerator {
 		return files;
 	}
 
+	/**
+	 * <p>getIndexPagePackageName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getIndexPagePackageName() {
 		return GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED) + ".action";
 	}
 	
+	/**
+	 * <p>getDocumentChangeFBPackageName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDocumentChangeFBPackageName() {
 		return GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED) + ".bean";
 	}
 	
+	/**
+	 * <p>getIndexPageActionName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getIndexPageActionName() {
 		return "WelcomePageMafAction";
 	}
 	
+	/**
+	 * <p>getDocumentChangeFBName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDocumentChangeFBName() {
 		return "DocumentChangeFB";
 	}
 	
+	/**
+	 * <p>getIndexPageFullName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getIndexPageFullName() {
 		return getIndexPagePackageName() + "." + getIndexPageActionName();
 	}
 	
+	/**
+	 * <p>getDocumentChangeFBFullName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDocumentChangeFBFullName() {
 		return getDocumentChangeFBPackageName() + "." + getDocumentChangeFBName();
 	}
 
+	/**
+	 * <p>generateBaseAction.</p>
+	 *
+	 * @param views a {@link java.util.List} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedClass} object.
+	 */
 	public GeneratedClass generateBaseAction(List<MetaView> views) {
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
@@ -142,6 +185,12 @@ public class IndexPageActionGenerator extends AbstractGenerator {
 		return clazz;
 	}
 	
+	/**
+	 * <p>generateDocumentChangeFBviews.</p>
+	 *
+	 * @param views a {@link java.util.List} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedClass} object.
+	 */
 	public GeneratedClass generateDocumentChangeFBviews(List<MetaView> views) {
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);

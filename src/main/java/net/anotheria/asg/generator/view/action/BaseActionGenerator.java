@@ -24,13 +24,16 @@ import java.util.List;
 
 /**
  * Generator class for the base action for a generator.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class BaseActionGenerator extends AbstractActionGenerator {
 
 	/**
 	 * Generates all artefacts for this action.
-	 * @param views
+	 *
+	 * @param views a {@link java.util.List} object.
 	 * @return generated artifacts
 	 */
 	public FileEntry generate(List<MetaView> views) {
@@ -39,7 +42,8 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 	
 	/**
 	 * Generates the base action.
-	 * @param views
+	 *
+	 * @param views a {@link java.util.List} object.
 	 * @return generated base action
 	 */
 	public GeneratedClass generateBaseAction(List<MetaView> views){

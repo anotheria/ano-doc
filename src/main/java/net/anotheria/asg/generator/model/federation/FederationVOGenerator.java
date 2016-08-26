@@ -19,7 +19,9 @@ import net.anotheria.util.StringUtils;
 
 /**
  * This generator generates VO objects for a Module Federation.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class FederationVOGenerator extends AbstractDataObjectGenerator
 	implements IGenerator{
@@ -33,6 +35,7 @@ public class FederationVOGenerator extends AbstractDataObjectGenerator
 	 */
 	private final MetaProperty lastUpdate = new MetaProperty("lastUpdateTimestamp", MetaProperty.Type.LONG);
 	
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable gdoc){
 		MetaDocument doc = (MetaDocument)gdoc;
 		id.setReadonly(true);
@@ -45,10 +48,17 @@ public class FederationVOGenerator extends AbstractDataObjectGenerator
 		return ret;
 	}
 	
+	/** {@inheritDoc} */
 	public String getDataObjectImplName(MetaDocument doc){
 		return getDocumentImplName(doc);
 	}
 	
+	/**
+	 * <p>getDocumentImplName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDocumentImplName(MetaDocument doc){
 		return doc.getName()+"VO";
 	}
@@ -385,6 +395,13 @@ public class FederationVOGenerator extends AbstractDataObjectGenerator
 	
 
 
+	/**
+	 * <p>getDocumentImport.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getDocumentImport(Context context, MetaDocument doc){
 		return context.getDataPackageName(doc)+"."+getDocumentImplName(doc);
 	}
@@ -522,25 +539,61 @@ public class FederationVOGenerator extends AbstractDataObjectGenerator
 		emptyline();
 	}
 	
+	/**
+	 * <p>getContainerSizeGetterName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerSizeGetterName(MetaContainerProperty p){
 		return "get"+StringUtils.capitalize(p.getName())+"Size"; 
 	}
 
+	/**
+	 * <p>getTableGetterName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaTableProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getTableGetterName(MetaTableProperty p){
 		return "get"+StringUtils.capitalize(p.getName())+"Table"; 
 	}
 	
+	/**
+	 * <p>getContainerEntryAdderName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerEntryAdderName(MetaContainerProperty p){
 	    return "add"+StringUtils.capitalize(p.getName())+p.getContainerEntryName();	    
 	}
+	/**
+	 * <p>getContainerEntryDeleterName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerEntryDeleterName(MetaContainerProperty p){
 		return "remove"+StringUtils.capitalize(p.getName())+p.getContainerEntryName();	    
 	}
 
+	/**
+	 * <p>getContainerEntrySwapperName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerEntrySwapperName(MetaContainerProperty p){
 		return "swap"+StringUtils.capitalize(p.getName())+p.getContainerEntryName();	    
 	}
 	
+	/**
+	 * <p>getListElementGetterName.</p>
+	 *
+	 * @param list a {@link net.anotheria.asg.generator.meta.MetaListProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getListElementGetterName(MetaListProperty list){
 		return "get"+StringUtils.capitalize(list.getName())+list.getContainerEntryName();
 	}

@@ -4,7 +4,10 @@ package net.anotheria.asg.generator.util;
 import java.util.ArrayList;
 
 /**
+ * <p>IncludedDocuments class.</p>
  *
+ * @author another
+ * @version $Id: $Id
  */
 public class IncludedDocuments {
     /**
@@ -12,13 +15,17 @@ public class IncludedDocuments {
      */
     private static ArrayList<IncludeDocumentsBean> list = new ArrayList<IncludeDocumentsBean>();
 
+    /**
+     * <p>Constructor for IncludedDocuments.</p>
+     */
     public IncludedDocuments() {
     }
 
     /**
      * get included document by line number.
-     * @param line
-     * @return
+     *
+     * @param line a int.
+     * @return a {@link net.anotheria.asg.generator.util.IncludeDocumentsBean} object.
      */
     public IncludeDocumentsBean getIncludeDocumentByLine(int line) {
         if (line < 0) {
@@ -51,8 +58,9 @@ public class IncludedDocuments {
 
     /**
      * add include document to list.
-     * @param documentName
-     * @param insertLine
+     *
+     * @param documentName a {@link java.lang.String} object.
+     * @param insertLine a int.
      */
     public void setNewIncludedDocument(String documentName, int insertLine) {
         list.add(new IncludeDocumentsBean(documentName, insertLine));
@@ -65,10 +73,20 @@ public class IncludedDocuments {
         list.clear();
     }
 
+    /**
+     * <p>isListEmpty.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isListEmpty() {
         return list.isEmpty();
     }
 
+    /**
+     * <p>getLastInsertLine.</p>
+     *
+     * @return a int.
+     */
     public int getLastInsertLine() {
         if (!list.isEmpty()) {
             return list.get(list.size() - 1).getInsertLine();

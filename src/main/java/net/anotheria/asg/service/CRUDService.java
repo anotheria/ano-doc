@@ -4,38 +4,43 @@ import net.anotheria.asg.exception.ASGRuntimeException;
 
 /**
  * The interface for a basic crud service.
- * @author lrosenberg
  *
+ * @author lrosenberg
  * @param <T>
+ * @version $Id: $Id
  */
 public interface CRUDService<T> {
 	/**
 	 * Returns an instance of T with the given id.
+	 *
 	 * @param id the id of the object.
 	 * @return T
-	 * @throws ASGRuntimeException
+	 * @throws net.anotheria.asg.exception.ASGRuntimeException if any.
 	 */
 	T get(String id) throws ASGRuntimeException;
 	/**
 	 * Deletes the object.
+	 *
 	 * @param t the object to delete.
-	 * @throws ASGRuntimeException
+	 * @throws net.anotheria.asg.exception.ASGRuntimeException if any.
 	 */
 	void delete(T t) throws ASGRuntimeException;
 	
 	/**
 	 * Updates an object.
+	 *
 	 * @param t the object to update.
 	 * @return T
-	 * @throws ASGRuntimeException
+	 * @throws net.anotheria.asg.exception.ASGRuntimeException if any.
 	 */
 	T update(T t) throws ASGRuntimeException;
 	
 	/**
 	 * Creates a new T.
-	 * @param t
+	 *
+	 * @param t a T object.
 	 * @return T
-	 * @throws ASGRuntimeException
+	 * @throws net.anotheria.asg.exception.ASGRuntimeException if any.
 	 */
 	T create(T t) throws ASGRuntimeException;
 }

@@ -8,8 +8,9 @@ import java.util.Map;
 
 /**
  * Container for the view helpers.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class CMSViewHelperRegistry {
 	/**
@@ -28,6 +29,12 @@ public class CMSViewHelperRegistry {
 		helperMap = Collections.synchronizedMap(new HashMap<String, List<CMSViewHelper>>());
 	}
 	
+	/**
+	 * <p>addCMSViewHelper.</p>
+	 *
+	 * @param documentPath a {@link java.lang.String} object.
+	 * @param helper a {@link net.anotheria.asg.util.helper.cmsview.CMSViewHelper} object.
+	 */
 	public static void addCMSViewHelper(String documentPath, CMSViewHelper helper){
 		List<CMSViewHelper> helpers = helperMap.get(documentPath);
 		if (helpers==null){
@@ -38,6 +45,12 @@ public class CMSViewHelperRegistry {
 		
 	}
 	
+	/**
+	 * <p>getCMSViewHelpers.</p>
+	 *
+	 * @param documentPath a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static List<CMSViewHelper> getCMSViewHelpers(String documentPath){
 		List<CMSViewHelper> ret = helperMap.get(documentPath);
 		return ret == null ? EMPTY_LIST : ret;

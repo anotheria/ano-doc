@@ -14,7 +14,9 @@ import org.jdom.input.SAXBuilder;
 
 /**
  * Parser for the filters definition.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public final class XMLFiltersParser {
 
@@ -23,8 +25,9 @@ public final class XMLFiltersParser {
 
 	/**
 	 * Parses the filter definition.
-	 * @param content
-	 * @return
+	 *
+	 * @param content a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
 	 */
 	public static List<MetaFilter> parseFilters(String content){
 		SAXBuilder reader = new SAXBuilder();

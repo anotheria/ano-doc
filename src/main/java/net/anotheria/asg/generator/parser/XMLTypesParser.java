@@ -15,9 +15,17 @@ import org.jdom.input.SAXBuilder;
 
 /**
  * TODO please remined another to comment this class
+ *
  * @author another
+ * @version $Id: $Id
  */
 public final class XMLTypesParser {
+	/**
+	 * <p>parseTypes.</p>
+	 *
+	 * @param content a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	@SuppressWarnings("unchecked")
 	public static final List<DataType> parseTypes(String content){
 		SAXBuilder reader = new SAXBuilder();

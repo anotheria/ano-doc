@@ -18,6 +18,7 @@ import net.anotheria.asg.generator.types.meta.EnumerationType;
  * TODO please remind another to comment this class
  *
  * @author another
+ * @version $Id: $Id
  */
 public class EnumTypeGenerator extends AbstractGenerator implements IGenerator {
 
@@ -25,6 +26,7 @@ public class EnumTypeGenerator extends AbstractGenerator implements IGenerator {
 		  * @see net.anotheria.anodoc.generator.IGenerator#generate(net.anotheria.anodoc.generator.IGenerateable, net.anotheria.anodoc.generator.Context)
 		  */
 
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable g) {
 		EnumerationType type = (EnumerationType) g;
 		List<FileEntry> ret = new ArrayList<FileEntry>();
@@ -101,10 +103,22 @@ public class EnumTypeGenerator extends AbstractGenerator implements IGenerator {
 		return clazz;
 	}
 
+	/**
+	 * <p>getEnumClassName.</p>
+	 *
+	 * @param type a {@link net.anotheria.asg.generator.types.meta.EnumerationType} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getEnumClassName(EnumerationType type) {
 		return type.getName() + "Enum";
 	}
 
+	/**
+	 * <p>getEnumImport.</p>
+	 *
+	 * @param type a {@link net.anotheria.asg.generator.types.meta.EnumerationType} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getEnumImport(EnumerationType type) {
 		return getPackageName(GeneratorDataRegistry.getInstance().getContext()) + "." + getEnumClassName(type);
 	}

@@ -16,8 +16,20 @@ import net.anotheria.asg.generator.meta.StorageType;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>SQLGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class SQLGenerator extends AbstractGenerator implements IGenerator{
 	
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param modules a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<FileEntry> generate(List<MetaModule>  modules){
 		ArrayList<FileEntry> ret = new ArrayList<FileEntry>();
 		ArrayList<MetaDocument> documents = new ArrayList<MetaDocument>();
@@ -67,6 +79,7 @@ public class SQLGenerator extends AbstractGenerator implements IGenerator{
 		return entries;
 	}
 	
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable gmodule){
 		
 		MetaModule mod = (MetaModule)gmodule;
@@ -81,6 +94,12 @@ public class SQLGenerator extends AbstractGenerator implements IGenerator{
 		return ret;
 	}
 	
+	/**
+	 * <p>getCreateScriptName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getCreateScriptName(MetaDocument doc){
 		return "create_"+doc.getParentModule().getName().toLowerCase()+"_"+doc.getName().toLowerCase();
 	}

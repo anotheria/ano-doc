@@ -13,8 +13,10 @@ import java.util.List;
 
 /**
  * TODO Please remain lrosenberg to comment BeanGenerator.java
+ *
  * @author lrosenberg
  * @created on Feb 25, 2005
+ * @version $Id: $Id
  */
 public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator {
 	
@@ -23,11 +25,13 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	 */
 	public static final String FLAG_FORM_SUBMITTED = "formSubmittedFlag";
 	
+	/** Constant <code>FIELD_ML_DISABLED="multilingualInstanceDisabled"</code> */
 	public static final String FIELD_ML_DISABLED = "multilingualInstanceDisabled";
     
 	/* (non-Javadoc)
 	 * @see net.anotheria.anodoc.generator.IGenerator#generate(net.anotheria.anodoc.generator.IGenerateable, net.anotheria.anodoc.generator.Context)
 	 */
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable g) {
 		List<FileEntry> files = new ArrayList<FileEntry>();
 		
@@ -236,6 +240,13 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	}
 	
 	
+	/**
+	 * <p>generateDialogForm.</p>
+	 *
+	 * @param dialog a {@link net.anotheria.asg.generator.view.meta.MetaDialog} object.
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedClass} object.
+	 */
 	public GeneratedClass generateDialogForm(MetaDialog dialog, MetaDocument doc){
 
 		
@@ -337,22 +348,55 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		return clazz;
 	}
 	
+	/**
+	 * <p>getPackage.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackage(MetaDocument doc){
 	    return getPackage(GeneratorDataRegistry.getInstance().getContext(), doc);
 	}
 	
+	/**
+	 * <p>getPackage.</p>
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackage(MetaModule module){
 	    return getPackage(GeneratorDataRegistry.getInstance().getContext(), module);
 	}
 	
+	/**
+	 * <p>getPackage.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackage(Context context, MetaModule module){
 	    return context.getPackageName(module)+".bean";
 	}
 	
+	/**
+	 * <p>getPackage.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackage(Context context, MetaDocument doc){
 	    return context.getPackageName(doc)+".bean";
 	}
 	
+	/**
+	 * <p>getDialogBeanName.</p>
+	 *
+	 * @param dialog a {@link net.anotheria.asg.generator.view.meta.MetaDialog} object.
+	 * @param document a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDialogBeanName(MetaDialog dialog, MetaDocument document){
 		return StringUtils.capitalize(dialog.getName())+StringUtils.capitalize(document.getName())+"FB";
 	}
@@ -812,51 +856,127 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		
 		
 		
+		/**
+		 * <p>getListItemBeanSortTypeImport.</p>
+		 *
+		 * @param context a {@link net.anotheria.asg.generator.Context} object.
+		 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getListItemBeanSortTypeImport(Context context, MetaDocument doc){
 			return getPackage(context, doc)+"."+getListItemBeanSortTypeName(doc);
 		}
 		
+		/**
+		 * <p>getListItemBeanSortTypeName.</p>
+		 *
+		 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getListItemBeanSortTypeName(MetaDocument doc){
 			return getListItemBeanName(doc)+"SortType";
 		}
 		
+		/**
+		 * <p>getListItemBeanName.</p>
+		 *
+		 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getListItemBeanName(MetaDocument doc){
 			return doc.getName()+"ListItemBean";
 		}
 		
+		/**
+		 * <p>getDialogBeanImport.</p>
+		 *
+		 * @param dialog a {@link net.anotheria.asg.generator.view.meta.MetaDialog} object.
+		 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getDialogBeanImport(MetaDialog dialog, MetaDocument doc){
 			return getPackage(GeneratorDataRegistry.getInstance().getContext(), doc)+"."+getDialogBeanName(dialog, doc);
 		}
 		
+		/**
+		 * <p>getListItemBeanImport.</p>
+		 *
+		 * @param context a {@link net.anotheria.asg.generator.Context} object.
+		 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getListItemBeanImport(Context context, MetaDocument doc){
 			return getPackage(context, doc)+"."+getListItemBeanName(doc);
 		}
 		
+		/**
+		 * <p>getContainerEntryFormImport.</p>
+		 *
+		 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+		 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getContainerEntryFormImport(MetaDocument doc, MetaContainerProperty p){
 			return GeneratorDataRegistry.getInstance().getContext().getPackageName(doc)+".bean."+getContainerEntryFormName(p);
 		}
 		
+		/**
+		 * <p>getContainerEntryFormName.</p>
+		 *
+		 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getContainerEntryFormName(MetaContainerProperty p){
 			return StringUtils.capitalize(p.getName())+p.getContainerEntryName()+"FB";
 		}
 		
+		/**
+		 * <p>getContainerQuickAddFormImport.</p>
+		 *
+		 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+		 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getContainerQuickAddFormImport(MetaDocument doc, MetaContainerProperty p){
 			return GeneratorDataRegistry.getInstance().getContext().getPackageName(doc)+".bean."+getContainerQuickAddFormName(p);
 		}
 		
+		/**
+		 * <p>getContainerQuickAddFormName.</p>
+		 *
+		 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getContainerQuickAddFormName(MetaContainerProperty p){
 			return StringUtils.capitalize(p.getName())+"QuickAddFB";
 		}
 		
+		/**
+		 * <p>getFormBeanImport.</p>
+		 *
+		 * @param form a {@link net.anotheria.asg.generator.forms.meta.MetaForm} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getFormBeanImport(MetaForm form){
 			return getPackage()+"."+getFormBeanName(form);
 		}
 		
+		/**
+		 * <p>getPackage.</p>
+		 *
+		 * @return a {@link java.lang.String} object.
+		 */
 		@Deprecated
 		public static String getPackage(){
 		    return GeneratorDataRegistry.getInstance().getContext().getPackageName()+".bean";
 		}
 		
+		/**
+		 * <p>getFormBeanName.</p>
+		 *
+		 * @param form a {@link net.anotheria.asg.generator.forms.meta.MetaForm} object.
+		 * @return a {@link java.lang.String} object.
+		 */
 		public static String getFormBeanName(MetaForm form){
 		    return StringUtils.capitalize(form.getId())+"AutoForm";
 		}

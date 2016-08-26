@@ -12,6 +12,9 @@ import org.slf4j.LoggerFactory;
 /**
  * This class behaves like {@link net.anotheria.anodoc.service.IModuleStorage} but
  * delegates all method calls to an instance of {@link net.anotheria.anodoc.util.ICommonModuleStorage}.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class CommonModuleStorageWrapper implements IModuleStorage {
 
@@ -24,12 +27,20 @@ public class CommonModuleStorageWrapper implements IModuleStorage {
 	private IModuleFactory factory;
 	private ICommonModuleStorage delegate;
 
+	/**
+	 * <p>Constructor for CommonModuleStorageWrapper.</p>
+	 *
+	 * @param aModuleId a {@link java.lang.String} object.
+	 * @param aFactory a {@link net.anotheria.anodoc.service.IModuleFactory} object.
+	 * @param aDelegate a {@link net.anotheria.anodoc.util.ICommonModuleStorage} object.
+	 */
 	public CommonModuleStorageWrapper(String aModuleId, IModuleFactory aFactory, ICommonModuleStorage aDelegate){
 		moduleId = aModuleId;
 		factory = aFactory;
 		delegate = aDelegate;
 	}
 	
+	/** {@inheritDoc} */
 	@Override public void saveModule(Module module) throws StorageFailureException{
 		try {
 			delegate.saveModule(module);
@@ -43,6 +54,7 @@ public class CommonModuleStorageWrapper implements IModuleStorage {
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override public Module loadModule(String ownerId, String copyId) throws NoStoredModuleEntityException, StorageFailureException{
 		try {
 			Module module = delegate.loadModule(moduleId,ownerId,copyId,factory);
@@ -58,6 +70,7 @@ public class CommonModuleStorageWrapper implements IModuleStorage {
 		}
 	}
 	
+	/** {@inheritDoc} */
 	@Override public void deleteModule(String ownerId, String copyId) throws StorageFailureException{
 		try{
 			delegate.deleteModule(moduleId,ownerId,copyId);
@@ -68,6 +81,8 @@ public class CommonModuleStorageWrapper implements IModuleStorage {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 *
 	 * Does nothing.
 	 */
@@ -75,6 +90,8 @@ public class CommonModuleStorageWrapper implements IModuleStorage {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 *
 	 * Does nothing.
 	 */

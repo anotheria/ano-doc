@@ -9,6 +9,9 @@ import net.anotheria.asg.generator.view.meta.MetaView;
 
 /**
  * Generator for jsp footer.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class SharedFooterJspGenerator extends AbstractJSPGenerator {
 	
@@ -17,6 +20,13 @@ public class SharedFooterJspGenerator extends AbstractJSPGenerator {
 	 */
     private static final String QUOTE = "\\\"\\\"";
 
+    /**
+     * <p>generate.</p>
+     *
+     * @param views a {@link java.util.List} object.
+     * @param context a {@link net.anotheria.asg.generator.Context} object.
+     * @return a {@link net.anotheria.asg.generator.FileEntry} object.
+     */
     public FileEntry generate(List<MetaView> views , Context context) {
 		
 		String ret = generateSharedFooter(views, context);
@@ -27,10 +37,20 @@ public class SharedFooterJspGenerator extends AbstractJSPGenerator {
 		//return new FileEntry(FileEntry.package2path(context.getPackageName()+".action"), getBaseActionName(context),ret);
 	}
 	
+	/**
+	 * <p>getSharedJspFooterName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getSharedJspFooterName(){
 		return "SharedFooter";
 	}
 	
+	/**
+	 * <p>getSharedJspFooterPageName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getSharedJspFooterPageName(){
 		return getSharedJspFooterName()+".jsp";
 	}

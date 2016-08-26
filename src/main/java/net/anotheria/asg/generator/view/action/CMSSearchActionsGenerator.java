@@ -15,9 +15,18 @@ import java.util.List;
 
 /**
  * Generator for SMC search action.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class CMSSearchActionsGenerator extends AbstractGenerator {
 
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param views a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<FileEntry> generate(List<MetaView> views) {
 		List<FileEntry> files = new ArrayList<FileEntry>();
 		files.add(new FileEntry(generateSearchAction(views)));
@@ -25,14 +34,29 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		return files;
 	}
 
+	/**
+	 * <p>getSearchPackageName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSearchPackageName() {
 		return SharedAction.getPackageName();
 	}
 
+	/**
+	 * <p>getCmsSearchActionName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getCmsSearchActionName() {
 		return SharedAction.SEARCH.getClassName();
 	}
 
+	/**
+	 * <p>getSearchPageFullName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSearchPageFullName() {
 		return getSearchPackageName() + "." + getCmsSearchActionName();
 	}
@@ -162,14 +186,29 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		return clazz;
 	}
 
+	/**
+	 * <p>getSearchFBPackageName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSearchFBPackageName() {
 		return GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED) + ".bean";
 	}
 
+	/**
+	 * <p>getSearchFBName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSearchFBName() {
 		return "SearchFB";
 	}
 
+	/**
+	 * <p>getSearchFBFullName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSearchFBFullName() {
 		return getSearchFBPackageName() + "." + getSearchFBName();
 	}

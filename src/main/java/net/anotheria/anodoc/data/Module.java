@@ -15,13 +15,16 @@ import java.util.Vector;
 
 /**
  * This class describes a Module, which is a unity that can be stored
- * and identified by the framework. Each module is identified by the 
- * tuple (moduleId, ownerId, copyId). The moduleId (or just id) is used to determine 
+ * and identified by the framework. Each module is identified by the
+ * tuple (moduleId, ownerId, copyId). The moduleId (or just id) is used to determine
  * the proper factory and storage, the ownerId represents the owner of the module, which
  * could be a user of the system or a content piece by content supporting functions (comments, netlogs, etc)
  * and the copyId is used for multiple copies systems or for context separation.<br>
- * A Module shouldn't be used directly, instead it should be extended and 
- * enhanced with the methods that are needed for the business logic.  
+ * A Module shouldn't be used directly, instead it should be extended and
+ * enhanced with the methods that are needed for the business logic.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class Module implements ICompositeDataObject, Serializable{
 	/**
@@ -56,7 +59,9 @@ public class Module implements ICompositeDataObject, Serializable{
 	private static final long serialVersionUID = 4896753471545492611L;
 
 	/**
-	 * Returns the current logger. Creates one if needed.  
+	 * Returns the current logger. Creates one if needed.
+	 *
+	 * @return a {@link org.slf4j.Logger} object.
 	 */
 	protected Logger getLog(){
 		return log;
@@ -74,6 +79,7 @@ public class Module implements ICompositeDataObject, Serializable{
 	
 	/**
 	 * Creates a new Module with given moduleId.
+	 *
 	 * @param anId the id of the module.
 	 */
 	public Module(String anId){
@@ -85,6 +91,10 @@ public class Module implements ICompositeDataObject, Serializable{
 	
 	/**
 	 * Returns the document with given name (if there is any).
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @return a {@link net.anotheria.anodoc.data.Document} object.
+	 * @throws net.anotheria.anodoc.data.NoSuchDocumentException if any.
 	 */
 	public Document getDocument(String name) throws NoSuchDocumentException{
 		DataHolder doc = getDataHolder(name);
@@ -95,6 +105,10 @@ public class Module implements ICompositeDataObject, Serializable{
 	
 	/**
 	 * Returns the documentlist with given name (if there is any).
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @return a {@link net.anotheria.anodoc.data.DocumentList} object.
+	 * @throws net.anotheria.anodoc.data.NoSuchDocumentListException if any.
 	 */
 	@SuppressWarnings("unchecked")
 	public <D extends Document>DocumentList<D> getList(String name) throws NoSuchDocumentListException{
@@ -105,7 +119,9 @@ public class Module implements ICompositeDataObject, Serializable{
 	}
 	
 	/**
-	 * Puts the given list into this module. 
+	 * Puts the given list into this module.
+	 *
+	 * @param aList a {@link net.anotheria.anodoc.data.DocumentList} object.
 	 */
 	@SuppressWarnings("unchecked")
 	public void putList(DocumentList aList){
@@ -113,7 +129,9 @@ public class Module implements ICompositeDataObject, Serializable{
 	}
 	
 	/**
-	 * Puts the given document into this module. 
+	 * Puts the given document into this module.
+	 *
+	 * @param aDoc a {@link net.anotheria.anodoc.data.Document} object.
 	 */
 	public void putDocument(Document aDoc){
 		putDataHolder(aDoc);
@@ -137,6 +155,7 @@ public class Module implements ICompositeDataObject, Serializable{
 	
 	/**
 	 * Returns the ownerId.
+	 *
 	 * @return String
 	 */
 	public String getOwnerId() {
@@ -145,6 +164,7 @@ public class Module implements ICompositeDataObject, Serializable{
 
 	/**
 	 * Sets the ownerId.
+	 *
 	 * @param ownerId The ownerId to set
 	 */
 	public void setOwnerId(String ownerId) {
@@ -153,6 +173,7 @@ public class Module implements ICompositeDataObject, Serializable{
 
 	/**
 	 * Returns the id.
+	 *
 	 * @return String
 	 */
 	public String getId() {
@@ -161,6 +182,7 @@ public class Module implements ICompositeDataObject, Serializable{
 
 	/**
 	 * Returns the copyId.
+	 *
 	 * @return String
 	 */
 	public String getCopyId() {
@@ -169,6 +191,7 @@ public class Module implements ICompositeDataObject, Serializable{
 
 	/**
 	 * Sets the copyId.
+	 *
 	 * @param copyId The copyId to set
 	 */
 	public void setCopyId(String copyId) {
@@ -176,6 +199,8 @@ public class Module implements ICompositeDataObject, Serializable{
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Returns the String representation of this Module entity.
 	 */
 	@Override public String toString(){
@@ -187,9 +212,7 @@ public class Module implements ICompositeDataObject, Serializable{
 	///////////////////
 	
 
-	/**
-	 *
-	 */
+	/** {@inheritDoc} */
 	@Override public Enumeration<String> getKeys() {
 		Enumeration<DataHolder> allObjects = holders.elements();
 		Vector<String> keys = new Vector<String>();
@@ -200,26 +223,24 @@ public class Module implements ICompositeDataObject, Serializable{
 		return keys.elements();
 	}
 
-	/**
-	 * @see net.anotheria.anodoc.data
-	 */
+	/** {@inheritDoc} */
 	@Override public Object getObject(String key) {
 		String myKey = key.substring(key.indexOf(IHelperConstants.DELIMITER)+1);
 		return holders.get(myKey);
 	}
 
-	/**
-	 * @see net.anotheria.anodoc.data.IBasicStoreableObject#getStorageId()
-	 */
+	/** {@inheritDoc} */
 	@Override public String getStorageId() {
 		return ""+id+DELIMITER+ownerId+DELIMITER+copyId;		
 	}
 	
 	/// restoring from container
 	/**
-	 * Restores this module from a container. When a Module is saved, 
+	 * Restores this module from a container. When a Module is saved,
 	 * it's not saved as is, but only it's contents (which recursively matches for contained documents too).
 	 * If a Module instance is loaded, it have to be reassembled which happens in this function.
+	 *
+	 * @param container a {@link java.util.Hashtable} object.
 	 */
 	@SuppressWarnings("unchecked")
 	public void fillFromContainer(Hashtable container){
@@ -334,6 +355,7 @@ public class Module implements ICompositeDataObject, Serializable{
 
 	/**
 	 * Returns the moduleFactory.
+	 *
 	 * @return IModuleFactory
 	 */
 	public IModuleFactory getModuleFactory() {
@@ -342,6 +364,7 @@ public class Module implements ICompositeDataObject, Serializable{
 
 	/**
 	 * Sets the moduleFactory.
+	 *
 	 * @param myFactory The moduleFactory to set
 	 */
 	public void setModuleFactory(IModuleFactory myFactory) {
@@ -352,14 +375,17 @@ public class Module implements ICompositeDataObject, Serializable{
 	 * Overwrite this to return some statistical information for netStats (activity module)
 	 * which would be save automatically on each module save.<br>
 	 * Return -1 if you don't want to provide any statistical information
-	 */	
+	 *
+	 * @return a long.
+	 */
 	public long getStatisticalInformation(){
 		return -1;
 	}
 	
 	/**
-	 * Returns the size of the module in bytes. Actually it checks the size of all contained Documents and DocumentLists 
+	 * Returns the size of the module in bytes. Actually it checks the size of all contained Documents and DocumentLists
 	 * and returns the cumulated value.
+	 *
 	 * @return the size of the data in the module in bytes.
 	 */
 	public long getSizeInBytes(){
@@ -372,7 +398,9 @@ public class Module implements ICompositeDataObject, Serializable{
 	}
 	
 	/**
-	 * Returns the names of the holders contained in this module. 
+	 * Returns the names of the holders contained in this module.
+	 *
+	 * @return a {@link java.util.Enumeration} object.
 	 */
 	public Enumeration<String> getHolderNames(){
 		return holders.keys();
@@ -380,8 +408,9 @@ public class Module implements ICompositeDataObject, Serializable{
 
 	/**
 	 * Returns the id holder for a given document (name).
-	 * @param docName
-	 * @return
+	 *
+	 * @param docName a {@link java.lang.String} object.
+	 * @return a {@link net.anotheria.anodoc.data.IDHolder} object.
 	 */
 	protected IDHolder _getIdHolder(String docName){
 		try{
@@ -392,7 +421,8 @@ public class Module implements ICompositeDataObject, Serializable{
 	}
 	/**
 	 * Creates an XMLNode for XML export.
-	 * @return
+	 *
+	 * @return a {@link net.anotheria.util.xml.XMLNode} object.
 	 */
 	public XMLNode toXMLNode(){
 		XMLNode root = new XMLNode("module");

@@ -7,7 +7,19 @@ import org.jdom.Element;
 import net.anotheria.asg.generator.GenerationOption;
 import net.anotheria.asg.generator.GenerationOptions;
 
+/**
+ * <p>OptionsParser class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public final class OptionsParser {
+	/**
+	 * <p>parseOptions.</p>
+	 *
+	 * @param element a {@link org.jdom.Element} object.
+	 * @return a {@link net.anotheria.asg.generator.GenerationOptions} object.
+	 */
 	public static final GenerationOptions parseOptions(Element element){
 		GenerationOptions ret = new GenerationOptions();
 		

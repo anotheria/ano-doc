@@ -11,7 +11,9 @@ import java.util.Map;
 
 /**
  * Representation of a module definition.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class MetaModule implements IGenerateable{
 
@@ -63,6 +65,7 @@ public class MetaModule implements IGenerateable{
 	
 	/**
 	 * Creates a new module with the given name.
+	 *
 	 * @param name name of the module.
 	 */
 	public MetaModule(String name){
@@ -75,7 +78,8 @@ public class MetaModule implements IGenerateable{
 	
 	/**
 	 * Adds a document definition to the module.
-	 * @param aDocument
+	 *
+	 * @param aDocument a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
 	 */
 	public void addDocument(MetaDocument aDocument){
 		documents.add(aDocument);
@@ -84,7 +88,8 @@ public class MetaModule implements IGenerateable{
 	
 	/**
 	 * Returns true if an option is enabled. For example 'rmi' is an option which can be enabled.
-	 * @param key
+	 *
+	 * @param key a {@link java.lang.String} object.
 	 * @return true if an option is enabled
 	 */
 	public boolean isEnabledByOptions(String key){
@@ -97,10 +102,13 @@ public class MetaModule implements IGenerateable{
 		
 	}
 	
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return "module "+name+" storage: "+storageType+" documents: "+documents;
 	}
 	/**
+	 * <p>Getter for the field <code>documents</code>.</p>
+	 *
 	 * @return contained documents
 	 */
 	public List<MetaDocument> getDocuments() {
@@ -108,6 +116,8 @@ public class MetaModule implements IGenerateable{
 	}
 
 	/**
+	 * <p>Getter for the field <code>name</code>.</p>
+	 *
 	 * @return name of the module
 	 */
 	public String getName() {
@@ -115,6 +125,8 @@ public class MetaModule implements IGenerateable{
 	}
 	
 	/**
+	 * <p>getModuleClassName.</p>
+	 *
 	 * @return the name for the module implementation class in the cms storage
 	 */
 	public String getModuleClassName(){
@@ -122,6 +134,8 @@ public class MetaModule implements IGenerateable{
 	}
 	
 	/**
+	 * <p>getFactoryClassName.</p>
+	 *
 	 * @return the class name of the generated module factory
 	 */
 	public String getFactoryClassName(){
@@ -129,14 +143,18 @@ public class MetaModule implements IGenerateable{
 	}
 
 	/**
-	 * @param list
+	 * <p>Setter for the field <code>documents</code>.</p>
+	 *
+	 * @param list a {@link java.util.List} object.
 	 */
 	public void setDocuments(List<MetaDocument> list) {
 		documents = list;
 	}
 
 	/**
-	 * @param string
+	 * <p>Setter for the field <code>name</code>.</p>
+	 *
+	 * @param string a {@link java.lang.String} object.
 	 */
 	public void setName(String string) {
 		name = string;
@@ -144,12 +162,19 @@ public class MetaModule implements IGenerateable{
 	
 	/**
 	 * Returns the id of the module. Id is basically name.toLowerCase().
+	 *
 	 * @return the id of the module
 	 */
 	public String getId(){
 		return getName().toLowerCase();
 	}
 
+	/**
+	 * <p>getDocumentByName.</p>
+	 *
+	 * @param aName a {@link java.lang.String} object.
+	 * @return a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 */
 	public MetaDocument getDocumentByName(String aName){
 	    for (int i=0; i<documents.size(); i++){
 	        MetaDocument d = documents.get(i);
@@ -159,74 +184,145 @@ public class MetaModule implements IGenerateable{
 	    throw new RuntimeException("No such document: "+aName + " in module "+getName());
 	}
 
+	/** {@inheritDoc} */
 	@Override public boolean equals(Object o){
 		return o instanceof MetaModule ? 
 			((MetaModule)o).name.equals(name) : false;
 	}
 	
+	/** {@inheritDoc} */
 	@Override public int hashCode(){
 		return name == null ? 42 : name.hashCode();
 	}
 
+	/**
+	 * <p>Getter for the field <code>listeners</code>.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<String> getListeners() {
 		return listeners;
 	}
 
+	/**
+	 * <p>Setter for the field <code>listeners</code>.</p>
+	 *
+	 * @param listeners a {@link java.util.List} object.
+	 */
 	public void setListeners(List<String> listeners) {
 		this.listeners = listeners;
 	}
 	
+	/**
+	 * <p>addListener.</p>
+	 *
+	 * @param listenerClass a {@link java.lang.String} object.
+	 */
 	public void addListener(String listenerClass){
 		listeners.add(listenerClass);
 	}
 	
+	/**
+	 * <p>removeListener.</p>
+	 *
+	 * @param listenerClass a {@link java.lang.String} object.
+	 */
 	public void removeListener(String listenerClass){
 		listeners.remove(listenerClass);
 	}
 
+	/**
+	 * <p>Getter for the field <code>storageType</code>.</p>
+	 *
+	 * @return a {@link net.anotheria.asg.generator.meta.StorageType} object.
+	 */
 	public StorageType getStorageType() {
 		return storageType;
 	}
 
+	/**
+	 * <p>Setter for the field <code>storageType</code>.</p>
+	 *
+	 * @param aStorageType a {@link net.anotheria.asg.generator.meta.StorageType} object.
+	 */
 	public void setStorageType(StorageType aStorageType) {
 		storageType = aStorageType;
 	}
 
 	/**
+	 * <p>Getter for the field <code>storageKey</code>.</p>
+	 *
 	 * @deprecated Noone knows what storagekey does.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public String getStorageKey() {
 		return storageKey;
 	}
 
 	/**
+	 * <p>Setter for the field <code>storageKey</code>.</p>
+	 *
 	 * @deprecated Noone knows what storagekey does.
+	 * @param aStorageKey a {@link java.lang.String} object.
 	 */
 	public void setStorageKey(String aStorageKey) {
 		storageKey = aStorageKey;
 	}
 	
+	/**
+	 * <p>addModuleParameter.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.ModuleParameter} object.
+	 */
 	public void addModuleParameter(ModuleParameter p){
 		parameters.put(p.getName(), p);
 	}
 	
+	/**
+	 * <p>getModuleParameter.</p>
+	 *
+	 * @param aName a {@link java.lang.String} object.
+	 * @return a {@link net.anotheria.asg.generator.meta.ModuleParameter} object.
+	 */
 	public ModuleParameter getModuleParameter(String aName){
 		return parameters.get(aName);
 	}
 	
+	/**
+	 * <p>isParameterEqual.</p>
+	 *
+	 * @param aName a {@link java.lang.String} object.
+	 * @param aValue a {@link java.lang.String} object.
+	 * @return a boolean.
+	 */
 	public boolean isParameterEqual(String aName, String aValue){
 		ModuleParameter p = getModuleParameter(aName);
 		return p == null ? false : p.getValue().equals(aValue);
 	}
 
+	/**
+	 * <p>Getter for the field <code>moduleOptions</code>.</p>
+	 *
+	 * @return a {@link net.anotheria.asg.generator.GenerationOptions} object.
+	 */
 	public GenerationOptions getModuleOptions() {
 		return moduleOptions;
 	}
 
+	/**
+	 * <p>Setter for the field <code>moduleOptions</code>.</p>
+	 *
+	 * @param someModuleOptions a {@link net.anotheria.asg.generator.GenerationOptions} object.
+	 */
 	public void setModuleOptions(GenerationOptions someModuleOptions) {
 		moduleOptions = someModuleOptions;
 	}
 	
+	/**
+	 * <p>isContainsAnyMultilingualDocs.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isContainsAnyMultilingualDocs(){
 		for(MetaDocument doc:documents)
 			if (GeneratorDataRegistry.hasLanguageCopyMethods(doc))

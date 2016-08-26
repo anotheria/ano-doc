@@ -9,12 +9,20 @@ import java.util.List;
 
 /**
  * TODO Please remain lrosenberg to comment AbstractServiceGenerator.java
+ *
  * @author lrosenberg
  * @created on Feb 24, 2005
+ * @version $Id: $Id
  */
 public class BasicServiceGenerator extends AbstractGenerator{
 	
 	
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param modules a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<FileEntry> generate(List<MetaModule>  modules){
 		List<FileEntry> ret = new ArrayList<FileEntry>(); 
 		

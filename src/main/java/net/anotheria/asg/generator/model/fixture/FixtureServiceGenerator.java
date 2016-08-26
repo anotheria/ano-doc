@@ -27,8 +27,15 @@ import net.anotheria.asg.service.IFixtureService;
 import net.anotheria.util.ExecutionTimer;
 import net.anotheria.util.StringUtils;
 
+/**
+ * <p>FixtureServiceGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class FixtureServiceGenerator  extends AbstractServiceGenerator implements IGenerator{
 	
+	/** {@inheritDoc} */
 	@Override public List<FileEntry> generate(IGenerateable gmodule){
 		
 		MetaModule mod = (MetaModule)gmodule;
@@ -51,10 +58,17 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 		return ret;
 	}
 	
+	/**
+	 * <p>getFixtureFactoryName.</p>
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getFixtureFactoryName(MetaModule m){
 		return getServiceName(m)+"FixtureFactory";
 	}
 	
+	/** {@inheritDoc} */
 	public String getFactoryName(MetaModule m){
 	    return getFixtureFactoryName(m);
 	}
@@ -537,6 +551,7 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 		return doc.getName().toLowerCase()+"IdHolder";
 	}
 
+	/** {@inheritDoc} */
 	@Override public String getImplementationName(MetaModule m){
 	    return getServiceName(m)+"FixtureImpl";
 	}
@@ -546,19 +561,23 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 	}
 	
 	
+	/** {@inheritDoc} */
 	@Override protected String getPackageName(MetaModule module){
 		return GeneratorDataRegistry.getInstance().getContext().getPackageName(module)+".service.fixture";	
 	}
 
+	/** {@inheritDoc} */
 	@Override protected void addAdditionalFactoryImports(GeneratedClass clazz, MetaModule module){
 		clazz.addImport(GeneratorDataRegistry.getInstance().getContext().getServicePackageName(module)+"."+getInterfaceName(module));
 		clazz.addImport(IFixtureService.class);
 	}
 
+	/** {@inheritDoc} */
 	protected String getSupportedInterfacesList(MetaModule module){
 		return super.getSupportedInterfacesList(module)+", IFixtureService.class";
 	}
 
+	/** {@inheritDoc} */
 	@Override protected String getMoskitoSubsystem(){
 		return super.getMoskitoSubsystem()+"-fixture";
 	}

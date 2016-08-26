@@ -24,11 +24,18 @@ import net.anotheria.util.ExecutionTimer;
 
 /**
  * TODO please remined another to comment this class
- * 
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class ViewGenerator extends AbstractAnoDocGenerator {
 
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param path a {@link java.lang.String} object.
+	 * @param views a {@link java.util.List} object.
+	 */
 	public void generate(String path, List<MetaView> views) {
 
 		ExecutionTimer timer = new ExecutionTimer("ViewGenerator");
@@ -92,6 +99,13 @@ public class ViewGenerator extends AbstractAnoDocGenerator {
 
 	}
 
+	/**
+	 * <p>generateView.</p>
+	 *
+	 * @param path a {@link java.lang.String} object.
+	 * @param view a {@link net.anotheria.asg.generator.view.meta.MetaView} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<FileEntry> generateView(String path, MetaView view) {
 		List<FileEntry> ret = new ArrayList<FileEntry>();
 

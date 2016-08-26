@@ -8,6 +8,12 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+/**
+ * <p>Abstract AbstractASGService class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public abstract class AbstractASGService implements ASGService{
 	
 	/**
@@ -22,6 +28,7 @@ public abstract class AbstractASGService implements ASGService{
 	
 	/**
 	 * Fires the create event. The method returns after all listeners have been notified. Exceptions from listeners are ignored (and logged).
+	 *
 	 * @param created the created object.
 	 */
 	protected void fireObjectCreatedEvent(DataObject created){
@@ -36,6 +43,7 @@ public abstract class AbstractASGService implements ASGService{
 	
 	/**
 	 * Fires the create event. The method returns after all listeners have been notified. Exceptions from listeners are ignored (and logged).
+	 *
 	 * @param oldVersion the previously existed object.
 	 * @param newVersion the newly updated object.
 	 */
@@ -51,6 +59,7 @@ public abstract class AbstractASGService implements ASGService{
 	
 	/**
 	 * Fires the delete event. The method returns after all listeners have been notified. Exceptions from listeners are ignored (and logged).
+	 *
 	 * @param deleted the deleted object.
 	 */
 	protected void fireObjectDeletedEvent(DataObject deleted){
@@ -63,8 +72,9 @@ public abstract class AbstractASGService implements ASGService{
 		}
 	}
 
-    /**
+	/**
 	 * Fires the import event. The method returns after all listeners have been notified. Exceptions from listeners are ignored (and logged).
+	 *
 	 * @param imported the imported object.
 	 */
 	protected void fireObjectImportedEvent(DataObject imported){
@@ -91,16 +101,18 @@ public abstract class AbstractASGService implements ASGService{
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Adds a service listener to this service.
-	 * @param listener the listener to add.
 	 */
 	public void addServiceListener(IServiceListener listener){
 		listeners.add(listener);
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Removes the service listener from the service.
-	 * @param listener the listener to remove.
 	 */
 	public void removeServiceListener(IServiceListener listener){
 		listeners.remove(listener);
@@ -108,6 +120,7 @@ public abstract class AbstractASGService implements ASGService{
 
 	/**
 	 * Returns true if there are service listeners connected to this service.
+	 *
 	 * @return true if there are service listeners attached.
 	 */
 	public boolean hasServiceListeners(){

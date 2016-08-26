@@ -1,8 +1,9 @@
 package net.anotheria.anodoc.data;
 /**
  * Declaration of supported types for properties.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public enum PropertyType {
 	/**
@@ -52,8 +53,9 @@ public enum PropertyType {
 	}
 	
 	/**
-	 * Returns the indicator for this property type. 
-	 * @return
+	 * Returns the indicator for this property type.
+	 *
+	 * @return a char.
 	 */
 	public char getIndicator(){
 		return indicator;

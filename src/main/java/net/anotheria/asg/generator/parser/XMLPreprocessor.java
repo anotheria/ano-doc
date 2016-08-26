@@ -9,8 +9,9 @@ import java.util.List;
 
 /**
  * This class preprocess an xml file. Its mainly used to put together a splitted xml file.
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 @SuppressWarnings("ALL")
 public final class XMLPreprocessor {
@@ -22,9 +23,11 @@ public final class XMLPreprocessor {
 
     /**
      * Loads a file from the disk. Include marks are replaced with the content of the included files.
-     * @param f
-     * @return
-     * @throws IOException
+     *
+     * @param f a {@link java.io.File} object.
+     * @throws java.io.IOException if any.
+     * @param includedDocuments a {@link net.anotheria.asg.generator.util.IncludedDocuments} object.
+     * @return a {@link java.lang.String} object.
      */
     public static String loadFile(File f, IncludedDocuments includedDocuments) throws IOException {
         if (!f.exists())

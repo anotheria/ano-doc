@@ -15,8 +15,10 @@ import net.anotheria.util.StringUtils;
 import java.util.List;
 
 /**
- * Generator for the JSP files used for generations of the view jsps. 
+ * Generator for the JSP files used for generations of the view jsps.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	/**
@@ -34,6 +36,7 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 //	private Context context;
 	
 	
+	/** {@inheritDoc} */
 	@Override
 	protected void appendCommentLine(String commentLine){
 		appendString("<%-- " + commentLine + " --%>");
@@ -41,8 +44,9 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	
 	
 	/**
-	 * Generates the header for all jsp files. 
-	 * @return
+	 * Generates the header for all jsp files.
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getBaseJSPHeader(){
 		String ret = "";
@@ -59,7 +63,8 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	
 	/**
 	 * Generates the header for jsp files that generate xml exports.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getBaseXMLHeader(){
 		String ret = "";
@@ -74,7 +79,8 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 
 	/**
 	 * Generates the header for jsp files that generate csv exports.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getBaseCSVHeader(){
 		String ret = "";
@@ -96,10 +102,11 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 
 	/**
 	 * Generates a footer file which is included by other jsps.
+	 *
 	 * @param view the vie to generate the footer for.
 	 * @param selection ?
 	 * @param name the name of the file.
-	 * @return
+	 * @return a {@link net.anotheria.asg.generator.GeneratedJSPFile} object.
 	 */
 	protected GeneratedJSPFile generateFooter(MetaView view, String selection, String name){
 		
@@ -168,7 +175,8 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	
 	/**
 	 * Returns image tag for the duplicate entry image.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getDuplicateImage(){
 		return getDuplicateImage("duplicate");
@@ -189,6 +197,7 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 
 	/**
 	 * Returns the basic footer used in all jsps.
+	 *
 	 * @return content of the base jsp footer.
 	 */
 	protected String getBaseJSPFooter(){
@@ -198,20 +207,27 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	
 	/**
 	 * Returns the name of the jsp file for the show page for the document.
-	 * @param doc
-	 * @return
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getShowPageName(MetaDocument doc){
 		return "Show"+doc.getMultiple();
 	}
 	
+	/**
+	 * <p>getSearchResultPageName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSearchResultPageName(){
 		return "SearchResult";
 	}
 
 	/**
 	 * Returns the page name for the version info page.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getVersionInfoPageName(){
 		return "VersionInfo";
@@ -219,20 +235,30 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 
 	/**
 	 * Returns the page name for the version info page for the given document.
-	 * @return
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getVersionInfoPageName(MetaDocument doc){
 		return getVersionInfoPageName();
 	}
 
 	
+	/**
+	 * <p>getShowQueriesPageName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getShowQueriesPageName(MetaDocument doc){
 		return "Show"+doc.getMultiple()+"Queries";
 	}
 	
 	/**
 	 * Returns the name of the jsp file for the csv page export for the document.
-	 * @return
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getExportAsCSVPageName(MetaDocument doc){
 		return "Show"+doc.getMultiple()+"AsCSV";
@@ -240,7 +266,9 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 
 	/**
 	 * Returns the name of the jsp file for the xml page export for the document.
-	 * @return
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getExportAsXMLPageName(MetaDocument doc){
 		return "Show"+doc.getMultiple()+"AsXML";
@@ -248,89 +276,196 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 
 	/**
 	 * Returns the name of the edit page for this document.
-	 * @return
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getEditPageName(MetaDocument doc){
 		return "Edit"+doc.getName();
 	}
 	
+	/**
+	 * <p>getDialogName.</p>
+	 *
+	 * @param dialog a {@link net.anotheria.asg.generator.view.meta.MetaDialog} object.
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDialogName(MetaDialog dialog, MetaDocument doc){
 		return dialog.getName()+doc.getName();
 	}
 	
+	/**
+	 * <p>getLinksToMePageName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getLinksToMePageName(MetaDocument doc){
 		return "LinksTo"+doc.getName();
 	}
 
+	/**
+	 * <p>getContainerPageName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param table a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerPageName(MetaDocument doc, MetaContainerProperty table){
 		return "Show"+doc.getName()+StringUtils.capitalize(table.getName());
 	}
 	
+	/**
+	 * <p>generateTimestampedLinkPath.</p>
+	 *
+	 * @param path a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String generateTimestampedLinkPath(String path){
 		return "<ano:tslink>"+path+"</ano:tslink>";
 	}
 
 	
 
+	/**
+	 * <p>getCurrentImagePath.</p>
+	 *
+	 * @param imageName a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getCurrentImagePath(String imageName){
 		return getImagePath(imageName, GeneratorDataRegistry.getInstance().getContext());
 	}
 	
+	/**
+	 * <p>getImagePath.</p>
+	 *
+	 * @param imageName a {@link java.lang.String} object.
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getImagePath(String imageName, Context context){
 		return context.getApplicationURLPath()+"/img/"+imageName;
 	}
 
+	/**
+	 * <p>getCurrentCSSPath.</p>
+	 *
+	 * @param stylesheetName a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getCurrentCSSPath(String stylesheetName){
 		return getCSSPath(stylesheetName, GeneratorDataRegistry.getInstance().getContext());
 	}
 	
+	/**
+	 * <p>getCurrentJSPath.</p>
+	 *
+	 * @param jsName a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getCurrentJSPath(String jsName){
 		return getJSPath(jsName, GeneratorDataRegistry.getInstance().getContext());
 	}
 	
+	/**
+	 * <p>getCurrentYUIPath.</p>
+	 *
+	 * @param yuiName a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getCurrentYUIPath(String yuiName){
 		return getYUIPath(yuiName, GeneratorDataRegistry.getInstance().getContext());
 	}
 	
+	/**
+	 * <p>getCurrentJavaScriptPath.</p>
+	 *
+	 * @param javaScript a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getCurrentJavaScriptPath(String javaScript){
 		return getJavaScriptPath(javaScript, GeneratorDataRegistry.getInstance().getContext());
 	}
 
+	/**
+	 * <p>getCSSPath.</p>
+	 *
+	 * @param stylesheetName a {@link java.lang.String} object.
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getCSSPath(String stylesheetName, Context context){
 		return context.getApplicationURLPath()+"/cms_static/css/"+stylesheetName;
 	}
 
+	/**
+	 * <p>getJSPath.</p>
+	 *
+	 * @param jsName a {@link java.lang.String} object.
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getJSPath(String jsName, Context context){
 		return context.getApplicationURLPath()+"/cms_static/js/"+jsName;
 	}
 
+	/**
+	 * <p>getJavaScriptPath.</p>
+	 *
+	 * @param javaScript a {@link java.lang.String} object.
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getJavaScriptPath(String javaScript, Context context){
 		return context.getApplicationURLPath()+"/cms_static/js/"+javaScript;
 	}
 	
+	/**
+	 * <p>getYUIPath.</p>
+	 *
+	 * @param yuiName a {@link java.lang.String} object.
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getYUIPath(String yuiName, Context context){
 		return context.getApplicationURLPath()+"/cms_static/yui/"+yuiName;
 	}
 
+	/**
+	 * <p>getPackage.</p>
+	 *
+	 * @param mod a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackage(MetaModule mod){
 		return GeneratorDataRegistry.getInstance().getContext().getJspPackageName(mod);
 	}
 
+	/**
+	 * <p>getPackage.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackage(MetaDocument doc){
 		return GeneratorDataRegistry.getInstance().getContext().getJspPackageName(doc);
 	}
 
 	/**
-	 * Returns the tag for the delete image in the overview. 
-	 * @return
+	 * Returns the tag for the delete image in the overview.
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getDeleteImage(){
 		return getDeleteImage("delete");
 	}
 	
 	/**
-	 * Returns the tag for the preview image in the overview. 
-	 * @return
+	 * Returns the tag for the preview image in the overview.
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getPreviewImage(){
 		return getPreviewImage("preview");
@@ -338,7 +473,8 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 
 	/**
 	 * Returns the tag for the version info image in the overview. Note: for now it returns a 'V' text.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getVersionImage(){
 		return getVersionImage("version");//getDeleteImage("delete");
@@ -346,52 +482,62 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 
 	/**
 	 * Returns the tag for the edit image in the overview.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getEditImage(){
 		return getEditImage("edit");
 	}
 	
 	/**
-	 * Returns the tag for the Version in the overview with the given alt tag. 
-	 * @return
+	 * Returns the tag for the Version in the overview with the given alt tag.
+	 *
+	 * @param alt a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getVersionImage(String alt){
 		return getImage("version",alt);
 	}
 
 	/**
-	 * Returns the tag for the delete image in the overview with the given alt tag. 
-	 * @return
+	 * Returns the tag for the delete image in the overview with the given alt tag.
+	 *
+	 * @param alt a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getDeleteImage(String alt){
 		return getImage("delete",alt);
 	}
 	
 	/**
-	 * Returns the tag for the preview image in the overview with the given alt tag. 
-	 * @return
+	 * Returns the tag for the preview image in the overview with the given alt tag.
+	 *
+	 * @param alt a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getPreviewImage(String alt){
 		return getImage("preview",alt);
 	}
 
     /**
-	 * Returns the tag for the lock image in the overview.
-	 * @return created image tag
-	 */
+     * Returns the tag for the lock image in the overview.
+     *
+     * @return created image tag
+     */
     protected String getLockImage(){
         return getLockImage("lock");
     }
     /**
-	 * Returns the tag for the lock image in the overview.
-	 * @return created image tag
-	 */
+     * Returns the tag for the lock image in the overview.
+     *
+     * @return created image tag
+     */
     protected String getUnLockImage(){
         return getUnLockImage("unlock");
     }
     /**
-     * Returns the tag for the lock image in the overview with the given alt tag. 
+     * Returns the tag for the lock image in the overview with the given alt tag.
+     *
      * @param alt actually alt - for the image tag
      * @return created image tag
      */
@@ -400,7 +546,8 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
     }
 
     /**
-     * Returns the tag for the unLock image in the overview with the given alt tag. 
+     * Returns the tag for the unLock image in the overview with the given alt tag.
+     *
      * @param alt actually alt for image tag
      * @return created image tag
      */
@@ -409,65 +556,88 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
     }
 
 	/**
-	 * Returns the tag for the move to the top image in the list view with the given alt tag. 
-	 * @return
+	 * Returns the tag for the move to the top image in the list view with the given alt tag.
+	 *
+	 * @param alt a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getTopImage(String alt){
 		return getImage("top",alt);
 	}
 
 	/**
-	 * Returns the tag for the move to the bottom image in the list view with the given alt tag. 
-	 * @return
+	 * Returns the tag for the move to the bottom image in the list view with the given alt tag.
+	 *
+	 * @param alt a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getBottomImage(String alt){
 		return getImage("bottom",alt);
 	}
 
 	/**
-	 * Returns the tag for the move up image in the list view with the given alt tag. 
-	 * @return
+	 * Returns the tag for the move up image in the list view with the given alt tag.
+	 *
+	 * @param alt a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getUpImage(String alt){
 		return getImage("up",alt);
 	}
 
 	/**
-	 * Returns the tag for the move down image in the list view with the given alt tag. 
-	 * @return
+	 * Returns the tag for the move down image in the list view with the given alt tag.
+	 *
+	 * @param alt a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getDownImage(String alt){
 		return getImage("down",alt);
 	}
 
 	/**
-	 * Returns the tag for the duplicate image in the overview with the given alt tag. 
-	 * @return
+	 * Returns the tag for the duplicate image in the overview with the given alt tag.
+	 *
+	 * @param alt a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getDuplicateImage(String alt){
 		return getImage("clone",alt);
 	}
 
+	/**
+	 * <p>getEditImage.</p>
+	 *
+	 * @param alt a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getEditImage(String alt){
 		return getImage("edit_icon",alt);
 	}
 	
 	/**
 	 * Returns the img tag to embed an image into the jsp.
+	 *
 	 * @param name name of the gif file containing the image.
 	 * @param alt alternative description (alt tag).
-	 * @return
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getImage(String name, String alt){
 		return "<img src=\""+GeneratorDataRegistry.getInstance().getContext().getApplicationURLPath()+"/cms_static/img/"+name+".gif"+"\" alt="+quote(alt)+" title="+quote(alt)+">";
 	}
 
+	/**
+	 * <p>getContext.</p>
+	 *
+	 * @return a {@link net.anotheria.asg.generator.Context} object.
+	 */
 	public Context getContext() {
 		return GeneratorDataRegistry.getInstance().getContext();
 	}
 
 	/**
 	 * Generates pragmas for a given view.
+	 *
 	 * @param view the view to generate pragmas for.
 	 */
 	protected void generatePragmas(MetaView view){
@@ -485,28 +655,56 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 		appendString("<meta http-equiv=\"Content-Type\" content=\"text/html; charset="+GeneratorDataRegistry.getInstance().getContext().getEncoding()+"\"/>");
 	}
 	
+	/**
+	 * <p>openTag.</p>
+	 *
+	 * @param tag a {@link java.lang.String} object.
+	 * @param params a {@link java.lang.String} object.
+	 */
 	protected void openTag(String tag, String params){
 		appendString("<"+tag+(params.length()>0 ? " ":"")+params+">");
 	}
 
+	/**
+	 * <p>closeTag.</p>
+	 *
+	 * @param tag a {@link java.lang.String} object.
+	 * @param params a {@link java.lang.String} object.
+	 */
 	protected void closeTag(String tag, String params){
 		appendString("</"+tag+(params.length()>0 ? " ":"")+params+">");
 	}
 
+	/**
+	 * <p>openTR.</p>
+	 *
+	 * @param additionalParams a {@link java.lang.String} object.
+	 */
 	protected void openTR(String additionalParams){
 		openTag("tr", additionalParams);
 		increaseIdent();
 	}
 	
+	/**
+	 * <p>closeTR.</p>
+	 *
+	 * @param additionalParams a {@link java.lang.String} object.
+	 */
 	protected void closeTR(String additionalParams){
 		decreaseIdent();
 		closeTag("tr", additionalParams);
 	}
 
+	/**
+	 * <p>openTR.</p>
+	 */
 	protected void openTR(){
 		openTR("");
 	}
 	
+	/**
+	 * <p>closeTR.</p>
+	 */
 	protected void closeTR(){
 		closeTR("");
 	}
@@ -518,18 +716,27 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 		openTD("");
 	}
 	
+	/**
+	 * <p>closeTD.</p>
+	 */
 	protected void closeTD(){
 		closeTD("");
 	}
 	
 	/**
 	 * Opens a table cell.
+	 *
 	 * @param additionalParams additional parameters.
 	 */
 	protected void openTD(String additionalParams){
 		openTag("td", additionalParams);
 	}
 	
+	/**
+	 * <p>closeTD.</p>
+	 *
+	 * @param additionalParams a {@link java.lang.String} object.
+	 */
 	protected void closeTD(String additionalParams){
 		closeTag("td", additionalParams);
 	}
@@ -537,6 +744,7 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	
 	/**
 	 * Appends to generation output tag without body.
+	 *
 	 * @param tag tag name
 	 * @param id html id attribute
 	 * @param clazz html class attribute
@@ -549,6 +757,7 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 
 	/**
 	 * Appends to generation output tag without body.
+	 *
 	 * @param tag tag name
 	 * @param clazz html class attribute
 	 * @param attrs array of tag attributes
@@ -560,6 +769,7 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	
 	/**
 	 * Appends to generation output tag without body.
+	 *
 	 * @param tag tag name
 	 * @param attrs array of tag attributes
 	 */
@@ -572,6 +782,7 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	
 	/**
 	 * Appends to generation output opening for tag.
+	 *
 	 * @param tag tag name
 	 * @param id html id attribute
 	 * @param clazz html class attribute
@@ -584,6 +795,7 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 
 	/**
 	 * Appends to generation output opening for tag.
+	 *
 	 * @param tag tag name
 	 * @param clazz html class attribute
 	 * @param attrs array of tag attributes
@@ -595,6 +807,7 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	
 	/**
 	 * Appends to generation output opening for tag.
+	 *
 	 * @param tag tag name
 	 * @param attrs array of tag attributes
 	 */
@@ -609,6 +822,7 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	
 	/**
 	 * Appends to generation output closing for tag.
+	 *
 	 * @param tag tag name
 	 */
 	protected void tagClose(String tag){
@@ -655,14 +869,31 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 		}
 	}
 	
+	/**
+	 * <p>getTopMenuPage.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getTopMenuPage(){
 		return "../../shared/jsp/"+MenuJspGenerator.getMenuPageName();		
 	}
 
+	/**
+	 * <p>getMenuName.</p>
+	 *
+	 * @param view a {@link net.anotheria.asg.generator.view.meta.MetaView} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getMenuName(MetaView view){
 		return "../../shared/jsp/"+StringUtils.capitalize(view.getName())+"Menu";		
 	}
 	
+	/**
+	 * <p>getFooterName.</p>
+	 *
+	 * @param view a {@link net.anotheria.asg.generator.view.meta.MetaView} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getFooterName(MetaView view){
 		return "../../shared/jsp/"+StringUtils.capitalize(view.getName())+"Footer";		
 	}

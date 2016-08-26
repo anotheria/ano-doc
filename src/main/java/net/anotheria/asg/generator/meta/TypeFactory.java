@@ -2,8 +2,9 @@ package net.anotheria.asg.generator.meta;
 
 /**
  * Factory for the meta types.
- * 
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class TypeFactory {
 
@@ -12,9 +13,9 @@ public class TypeFactory {
 
 	/**
 	 * Creates a type out of a string description.
-	 * 
-	 * @param type
-	 * @return
+	 *
+	 * @param type a {@link net.anotheria.asg.generator.meta.MetaProperty.Type} object.
+	 * @return a {@link net.anotheria.asg.generator.meta.IMetaType} object.
 	 */
 	public static final IMetaType createType(MetaProperty.Type type) {
 

@@ -13,9 +13,18 @@ import net.anotheria.util.StringUtils;
  * Generates the jsps for the edit view.
  *
  * @author another
+ * @version $Id: $Id
  */
 public class ListPageJspGenerator extends AbstractJSPGenerator {
 
+    /**
+     * <p>generate.</p>
+     *
+     * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+     * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+     * @param list a {@link net.anotheria.asg.generator.meta.MetaListProperty} object.
+     * @return a {@link net.anotheria.asg.generator.GeneratedJSPFile} object.
+     */
     public GeneratedJSPFile generate(MetaModuleSection section, MetaDocument doc, MetaListProperty list) {
 
         GeneratedJSPFile jsp = new GeneratedJSPFile();

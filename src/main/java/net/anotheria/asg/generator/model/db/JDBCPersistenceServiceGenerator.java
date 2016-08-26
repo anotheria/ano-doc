@@ -18,8 +18,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * <p>JDBCPersistenceServiceGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class JDBCPersistenceServiceGenerator extends AbstractGenerator implements IGenerator{
 	
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable gmodule){
 		
 		MetaModule mod = (MetaModule)gmodule;
@@ -72,10 +79,25 @@ public class JDBCPersistenceServiceGenerator extends AbstractGenerator implement
 		
 	}
 	
+	/**
+	 * <p>getItemNotFoundExceptionImport.</p>
+	 *
+	 * @param c a {@link net.anotheria.asg.generator.Context} object.
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getItemNotFoundExceptionImport(Context c, MetaDocument doc, MetaModule m){
 		return getPackageName(c, m)+"."+getItemNotFoundExceptionName(doc,m);
 	}
 	
+	/**
+	 * <p>getItemNotFoundExceptionName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getItemNotFoundExceptionName(MetaDocument doc, MetaModule module){
 		return doc.getName()+"NotFoundIn"+getExceptionName(module);
 	}
@@ -500,38 +522,96 @@ public class JDBCPersistenceServiceGenerator extends AbstractGenerator implement
 	}
 
 	
+	/**
+	 * <p>getExceptionName.</p>
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getExceptionName(MetaModule m){
 		return getServiceName(m)+"Exception";
 	}
 	
+	/**
+	 * <p>getInterfaceName.</p>
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getInterfaceName(MetaModule m){
 	    return "I"+getServiceName(m);
 	}
 	
+	/**
+	 * <p>getServiceName.</p>
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getServiceName(MetaModule m){
 	    return m.getName()+"PersistenceService";
 	}
 
+	/**
+	 * <p>getFactoryName.</p>
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getFactoryName(MetaModule m){
 	    return getServiceName(m)+"Factory";
 	}
 	
+	/**
+	 * <p>getImplementationName.</p>
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getImplementationName(MetaModule m){
 	    return getServiceName(m)+"Impl";
 	}
 	
+	/**
+	 * <p>getPackageName.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackageName(Context context, MetaModule module){
 		return context.getPackageName(module)+".service.persistence";
 	}
 	
+	/**
+	 * <p>getExceptionImport.</p>
+	 *
+	 * @param c a {@link net.anotheria.asg.generator.Context} object.
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getExceptionImport(Context c, MetaModule m){
 		return getPackageName(c, m)+"."+getExceptionName(m);
 	}
 
+	/**
+	 * <p>getFactoryImport.</p>
+	 *
+	 * @param c a {@link net.anotheria.asg.generator.Context} object.
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getFactoryImport(Context c, MetaModule m){
 		return getPackageName(c, m)+"."+getFactoryName(m);
 	}
 
+	/**
+	 * <p>getInterfaceImport.</p>
+	 *
+	 * @param c a {@link net.anotheria.asg.generator.Context} object.
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getInterfaceImport(Context c, MetaModule m){
 		return getPackageName(c, m)+"."+getInterfaceName(m);
 	}

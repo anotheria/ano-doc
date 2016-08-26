@@ -4,11 +4,25 @@ import java.util.List;
 
 import net.anotheria.asg.data.DataObject;
 
+/**
+ * <p>CMSViewHelperUtil class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class CMSViewHelperUtil {
 
 	private CMSViewHelperUtil() {
 	}
 
+	/**
+	 * <p>getFieldExplanation.</p>
+	 *
+	 * @param documentPath a {@link java.lang.String} object.
+	 * @param object a {@link net.anotheria.asg.data.DataObject} object.
+	 * @param property a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getFieldExplanation(String documentPath, DataObject object, String property){
 		List<CMSViewHelper> helpers = CMSViewHelperRegistry.getCMSViewHelpers(documentPath);
 		boolean moreThanOne = false;

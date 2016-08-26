@@ -24,9 +24,11 @@ import java.util.List;
  * This generator generates the DAO for a Document, the daoexceptions, and the rowmapper.
  *
  * @author another
+ * @version $Id: $Id
  */
 public class PersistenceServiceDAOGenerator extends AbstractGenerator implements IGenerator {
 
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable gmodule) {
 
 		MetaModule mod = (MetaModule) gmodule;
@@ -1146,18 +1148,42 @@ public class PersistenceServiceDAOGenerator extends AbstractGenerator implements
 	}
 
 
+	/**
+	 * <p>getExceptionName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getExceptionName(MetaDocument doc) {
 		return getDAOName(doc) + "Exception";
 	}
 
+	/**
+	 * <p>getNoItemExceptionName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getNoItemExceptionName(MetaDocument doc) {
 		return getDAOName(doc) + "NoItemForIdFoundException";
 	}
 
+	/**
+	 * <p>getDAOName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDAOName(MetaDocument doc) {
 		return doc.getName() + "DAO";
 	}
 
+	/**
+	 * <p>getRowMapperName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getRowMapperName(MetaDocument doc) {
 		return doc.getName() + "RowMapper";
 	}

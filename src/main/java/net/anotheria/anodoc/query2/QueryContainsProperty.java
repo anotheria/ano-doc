@@ -11,11 +11,11 @@ import net.anotheria.util.StringUtils;
 
 /**
  * Query to List/Array Property. Passes only if Property contains all queried values.
- * 
- * <b>IMPORTANT:<i>Not properly tested yet. Use on own risk!!!!</i></b>
- * 
- * @author denis
  *
+ * <b>IMPORTANT:<i>Not properly tested yet. Use on own risk!!!!</i></b>
+ *
+ * @author denis
+ * @version $Id: $Id
  */
 public class QueryContainsProperty <T>extends QueryProperty{
 	
@@ -24,14 +24,27 @@ public class QueryContainsProperty <T>extends QueryProperty{
 	 */
 	private static final long serialVersionUID = -8649073486730051958L;
 	
+	/**
+	 * <p>Constructor for QueryContainsProperty.</p>
+	 *
+	 * @param aName a {@link java.lang.String} object.
+	 * @param aValues a T object.
+	 */
 	public QueryContainsProperty(String aName, T... aValues){
 		this(aName, Arrays.asList(aValues));
 	}
 
+	/**
+	 * <p>Constructor for QueryContainsProperty.</p>
+	 *
+	 * @param aName a {@link java.lang.String} object.
+	 * @param aValues a {@link java.util.Collection} object.
+	 */
 	public QueryContainsProperty(String aName, Collection<T> aValues){
 		super(aName, aValues);
 	}
 
+	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean doesMatch(Object o) {
@@ -45,11 +58,13 @@ public class QueryContainsProperty <T>extends QueryProperty{
 		return toCompare.containsAll(getListValue());
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getComparator() {
 		return " @> ";
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Object getValue() {
 		Collection<T> values = getListValue(); 
@@ -61,6 +76,7 @@ public class QueryContainsProperty <T>extends QueryProperty{
 		return (Collection<T>) getOriginalValue();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public boolean unprepaireable() {
 		return true;

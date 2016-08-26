@@ -1,8 +1,9 @@
 package net.anotheria.asg.generator.meta;
 /**
  * Definition of a federated module. Each federated module is mapped to a key.
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 public class FederatedModuleDef{
 	/**
@@ -19,10 +20,20 @@ public class FederatedModuleDef{
 		key = aKey;
 	}
 
+	/**
+	 * <p>Getter for the field <code>key</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getKey() {
 		return key;
 	}
 
+	/**
+	 * <p>Getter for the field <code>name</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getName() {
 		return name;
 	}

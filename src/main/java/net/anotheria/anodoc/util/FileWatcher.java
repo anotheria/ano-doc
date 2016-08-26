@@ -9,6 +9,7 @@ import java.util.TimerTask;
  * Class for watching file existence. If file not exists - FileWatcher creates it and fire onChange event.
  *
  * @author dsilenko
+ * @version $Id: $Id
  */
 public abstract class FileWatcher {
 
@@ -26,6 +27,8 @@ public abstract class FileWatcher {
 	private Timer timer;
 
 	/**
+	 * <p>Constructor for FileWatcher.</p>
+	 *
 	 * @param aFilePath path for file to watch.
 	 * @param aPeriod delay for starting and period time in milliseconds between successive task executions.
 	 */

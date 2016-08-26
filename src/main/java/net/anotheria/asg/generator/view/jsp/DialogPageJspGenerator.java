@@ -16,6 +16,7 @@ import java.util.List;
  * Generates the jsps for the edit view.
  *
  * @author another
+ * @version $Id: $Id
  */
 public class DialogPageJspGenerator extends AbstractJSPGenerator {
 
@@ -32,6 +33,15 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 	 */
 	private boolean isNeedEnableDateTimeWidgets = false;
 
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param metaSection a {@link net.anotheria.asg.generator.view.meta.MetaSection} object.
+	 * @param dialog a {@link net.anotheria.asg.generator.view.meta.MetaDialog} object.
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @param view a {@link net.anotheria.asg.generator.view.meta.MetaView} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedJSPFile} object.
+	 */
 	public GeneratedJSPFile generate(MetaSection metaSection, MetaDialog dialog, MetaModuleSection section, MetaView view) {
 		this.currentSection = metaSection;
 		this.currentDialog = dialog;

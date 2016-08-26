@@ -13,20 +13,22 @@ import java.util.List;
 
 /**
  * Missing Any Translation Filter. Pass documents if any of properties:
- * 
+ *
  * - multilanguage support is enabled
  * - value for default language (context.xml) is set.
  * - value for selected language (selectable in filter) is not set (empty)
- *  
+ *
  * Using:
- * 
+ *
  * The main feature of this filter realization is that attributeName is ignored in mayPass() method,
  * so viewdef filter definition may be not linked with real field, for example:
- * 
+ *
  * <filter name="MissingAnyTranslation" field="Any" />
  * or
- * <filter name="MissingAnyTranslation" field="*" />   
- * 
+ * <filter name="MissingAnyTranslation" field="*" />
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class MissingAnyTranslationFilter implements DocumentFilter{
 
@@ -72,14 +74,16 @@ public class MissingAnyTranslationFilter implements DocumentFilter{
 	
 	/**
 	 * Constructor with parameters. May be used for unit test.
-	 * @param supportedLanguages
-	 * @param defaultLanguage
+	 *
+	 * @param supportedLanguages a {@link java.util.List} object.
+	 * @param defaultLanguage a {@link java.lang.String} object.
 	 */
 	public MissingAnyTranslationFilter(List<String> supportedLanguages, String defaultLanguage) {
 		this.setDefaultLanguage(defaultLanguage);
 		this.setSupportedLanguages(supportedLanguages);								
 	}
 	
+	/** {@inheritDoc} */
 	@Override public List<FilterTrigger> getTriggerer(String storedFilterParameter) {
 		return triggerer;
 	}
@@ -87,6 +91,7 @@ public class MissingAnyTranslationFilter implements DocumentFilter{
 	/*
 	 * @param attributeName Ignored, all properties for given attributeName (Language) will be checked
 	 */
+	/** {@inheritDoc} */
 	@Override public boolean mayPass(DataObject document, String attributeName, String filterParameter) {
 		if (filterParameter == null || filterParameter.length() == 0) {
 			return true;
@@ -149,6 +154,8 @@ public class MissingAnyTranslationFilter implements DocumentFilter{
 	/**
 	 * Set supported languages. Method update triggers.
 	 * NOTE: Default language will not be included into triggers.
+	 *
+	 * @param supportedLanguages a {@link java.util.List} object.
 	 */
 	public void setSupportedLanguages(List<String> supportedLanguages) {
 		this.supportedLanguages = supportedLanguages;
@@ -163,14 +170,29 @@ public class MissingAnyTranslationFilter implements DocumentFilter{
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>supportedLanguages</code>.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<String> getSupportedLanguages() {
 		return supportedLanguages;
 	}
 
+	/**
+	 * <p>Setter for the field <code>defaultLanguage</code>.</p>
+	 *
+	 * @param defaultLanguage a {@link java.lang.String} object.
+	 */
 	public void setDefaultLanguage(String defaultLanguage) {
 		this.defaultLanguage = defaultLanguage;
 	}
 
+	/**
+	 * <p>Getter for the field <code>defaultLanguage</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getDefaultLanguage() {
 		return defaultLanguage;
 	}

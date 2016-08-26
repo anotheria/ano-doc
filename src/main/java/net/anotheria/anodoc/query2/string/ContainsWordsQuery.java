@@ -21,6 +21,12 @@ import java.util.Map;
 import java.util.Set;
 
 
+/**
+ * <p>ContainsWordsQuery class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class ContainsWordsQuery implements DocumentQuery{
 
 	/**
@@ -89,6 +95,7 @@ public class ContainsWordsQuery implements DocumentQuery{
 		
 	}
 	
+	/** Constant <code>WORDS_SEPARATORS</code> */
 	public static final Map<String, String> WORDS_SEPARATORS = new HashMap<String, String>();
 	static{
 		WORDS_SEPARATORS.put("\n", " ");
@@ -105,10 +112,21 @@ public class ContainsWordsQuery implements DocumentQuery{
 	private String[] criteria;
 	private Set<String> propertiesToSearch = Collections.emptySet();
 	
+	/**
+	 * <p>Constructor for ContainsWordsQuery.</p>
+	 *
+	 * @param aCriteria a {@link java.lang.String} object.
+	 */
 	public ContainsWordsQuery(String aCriteria){
 		this(aCriteria, new String[]{});
 	}
 	
+	/**
+	 * <p>Constructor for ContainsWordsQuery.</p>
+	 *
+	 * @param aCriteria a {@link java.lang.String} object.
+	 * @param aPropertiesToSearch a {@link java.lang.String} object.
+	 */
 	public ContainsWordsQuery(String aCriteria, String... aPropertiesToSearch){
 		aCriteria = aCriteria.toLowerCase().trim();
 		aCriteria = StringUtils.replace(aCriteria, WORDS_SEPARATORS);
@@ -119,6 +137,7 @@ public class ContainsWordsQuery implements DocumentQuery{
 	}
 	
   
+	/** {@inheritDoc} */
 	public List<QueryResultEntry> match(DataObject obj) {
 		LOGGER.debug("Match DataObject  " + obj.getDefinedName() + " with ID " + obj.getId() + "." + this);
 		if (!(obj instanceof Document))
@@ -126,6 +145,12 @@ public class ContainsWordsQuery implements DocumentQuery{
 		return match((Document)obj);
 	}
 	
+	/**
+	 * <p>match.</p>
+	 *
+	 * @param doc a {@link net.anotheria.anodoc.data.Document} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<QueryResultEntry> match(Document doc) {
 		List<QueryResultEntry> ret = new ArrayList<QueryResultEntry>();
 		List<Property> properties = doc.getProperties();
@@ -172,12 +197,19 @@ public class ContainsWordsQuery implements DocumentQuery{
 		return ret;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "ContainsAllQuery [criteria=" + Arrays.toString(criteria) + ", propertiesToSearch=" + propertiesToSearch + "]";
 	}
 
 	//TODO: write Unit Tests
+	/**
+	 * <p>main.</p>
+	 *
+	 * @param args an array of {@link java.lang.String} objects.
+	 * @throws java.lang.Exception if any.
+	 */
 	public static void main(String[] args) throws Exception{
 		ContainsWordsQuery query = new ContainsWordsQuery("search query indexing matrix Ноутбук");
 		

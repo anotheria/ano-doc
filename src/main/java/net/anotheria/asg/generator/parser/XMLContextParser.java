@@ -14,7 +14,9 @@ import net.anotheria.util.StringUtils;
 
 /**
  * Parser for the context-xml.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public final class XMLContextParser {
 
@@ -25,7 +27,10 @@ public final class XMLContextParser {
 	}
 
 	/**
+	 * <p>parseContext.</p>
+	 *
 	 * @return parsed generation context.
+	 * @param content a {@link java.lang.String} object.
 	 */
 	public static Context parseContext(String content){
 		SAXBuilder reader = new SAXBuilder();

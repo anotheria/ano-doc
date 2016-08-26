@@ -23,14 +23,19 @@ import net.anotheria.util.StringUtils;
 
 /**
  * This generator generates an ano-doc framework based implementation of the data object interface previously generated
- * by the DataFacadeGenerator. It also generates an according factory. 
+ * by the DataFacadeGenerator. It also generates an according factory.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class DocumentGenerator extends AbstractDataObjectGenerator implements IGenerator{
 
+	/** Constant <code>PROPERTY_DECLARATION="public static final String "</code> */
 	public static final String PROPERTY_DECLARATION = "public static final String ";	
+	/** Constant <code>GET_CURRENT_LANG="ContextManager.getCallContext().getCurr"{trunked}</code> */
 	public static final String GET_CURRENT_LANG = "ContextManager.getCallContext().getCurrentLanguage()";
 
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable gdoc){
 		MetaDocument doc = (MetaDocument)gdoc;
 		
@@ -41,23 +46,43 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 		return _ret;
 	}
 	
+	/**
+	 * <p>getDocumentName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDocumentName(MetaDocument doc){
 		return doc.getName()+"Document";
 	}
 
+	/** {@inheritDoc} */
 	public String getDataObjectImplName(MetaDocument doc){
 		return getDocumentImplName(doc);
 	}
 
+	/**
+	 * <p>getDocumentImplName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDocumentImplName(MetaDocument doc){
 		return doc.getName()+"Document";
 	}
 	
 
+	/**
+	 * <p>getClassImplName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getClassImplName(MetaDocument doc){
 		return doc.getName()+"Document";
 	}
 
+	/** {@inheritDoc} */
 	public static String getSortTypeName(MetaDocument doc){
 		return doc.getName()+"SortType";
 	}
@@ -399,6 +424,13 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 		return ret;
 	}
 	
+	/**
+	 * <p>getDocumentImport.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getDocumentImport(Context context, MetaDocument doc){
 		return context.getDataPackageName(doc)+"."+getDocumentImplName(doc);
 	}
@@ -699,50 +731,126 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 	}
 	*/
 
+	/**
+	 * <p>getContainerSizeGetterName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerSizeGetterName(MetaContainerProperty p){
 		return "get"+StringUtils.capitalize(p.getName())+"Size"; 
 	}
 
+	/**
+	 * <p>getContainerSizeGetterName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @param language a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerSizeGetterName(MetaContainerProperty p, String language){
 		return "get"+StringUtils.capitalize(p.getName(language))+"Size"; 
 	}
 
+	/**
+	 * <p>getTableGetterName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaTableProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getTableGetterName(MetaTableProperty p){
 		return "get"+StringUtils.capitalize(p.getName())+"Table"; 
 	}
 	
+	/**
+	 * <p>getContainerEntryAdderName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerEntryAdderName(MetaContainerProperty p){
 	    return DataFacadeGenerator.getContainerEntryAdderName(p);	    
 	}
 
+	/**
+	 * <p>getContainerEntryAdderName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @param language a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerEntryAdderName(MetaContainerProperty p, String language){
 		return DataFacadeGenerator.getContainerEntryAdderName(p, language);	    
 	}
 
+	/**
+	 * <p>getContainerEntryDeleterName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerEntryDeleterName(MetaContainerProperty p){
 		return DataFacadeGenerator.getContainerEntryDeleterName(p);	    
 	}
 
+	/**
+	 * <p>getContainerEntryDeleterName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @param language a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerEntryDeleterName(MetaContainerProperty p, String language){
 		return DataFacadeGenerator.getContainerEntryDeleterName(p, language);	    
 	}
 
+	/**
+	 * <p>getContainerEntrySwapperName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerEntrySwapperName(MetaContainerProperty p){
 		return DataFacadeGenerator.getContainerEntrySwapperName(p);	    
 	}
 	
+	/**
+	 * <p>getContainerEntrySwapperName.</p>
+	 *
+	 * @param p a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @param language a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerEntrySwapperName(MetaContainerProperty p, String language){
 		return DataFacadeGenerator.getContainerEntrySwapperName(p, language);	    
 	}
 
+	/**
+	 * <p>getListElementGetterName.</p>
+	 *
+	 * @param list a {@link net.anotheria.asg.generator.meta.MetaListProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getListElementGetterName(MetaListProperty list){
 		return DataFacadeGenerator.getListElementGetterName(list);	    
 	}
 
+	/**
+	 * <p>getListElementGetterName.</p>
+	 *
+	 * @param list a {@link net.anotheria.asg.generator.meta.MetaListProperty} object.
+	 * @param language a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getListElementGetterName(MetaListProperty list, String language){
 		return DataFacadeGenerator.getListElementGetterName(list, language);	    
 	}
 
+	/**
+	 * <p>generateMultilingualSwitchSupport.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 */
 	protected void generateMultilingualSwitchSupport(MetaDocument doc){
 		if (!doc.isMultilingual())
 			return ;

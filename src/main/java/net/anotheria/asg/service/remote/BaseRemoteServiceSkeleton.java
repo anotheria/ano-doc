@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 abstract class BaseRemoteServiceSkeleton implements RemoteService{
 	
+	/** {@inheritDoc} */
 	@Override
 	public EchoResponse getEcho(EchoRequest req) throws RemoteException{
 		EchoResponse res = new EchoResponse();

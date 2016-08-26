@@ -5,24 +5,29 @@ import net.anotheria.asg.util.CmsChangesTracker;
 import net.anotheria.asg.util.DocumentChange;
 import net.anotheria.asg.util.CmsChangesTracker.Action;
 /**
- * 
- * @author 
+ * <p>ContentChangeTrackerListener class.</p>
+ *
+ * @version $Id: $Id
  */
 public class ContentChangeTrackerListener implements IServiceListener{
 	
+	/** {@inheritDoc} */
 	@Override public void documentCreated(DataObject doc) {
 		trackChanges(doc, Action.CREATE);
 	}
 
+    /** {@inheritDoc} */
     @Override
     public void documentImported(DataObject doc) {
     	trackChanges(doc, Action.IMPORT);
     }
 
+    /** {@inheritDoc} */
     @Override public void documentDeleted(DataObject doc) {
     	trackChanges(doc, Action.DELETE);
 	}
 
+	/** {@inheritDoc} */
 	@Override public void documentUpdated(DataObject oldVersion, DataObject newVersion) {
 		trackChanges(newVersion, Action.UPDATE);
 	}
@@ -40,6 +45,7 @@ public class ContentChangeTrackerListener implements IServiceListener{
 		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void persistenceChanged() {
 		//nothing todo here

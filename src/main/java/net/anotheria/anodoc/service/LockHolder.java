@@ -10,8 +10,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * This class contains a reentrant read-write lock and offers operations on it. It is used to synchronize the shutdown of the VM and to allow the threads to finish the writes prior to the shutdown,
  * and to block new writers to keep the data consistent.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class LockHolder {
 
@@ -25,10 +26,16 @@ public class LockHolder {
 	private LockHolder() {
 	}
 
+	/**
+	 * <p>prepareForSave.</p>
+	 */
 	public static void prepareForSave(){
 		lock.readLock().lock();
 	}
 	
+	/**
+	 * <p>notifySaved.</p>
+	 */
 	public static void notifySaved(){
 		lock.readLock().unlock();
 	}
@@ -37,6 +44,9 @@ public class LockHolder {
 		lock.writeLock().lock();
 	}
 	
+	/**
+	 * <p>addShutdownHook.</p>
+	 */
 	public static final void addShutdownHook(){
 		Runtime.getRuntime().addShutdownHook(new Thread(){
 			public void run(){

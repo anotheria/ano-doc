@@ -8,8 +8,21 @@ import net.anotheria.asg.generator.util.DirectLink;
 import net.anotheria.asg.generator.view.meta.MetaModuleSection;
 import net.anotheria.asg.generator.view.meta.MetaView;
 
+/**
+ * <p>LinksToMePageJspGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class LinksToMePageJspGenerator extends AbstractJSPGenerator{
 	
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @param view a {@link net.anotheria.asg.generator.view.meta.MetaView} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedJSPFile} object.
+	 */
 	public GeneratedJSPFile generate(MetaModuleSection section, MetaView view){
 
 		GeneratedJSPFile jsp = new GeneratedJSPFile();

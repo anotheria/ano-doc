@@ -15,11 +15,14 @@ import net.anotheria.asg.generator.meta.MetaModule;
 
 /**
  * TODO please remined another to comment this class
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class ModuleFactoryGenerator extends AbstractGenerator implements IGenerator{
 	
 	
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable gmodule){
 		
 		MetaModule mod = (MetaModule)gmodule;
@@ -31,6 +34,12 @@ public class ModuleFactoryGenerator extends AbstractGenerator implements IGenera
 		return ret;
 	}
 	
+	/**
+	 * <p>getModuleFactoryName.</p>
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getModuleFactoryName(MetaModule module){
 		return module.getFactoryClassName();
 	}

@@ -1,7 +1,10 @@
 package net.anotheria.anodoc.data;
 
 /**
- * Some constants used by the assembling and dissembling routines. 
+ * Some constants used by the assembling and dissembling routines.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public interface IHelperConstants {
 	/**

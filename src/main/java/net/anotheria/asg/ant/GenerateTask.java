@@ -8,8 +8,9 @@ import net.anotheria.asg.generator.util.FileWriter;
 import org.apache.tools.ant.Task;
 /**
  * Tasks for generation of java files out of xml data.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class GenerateTask extends Task {
 	/**
@@ -21,6 +22,9 @@ public class GenerateTask extends Task {
 	 */
 	private String baseDir;
 	
+	/**
+	 * <p>execute.</p>
+	 */
 	public void execute(){
 		
 		try{
@@ -37,18 +41,38 @@ public class GenerateTask extends Task {
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>outputDir</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getOutputDir() {
 		return outputDir;
 	}
 
+	/**
+	 * <p>Setter for the field <code>outputDir</code>.</p>
+	 *
+	 * @param outputDir a {@link java.lang.String} object.
+	 */
 	public void setOutputDir(String outputDir) {
 		this.outputDir = outputDir;
 	}
 
+	/**
+	 * <p>Getter for the field <code>baseDir</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getBaseDir() {
 		return baseDir;
 	}
 
+	/**
+	 * <p>Setter for the field <code>baseDir</code>.</p>
+	 *
+	 * @param baseDir a {@link java.lang.String} object.
+	 */
 	public void setBaseDir(String baseDir) {
 		this.baseDir = baseDir;
 	}

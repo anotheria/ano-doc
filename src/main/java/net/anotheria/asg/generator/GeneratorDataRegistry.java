@@ -21,7 +21,9 @@ import net.anotheria.asg.generator.view.meta.MetaView;
 
 /**
  * Used by the generator to store the parsed xml data during the generation.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public final class GeneratorDataRegistry {
 
@@ -82,6 +84,7 @@ public final class GeneratorDataRegistry {
 	
 	/**
 	 * Returns the singleton instance of the GeneratorDataRegistry.
+	 *
 	 * @return instance of the GeneratorDataRegistry
 	 */
 	public static GeneratorDataRegistry getInstance(){
@@ -90,6 +93,7 @@ public final class GeneratorDataRegistry {
 	
 	/**
 	 * Adds a new parsed module to the storage.
+	 *
 	 * @param m the module to add.
 	 */
 	public void addModule(MetaModule m){
@@ -98,6 +102,7 @@ public final class GeneratorDataRegistry {
 	
 	/**
 	 * Adds some modules to the storage.
+	 *
 	 * @param aModules a list of modules to add.
 	 */
 	public void addModules(List<MetaModule> aModules){
@@ -106,6 +111,7 @@ public final class GeneratorDataRegistry {
 	}
 	/**
 	 * Adds a view to the storage.
+	 *
 	 * @param v the view to add.
 	 */
 	public void addView(MetaView v){
@@ -114,6 +120,7 @@ public final class GeneratorDataRegistry {
 	
 	/**
 	 * Adds some view to the storage.
+	 *
 	 * @param aViews the views to add.
 	 */
 	public void addViews(List<MetaView> aViews){
@@ -122,7 +129,8 @@ public final class GeneratorDataRegistry {
 	}
 	
 	/**
-	 * 
+	 * <p>resolveLink.</p>
+	 *
 	 * @param link link for resolving document
 	 * @return resolved document
 	 */
@@ -135,6 +143,12 @@ public final class GeneratorDataRegistry {
 		return targetDocument;
 	}
 	
+	/**
+	 * <p>findLinksToDocument.</p>
+	 *
+	 * @param target a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<DirectLink> findLinksToDocument(MetaDocument target){
 		ArrayList<DirectLink> ret = new ArrayList<DirectLink>();
 		for (MetaModule module : modules.values()){
@@ -148,6 +162,12 @@ public final class GeneratorDataRegistry {
 		return ret;
 	}
 	
+	/**
+	 * <p>findViewSection.</p>
+	 *
+	 * @param document a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link net.anotheria.asg.generator.view.meta.MetaSection} object.
+	 */
 	public MetaSection findViewSection(MetaDocument document){
 		for (MetaView module : views.values()){
 			for (MetaSection section : module.getSections())
@@ -159,6 +179,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Returns the module from the storage.
+	 *
 	 * @param name the name of the module.
 	 * @return module
 	 */
@@ -168,6 +189,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Returns module from storage.
+	 *
 	 * @return modules
 	 */
 	public Collection<MetaModule> getModules(){
@@ -176,6 +198,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Return view from storage.
+	 *
 	 * @param name name of view
 	 * @return view
 	 */
@@ -184,6 +207,8 @@ public final class GeneratorDataRegistry {
 	}
 
 	/**
+	 * <p>Getter for the field <code>context</code>.</p>
+	 *
 	 * @return the context
 	 */
 	public Context getContext() {
@@ -192,6 +217,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Sets the context.
+	 *
 	 * @param context context to set
 	 */
 	public void setContext(Context context) {
@@ -202,6 +228,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Adds parsed data type.
+	 *
 	 * @param type type to add
 	 */
 	public void addType(DataType type){
@@ -211,6 +238,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Adds parsed data types.
+	 *
 	 * @param aTypes types to add
 	 */
 	public void addTypes(List<DataType> aTypes){
@@ -221,6 +249,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Returns parsed data type by name.
+	 *
 	 * @param name name of type
 	 * @return type
 	 */
@@ -238,6 +267,7 @@ public final class GeneratorDataRegistry {
 	
 	/**
 	 * Adds the decorator to the storage.
+	 *
 	 * @param decorator the decorator to add.
 	 */
 	public void addDecorator(MetaDecorator decorator){
@@ -246,6 +276,7 @@ public final class GeneratorDataRegistry {
 	
 	/**
 	 * Adds some decorators to the storage.
+	 *
 	 * @param someDecorators a list with decorators to add.
 	 */
 	public void addDecorators(List<MetaDecorator> someDecorators){
@@ -256,6 +287,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Returns parsed decorator by name.
+	 *
 	 * @param name name of decorator
 	 * @return decorator
 	 */
@@ -263,6 +295,13 @@ public final class GeneratorDataRegistry {
 		return decorators.get(name);
 	}
 
+	/**
+	 * <p>createDecorator.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param rule a {@link java.lang.String} object.
+	 * @return a {@link net.anotheria.asg.generator.view.meta.MetaDecorator} object.
+	 */
 	public MetaDecorator createDecorator(String name, String rule){
 		MetaDecorator blueprint = getDecorator(name);
 		if (blueprint==null)
@@ -274,6 +313,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Adds parsed filter.
+	 *
 	 * @param filter filter to add
 	 */
 	public void addFilter(MetaFilter filter){
@@ -282,6 +322,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Adds parsed filters.
+	 *
 	 * @param aFilters filters to add
 	 */
 	public void addFilters(List<MetaFilter> aFilters){
@@ -292,6 +333,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * returns parsed filter by name.
+	 *
 	 * @param name name of filter
 	 * @return filter
 	 */
@@ -299,6 +341,13 @@ public final class GeneratorDataRegistry {
 		return filters.get(name);
 	}
 
+	/**
+	 * <p>createFilter.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param fieldName a {@link java.lang.String} object.
+	 * @return a {@link net.anotheria.asg.generator.view.meta.MetaFilter} object.
+	 */
 	public MetaFilter createFilter(String name, String fieldName){
 		MetaFilter blueprint = getFilter(name);
 		if (blueprint==null)
@@ -310,6 +359,7 @@ public final class GeneratorDataRegistry {
 
 	/**
 	 * Adds parsed validator.
+	 *
 	 * @param validator validator to add
 	 */
 	public void addValidator(MetaValidator validator) {
@@ -318,6 +368,7 @@ public final class GeneratorDataRegistry {
 	
 	/**
 	 * Adds parsed validators.
+	 *
 	 * @param aValidators validators to add
 	 */
 	public void addValidators(List<MetaValidator> aValidators) {
@@ -327,6 +378,7 @@ public final class GeneratorDataRegistry {
 	
 	/**
 	 * Returns parsed validator by name.
+	 *
 	 * @param name validator name
 	 * @return validator
 	 */
@@ -340,6 +392,7 @@ public final class GeneratorDataRegistry {
 	
 	/**
 	 * Returns true if the document should have methods for language copying.
+	 *
 	 * @param doc the document to check.
 	 * @return true if support for languages is enabled and the document has multilingual attributes.
 	 */
@@ -359,10 +412,20 @@ public final class GeneratorDataRegistry {
 		return ret;
 	}
 
+	/**
+	 * <p>Getter for the field <code>options</code>.</p>
+	 *
+	 * @return a {@link net.anotheria.asg.generator.GenerationOptions} object.
+	 */
 	public GenerationOptions getOptions() {
 		return options;
 	}
 
+	/**
+	 * <p>Setter for the field <code>options</code>.</p>
+	 *
+	 * @param options a {@link net.anotheria.asg.generator.GenerationOptions} object.
+	 */
 	public void setOptions(GenerationOptions options) {
 		this.options = options;
 	}

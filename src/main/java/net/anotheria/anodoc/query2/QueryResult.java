@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  * The result of the query.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class QueryResult {
 	/**
@@ -20,29 +22,30 @@ public class QueryResult {
 	
 	/**
 	 * Adds a result entry.
-	 * @param entry
+	 *
+	 * @param entry a {@link net.anotheria.anodoc.query2.QueryResultEntry} object.
 	 */
 	public void add(QueryResultEntry entry){
 		entries.add(entry);
 	}
 	/**
 	 * Adds some result entries.
-	 * @param someEntries
+	 *
+	 * @param someEntries a {@link java.util.List} object.
 	 */
 	public void add(List<QueryResultEntry> someEntries){
 		entries.addAll(someEntries);
 	}
 	/**
 	 * Returns the entries.
-	 * @return
+	 *
+	 * @return a {@link java.util.List} object.
 	 */
 	public List<QueryResultEntry> getEntries(){
 		return entries;
 	}
 	
-	/**
-	 * {@inheritDoc}
-	 */
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return "QueryResult with "+entries.size()+" entries: \n"+entries;
 	}

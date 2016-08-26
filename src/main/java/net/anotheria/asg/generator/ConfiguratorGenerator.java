@@ -12,23 +12,42 @@ import net.anotheria.asg.generator.model.ServiceGenerator;
 
 /**
  * TODO please remined another to comment this class
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class ConfiguratorGenerator extends AbstractGenerator implements IGenerator{
 	
+	/** {@inheritDoc} */
 	@Override public List<FileEntry> generate(IGenerateable g) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * <p>getConfiguratorClassName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getConfiguratorClassName(){
 		return "AnoDocConfigurator";
 	}
 
+	/**
+	 * <p>getMetaFactoryConfiguratorClassName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getMetaFactoryConfiguratorClassName(){
 		return "MetaFactoryConfigurator";
 	}
 
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param modules a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<FileEntry> generate(List<MetaModule> modules){
 		List<FileEntry> entries = new ArrayList<FileEntry>();
 		

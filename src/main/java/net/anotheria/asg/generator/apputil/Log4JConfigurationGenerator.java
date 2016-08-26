@@ -15,6 +15,9 @@ import java.util.List;
  * Log4j configuration generator.
  *
  * Comment: In version 2.5.1 migration to slf4j was done and this file doesn't seem to be needed and can be removed in future.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class Log4JConfigurationGenerator extends AbstractGenerator implements IGenerator {
 
@@ -27,6 +30,7 @@ public class Log4JConfigurationGenerator extends AbstractGenerator implements IG
 	 */
 	public static final String GENERATED_PACKAGE = "net.anotheria.anosite.gen";
 	
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable g) {
 		List<FileEntry> files = new ArrayList<FileEntry>();
 		

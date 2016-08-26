@@ -2,8 +2,10 @@ package net.anotheria.anodoc.util;
 
 /**
  * Base exception class for this service, custom exceptions should derive from it.
+ *
+ * @author another
+ * @version $Id: $Id
  */
-
 public class CommonModuleStorageException extends Exception{
 	/**
 	 * Basic serial version UID.
@@ -12,6 +14,7 @@ public class CommonModuleStorageException extends Exception{
 
 	/**
 	 * Default constructor.
+	 *
 	 * @param aMessage message of exception
 	 */
 	public CommonModuleStorageException(String aMessage){

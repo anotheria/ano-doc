@@ -13,7 +13,9 @@ import java.util.List;
 
 /**
  * Generates the jsps for the edit view.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class JspGenerator extends AbstractJSPGenerator implements IGenerator{
 
@@ -26,6 +28,7 @@ public class JspGenerator extends AbstractJSPGenerator implements IGenerator{
 	/* (non-Javadoc)
 	 * @see net.anotheria.anodoc.generator.IGenerator#generate(net.anotheria.anodoc.generator.IGenerateable, net.anotheria.anodoc.generator.Context)
 	 */
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable g) {
 		try{
 		List<FileEntry> files = new ArrayList<FileEntry>();
@@ -388,6 +391,12 @@ public class JspGenerator extends AbstractJSPGenerator implements IGenerator{
 
 
 	
+	/**
+	 * <p>getFormIncludePageName.</p>
+	 *
+	 * @param form a {@link net.anotheria.asg.generator.forms.meta.MetaForm} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getFormIncludePageName(MetaForm form){
 	    return StringUtils.capitalize(form.getId())+"AutoForm";
 	}
@@ -417,6 +426,12 @@ public class JspGenerator extends AbstractJSPGenerator implements IGenerator{
 		
 	}
 	
+	/**
+	 * <p>generateFormInclude.</p>
+	 *
+	 * @param form a {@link net.anotheria.asg.generator.forms.meta.MetaForm} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String generateFormInclude(MetaForm form){
 		System.out.println("generating form "+form);
 	    String ret = "";

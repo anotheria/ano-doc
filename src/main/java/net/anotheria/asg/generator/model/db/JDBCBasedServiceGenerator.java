@@ -18,11 +18,13 @@ import net.anotheria.asg.generator.model.ServiceGenerator;
 
 /**
  * Generates a DB-Backed implementation of a module interface and the according factory.
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 public class JDBCBasedServiceGenerator extends AbstractServiceGenerator implements IGenerator{
 	
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable gmodule){
 		
 		MetaModule mod = (MetaModule)gmodule;
@@ -538,14 +540,32 @@ public class JDBCBasedServiceGenerator extends AbstractServiceGenerator implemen
 	    return clazz;
 	}
 	
+	/**
+	 * <p>getAll.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<String> getAll() {
 		return getAllByLimit(Integer.MIN_VALUE);
 	}
 	
+	/**
+	 * <p>getAllByLimit.</p>
+	 *
+	 * @param aLimit a int.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<String> getAllByLimit(int aLimit) {
 		return getAllByLimitAndOffset(aLimit, Integer.MIN_VALUE);
 	}
 	
+	/**
+	 * <p>getAllByLimitAndOffset.</p>
+	 *
+	 * @param aLimit a int.
+	 * @param aOffcet a long.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<String> getAllByLimitAndOffset(int aLimit, long aOffcet) {
 		List<String> result = new ArrayList<String>();
 		String sqlQuery = "SELECT * FROM table";
@@ -567,6 +587,7 @@ public class JDBCBasedServiceGenerator extends AbstractServiceGenerator implemen
 		return result;
 	}
 	
+	/** {@inheritDoc} */
 	@Override protected String getMoskitoSubsystem(){
 		return super.getMoskitoSubsystem()+"-jdbc";
 	}

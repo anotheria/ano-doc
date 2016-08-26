@@ -31,7 +31,9 @@ import java.util.List;
 
 /**
  * XML Parser for MetaViews.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public final class XMLViewParser {
 
@@ -40,6 +42,12 @@ public final class XMLViewParser {
 	 */
 	private static final Logger LOGGER = LoggerFactory.getLogger(XMLViewParser.class);
 	
+	/**
+	 * <p>parseViews.</p>
+	 *
+	 * @param content a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static final List<MetaView> parseViews(String content){
 		
 		SAXBuilder reader = new SAXBuilder();

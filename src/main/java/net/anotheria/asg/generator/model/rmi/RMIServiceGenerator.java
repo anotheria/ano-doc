@@ -24,8 +24,9 @@ import java.util.List;
 
 /**
  * Generates a RMI-Backed distribution of a module interface and the according factory.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class RMIServiceGenerator extends AbstractServiceGenerator implements IGenerator{
 	
@@ -34,6 +35,7 @@ public class RMIServiceGenerator extends AbstractServiceGenerator implements IGe
 	 */
 	private MetaModule module;
 	
+	/** {@inheritDoc} */
 	@Override public List<FileEntry> generate(IGenerateable gmodule){
 		
 		module = (MetaModule)gmodule;
@@ -73,7 +75,8 @@ public class RMIServiceGenerator extends AbstractServiceGenerator implements IGe
 
 	/**
 	 * Returns the name of the remote exception.
-	 * @param m
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return name of exception
 	 */
 	public String getRemoteExceptionName(MetaModule m){
@@ -81,33 +84,37 @@ public class RMIServiceGenerator extends AbstractServiceGenerator implements IGe
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Returns the implementation name of the rmi service for this module.
-     * Currently implementation not used! Hack  for using  Stub.
-	 * @param m
-	 * @return name of service
+	 * Currently implementation not used! Hack  for using  Stub.
 	 */
 	public String getImplementationName(MetaModule m){
 	    return getStubName(m);//"RMI"+getServiceName(m)+"Impl";
 	}
 	
-	/**
-	 * @return the name of the factory for the service.
-	 */
+	/** {@inheritDoc} */
 	public String getFactoryName(MetaModule m){
 	    return "RMI"+getServiceName(m)+"Factory";
 	}
 
-	/**
-	 * @return the package name for the given module.
-	 */
+	/** {@inheritDoc} */
 	protected String getPackageName(MetaModule aModule){
 		return getPackageName(GeneratorDataRegistry.getInstance().getContext(), aModule);
 	}
 	
+	/** {@inheritDoc} */
 	protected void addAdditionalFactoryImports(GeneratedClass clazz, MetaModule aModule){
        clazz.addImport(GeneratorDataRegistry.getInstance().getContext().getServicePackageName(aModule)+"."+ServiceGenerator.getInterfaceName(aModule));
 	}
 	
+	/**
+	 * <p>getPackageName.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackageName(Context context, MetaModule module){
 		return context.getPackageName(module)+".service.rmi";
 	}
@@ -387,9 +394,9 @@ public class RMIServiceGenerator extends AbstractServiceGenerator implements IGe
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Returns the name of the remote interface.
-	 * @param mod
-	 * @return name of interface
 	 */
 	public static String getInterfaceName(MetaModule mod){
 		return "Remote"+getServiceName(mod);
@@ -397,7 +404,8 @@ public class RMIServiceGenerator extends AbstractServiceGenerator implements IGe
 	
 	/**
 	 * Returns the name of the rmi stub.
-	 * @param mod
+	 *
+	 * @param mod a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return name of stub
 	 */
 	public static String getStubName(MetaModule mod){
@@ -406,7 +414,8 @@ public class RMIServiceGenerator extends AbstractServiceGenerator implements IGe
 
 	/**
 	 * Returns the name of the rmi server class.
-	 * @param mod
+	 *
+	 * @param mod a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return name of service class
 	 */
 	public static String getServerName(MetaModule mod){
@@ -415,7 +424,8 @@ public class RMIServiceGenerator extends AbstractServiceGenerator implements IGe
 
 	/**
 	 * Returns the name of the rmi lookup function class.
-	 * @param mod
+	 *
+	 * @param mod a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return name of rmi lookup function class
 	 */
 	public static String getLookupName(MetaModule mod){
@@ -424,7 +434,8 @@ public class RMIServiceGenerator extends AbstractServiceGenerator implements IGe
 
 	/**
 	 * Returns the name of the rmi skeleton class.
-	 * @param mod
+	 *
+	 * @param mod a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return name of the skeleton class
 	 */
 	public static String getSkeletonName(MetaModule mod){
@@ -1376,6 +1387,7 @@ public class RMIServiceGenerator extends AbstractServiceGenerator implements IGe
 		emptyline();
 	}
 
+	/** {@inheritDoc} */
 	@Override protected String getMoskitoSubsystem(){
 		return super.getMoskitoSubsystem()+"-rmi";
 	}

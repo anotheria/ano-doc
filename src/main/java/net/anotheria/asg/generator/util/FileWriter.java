@@ -10,8 +10,9 @@ import net.anotheria.util.StringUtils;
 
 /**
  * Utility for writing code to files.
- * @author lrosenberg.
  *
+ * @author lrosenberg.
+ * @version $Id: $Id
  */
 public class FileWriter {
 
@@ -20,16 +21,32 @@ public class FileWriter {
 
 	private static String BASE_DIR;
 	
+	/** Constant <code>DEF_BASE_DIR="."</code> */
 	public static final String DEF_BASE_DIR = ".";
 	
 	static{
 		BASE_DIR = DEF_BASE_DIR;
 	}
 	
+	/**
+	 * <p>writeFile.</p>
+	 *
+	 * @param path a {@link java.lang.String} object.
+	 * @param fileName a {@link java.lang.String} object.
+	 * @param content a {@link java.lang.String} object.
+	 */
 	public static final void writeFile(String path, String fileName, String content){
 		writeFile(path, fileName, content, false);
 	}
 
+	/**
+	 * <p>writeFile.</p>
+	 *
+	 * @param path a {@link java.lang.String} object.
+	 * @param fileName a {@link java.lang.String} object.
+	 * @param content a {@link java.lang.String} object.
+	 * @param override a boolean.
+	 */
 	public static final void writeFile(String path, String fileName, String content, boolean override){
 		if (content==null || content.length()==0){
 			//System.out.println("IGNORE emptyfile "+fileName );
@@ -72,6 +89,13 @@ public class FileWriter {
 		}
 	}
 	
+	/**
+	 * <p>writeJavaFile.</p>
+	 *
+	 * @param packageName a {@link java.lang.String} object.
+	 * @param className a {@link java.lang.String} object.
+	 * @param content a {@link java.lang.String} object.
+	 */
 	public static final void writeJavaFile(String packageName, String className, String content){
 		String[] tokens = StringUtils.tokenize(packageName, '.');
 		String path = "";
@@ -83,10 +107,20 @@ public class FileWriter {
 		writeFile(path, className+".java", content, false);
 	}
 	
+	/**
+	 * <p>setBaseDir.</p>
+	 *
+	 * @param aBaseDir a {@link java.lang.String} object.
+	 */
 	public static void setBaseDir(String aBaseDir){
 		BASE_DIR = aBaseDir;
 	}
 	
+	/**
+	 * <p>main.</p>
+	 *
+	 * @param a an array of {@link java.lang.String} objects.
+	 */
 	public static void main(String []a){
 		
 	}

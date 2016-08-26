@@ -8,6 +8,8 @@ import net.anotheria.asg.util.locking.exeption.LockingException;
  * Actually should be used in CMS actions - as additional permission checker.
  *
  * @author: h3llka
+ * @author another
+ * @version $Id: $Id
  */
 public enum DocumentLockingHelper {
     /**
@@ -225,9 +227,9 @@ public enum DocumentLockingHelper {
      * RuntimeException will be thrown if action can't be performed.
      *
      * @param document - actually LockableObject instance
-	 * @param userInAdminRole - is user in "admin" role, actually for unlock operation only
-	 * @param currentUser     - current user id
-	 */
+     * @param userInAdminRole - is user in "admin" role, actually for unlock operation only
+     * @param currentUser     - current user id
+     */
     public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
     }
 

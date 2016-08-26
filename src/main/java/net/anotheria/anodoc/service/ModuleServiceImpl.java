@@ -13,8 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
- * An implementation of IModuleService for local usage, 
+ * An implementation of IModuleService for local usage,
  * which supports local cache and synchronization over network.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 @ConfigureMe (name="anodoc.storage")
 public class ModuleServiceImpl implements IModuleService, IModuleListener{
@@ -60,7 +63,9 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	private static ModuleServiceImpl instance = new ModuleServiceImpl() ;
 	
 	/**
-	 * Returns the current (singleton) instance of this implementation. 
+	 * Returns the current (singleton) instance of this implementation.
+	 *
+	 * @return a {@link net.anotheria.anodoc.service.ModuleServiceImpl} object.
 	 */
 	protected static ModuleServiceImpl getInstance(){
 		return instance;
@@ -84,6 +89,8 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Attaches a factory for given module id.
 	 */
 	public void attachModuleFactory(String moduleId, IModuleFactory factory) {
@@ -94,6 +101,8 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Attaches a storage for given module id.
 	 */
 	public void attachModuleStorage(String moduleId, IModuleStorage storage){
@@ -160,6 +169,8 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Same as getModule(ownerId, moduleId, copyId, false)
 	 */
 	public Module getModule(String ownerId, String moduleId, String copyId) 
@@ -168,6 +179,8 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Same as getModule(ownerId, moduleId, default_copy_id, false)
 	 */
 	public Module getModule(String ownerId, String moduleId) 
@@ -176,7 +189,16 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	}
 
 	/**
- 	 * Same as getModule(ownerId, moduleId, default_copy_id, create?)
+	 * Same as getModule(ownerId, moduleId, default_copy_id, create?)
+	 *
+	 * @param ownerId a {@link java.lang.String} object.
+	 * @param moduleId a {@link java.lang.String} object.
+	 * @param create a boolean.
+	 * @return a {@link net.anotheria.anodoc.data.Module} object.
+	 * @throws net.anotheria.anodoc.service.NoStorageForModuleException if any.
+	 * @throws net.anotheria.anodoc.service.NoFactoryForModuleException if any.
+	 * @throws net.anotheria.anodoc.service.NoStoredModuleEntityException if any.
+	 * @throws net.anotheria.anodoc.service.StorageFailureException if any.
 	 */
 	public Module getModule(
 		String ownerId,
@@ -187,6 +209,7 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	}
 	
 
+	/** {@inheritDoc} */
 	@Override public Module getModule(
 		String ownerId,
 		String moduleId,
@@ -260,6 +283,7 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 		return factory.createModule(ownerId, copyId);
 	}
 
+	/** {@inheritDoc} */
 	@Override public void storeModule(Module module) throws NoStorageForModuleException, StorageFailureException{
 		try{
 			LockHolder.prepareForSave();
@@ -283,16 +307,19 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 		return getKey(module.getId(), module.getCopyId(), module.getOwnerId());
 	}
 
+	/** {@inheritDoc} */
 	@Override public void deleteModule(Module module) throws NoStorageForModuleException, StorageFailureException{
 		deleteModule(module.getOwnerId(), module.getId(), module.getCopyId());
 	}
 
+	/** {@inheritDoc} */
 	@Override public void deleteModule(String ownerId, String moduleId, String copyId)
 		throws NoStorageForModuleException , StorageFailureException{
 		removeFromCacheDirty(moduleId, ownerId, copyId);
 		
 	}
 
+	/** {@inheritDoc} */
 	@Override public void deleteModule(String ownerId, String moduleId)
 		throws NoStorageForModuleException , StorageFailureException{
 		deleteModule(ownerId, moduleId, DEFAULT_COPY_ID);
@@ -300,8 +327,9 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Removes changed module from cache and fires moduleLoaded event of registered listener.
-	 * @param module changed module.
 	 */
 	@Override
 	public void moduleLoaded(Module module){
@@ -317,6 +345,7 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 			}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addModuleListener(String moduleId, String ownerId, IModuleListener aModuleListeners){
 		String key = getKey(moduleId, DEFAULT_COPY_ID, ownerId);
@@ -325,15 +354,18 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Removes listener for module.
-	 * @param moduleId id of module.
-	 * @param ownerId  owner id for module.
 	 */
 	@Override
 	public void removeModuleListener(String moduleId, String ownerId) {
 		moduleListeners.remove(getKey(moduleId, DEFAULT_COPY_ID, ownerId));
 	}
 
+	/**
+	 * <p>notifyConfigurationFinished.</p>
+	 */
 	@AfterConfiguration public void notifyConfigurationFinished() {
 		LOGGER.info("Cleaning cache.");
 		cache.clear();

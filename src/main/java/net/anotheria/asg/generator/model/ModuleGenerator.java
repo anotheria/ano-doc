@@ -18,11 +18,14 @@ import net.anotheria.asg.generator.model.federation.FederationVOGenerator;
 
 /**
  * TODO please remined another to comment this class
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class ModuleGenerator extends AbstractGenerator implements IGenerator{
 	
 	
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable gmodule){
 		
 		MetaModule mod = (MetaModule)gmodule;

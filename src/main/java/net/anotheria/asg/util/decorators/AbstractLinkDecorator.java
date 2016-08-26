@@ -6,13 +6,16 @@ import net.anotheria.anodoc.data.StringProperty;
 
 /**
  * This decorator decorates a link value with the linked document name.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public abstract class AbstractLinkDecorator implements IAttributeDecorator{
 
 	/* (non-Javadoc)
 	 * @see net.anotheria.asg.util.decorators.IAttributeDecorator#decorate(net.anotheria.anodoc.data.Document, java.lang.String, java.lang.String)
 	 */
+	/** {@inheritDoc} */
 	public String decorate(Document doc, String attributeName, String rule) {
 		try{
 			String id = ((StringProperty)doc.getProperty(attributeName)).getString();
@@ -24,6 +27,12 @@ public abstract class AbstractLinkDecorator implements IAttributeDecorator{
 		}
 	}
 	
+	/**
+	 * <p>getName.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected abstract String getName(String id);
 
 }

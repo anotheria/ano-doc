@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
  * Actually   contains  'autolocking' property  and  timeout.
  *
  * @author: h3llka
+ * @author another
+ * @version $Id: $Id
  */
 @ConfigureMe(name = "lockingconfig")
 public class LockingConfig {
@@ -28,6 +30,7 @@ public class LockingConfig {
 
 	/**
 	 * Actually getInstance method.
+	 *
 	 * @return Instance of LockingConfig
 	 */
 	public static LockingConfig getInstance() {
@@ -39,18 +42,38 @@ public class LockingConfig {
 		this.timeout = 0;
 	}
 
+	/**
+	 * <p>isAutolocking.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isAutolocking() {
 		return autolocking;
 	}
 
+	/**
+	 * <p>Setter for the field <code>autolocking</code>.</p>
+	 *
+	 * @param autolocking a boolean.
+	 */
 	public void setAutolocking(boolean autolocking) {
 		this.autolocking = autolocking;
 	}
 
+	/**
+	 * <p>Getter for the field <code>timeout</code>.</p>
+	 *
+	 * @return a long.
+	 */
 	public long getTimeout() {
 		return timeout;
 	}
 
+	/**
+	 * <p>Setter for the field <code>timeout</code>.</p>
+	 *
+	 * @param timeout a long.
+	 */
 	public void setTimeout(long timeout) {
 		this.timeout = timeout;
 	}

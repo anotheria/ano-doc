@@ -8,7 +8,10 @@ import net.anotheria.util.xml.XMLNode;
 
 /**
  * This property hold the list of Properties.
+ *
  * @since 1.0
+ * @author another
+ * @version $Id: $Id
  */
 public class ListProperty extends Property{
 	/**
@@ -17,18 +20,23 @@ public class ListProperty extends Property{
 	private static final long serialVersionUID = -8714197156967135129L;
 	
 	/**
-     * Creates a new ListProperty with the given name 
-     * and an empty list as data.
+	 * Creates a new ListProperty with the given name
+	 * and an empty list as data.
+	 *
+	 * @param name a {@link java.lang.String} object.
 	 */
 	public ListProperty(String name){
 		super(name, new ArrayList<Property>());
 	}
 	
 	/**
-	 * Creates a new ListProperty with the given name 
+	 * Creates a new ListProperty with the given name
 	 * and the given list. The list should only contain Property objects.<br>
-	 * <b>Warning: </b> the content of the list parameter will be not explicitely check 
+	 * <b>Warning: </b> the content of the list parameter will be not explicitely check
 	 * to contain only Property object, but will cause runtime exceptions later in case it contained something else.
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param aList a {@link java.util.List} object.
 	 */
 	public ListProperty(String name, List<Property> aList){
 		super(name, aList);
@@ -36,7 +44,9 @@ public class ListProperty extends Property{
 	
 	
 	/**
-	 * Returns the underlying list as java.util.List 
+	 * Returns the underlying list as java.util.List
+	 *
+	 * @return a {@link java.util.List} object.
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Property> getList(){
@@ -44,36 +54,48 @@ public class ListProperty extends Property{
 	}
 	
 	/**
-	 * Returns the Property at position specified by index. 
+	 * Returns the Property at position specified by index.
+	 *
+	 * @param index a int.
+	 * @return a {@link net.anotheria.anodoc.data.Property} object.
 	 */
 	public Property get(int index){
 		return getList().get(index);
 	}
 	
 	/**
-	 * Adds the property p to the current list at position index (equal to java.util.List.set(index, object) 
+	 * Adds the property p to the current list at position index (equal to java.util.List.set(index, object)
+	 *
+	 * @param index a int.
+	 * @param p a {@link net.anotheria.anodoc.data.Property} object.
 	 */
 	public void add(int index, Property p){
 		getList().set(index, p);
 	}
 	
 	/**
-	 * Adds the property p to the current list. 
+	 * Adds the property p to the current list.
+	 *
+	 * @param p a {@link net.anotheria.anodoc.data.Property} object.
 	 */
 	public void add(Property p){
 		getList().add(p);
 	}
 
 	/**
-	 * Removes the given property from this list. If the same property is 
-	 * contained in the list more then one time, only the first occurence of the property will be removed. 
+	 * Removes the given property from this list. If the same property is
+	 * contained in the list more then one time, only the first occurence of the property will be removed.
+	 *
+	 * @param p a {@link net.anotheria.anodoc.data.Property} object.
 	 */
 	public void remove(Property p){
 		getList().remove(p);
 	}
 	
 	/**
-	 * Remove the property at position index from this list. 
+	 * Remove the property at position index from this list.
+	 *
+	 * @param index a int.
 	 */
 	public void remove(int index){
 		getList().remove(index);
@@ -81,6 +103,8 @@ public class ListProperty extends Property{
 	
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Returns the cumulative size of contained properties. The ListProperty itself is not counted.
 	 */
 	@Override public long getSizeInBytes() {
@@ -91,6 +115,11 @@ public class ListProperty extends Property{
 		return sum;
 	}
 	
+	/**
+	 * <p>getListData.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<Object> getListData(){
 		List<Property> propertyList = getList();
 		List<Object> ret = new ArrayList<Object>(propertyList.size());
@@ -104,6 +133,7 @@ public class ListProperty extends Property{
 	/* (non-Javadoc)
 	 * @see net.anotheria.anodoc.data.Property#cloneValue()
 	 */
+	/** {@inheritDoc} */
 	@Override protected Object cloneValue() throws CloneNotSupportedException{
 		List<Property> src = getList();
 		List<Property> ret = new ArrayList<Property>(src.size());
@@ -114,6 +144,7 @@ public class ListProperty extends Property{
 		return ret;
 	}
 
+	/** {@inheritDoc} */
 	@Override public XMLNode toXMLNode(){
 		XMLNode elem = super.toXMLNode();
 		
@@ -126,6 +157,7 @@ public class ListProperty extends Property{
 		return elem;
 	}
 	
+	/** {@inheritDoc} */
 	@Override public PropertyType getPropertyType(){
 		return PropertyType.LIST;
 	}

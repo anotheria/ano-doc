@@ -18,11 +18,21 @@ import java.util.List;
 
 /**
  * Generator for show page.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class ShowPageJspGenerator extends AbstractJSPGenerator {
 	
 	private MetaSection currentSection;
 	
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @param view a {@link net.anotheria.asg.generator.view.meta.MetaView} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedJSPFile} object.
+	 */
 	public GeneratedJSPFile generate(MetaModuleSection section, MetaView view){
 
 		currentSection = section;

@@ -6,8 +6,20 @@ import net.anotheria.asg.generator.GeneratedJSPFile;
 import net.anotheria.asg.generator.GeneratorDataRegistry;
 import net.anotheria.asg.generator.meta.MetaModule;
 
+/**
+ * <p>IndexPageJspGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class IndexPageJspGenerator extends AbstractJSPGenerator {
 
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link net.anotheria.asg.generator.FileEntry} object.
+	 */
 	public FileEntry generate(Context context) {
 		FileEntry page = new FileEntry(getIndexPagePathJSP(), getIndexPageJspName(),
 				generateIndexPage().createFileContent());
@@ -15,23 +27,48 @@ public class IndexPageJspGenerator extends AbstractJSPGenerator {
 		return page;
 	}
 
+	/**
+	 * <p>getIndexPageJspName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getIndexPageJspName() {
 		return "WelcomePageMaf";
 	}
 
+	/**
+	 * <p>getSharedJspFooterPageName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getSharedJspFooterPageName() {
 		return getIndexPageJspName() + ".jsp";
 	}
 	
+	/**
+	 * <p>getIndexJspFullName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getIndexJspFullName() {
 		return getIndexPageJspPath() + "/" + getSharedJspFooterPageName();
 	}
 	
 	
+	/**
+	 * <p>getIndexPagePathJSP.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getIndexPagePathJSP(){
 		return  FileEntry.package2fullPath(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED) + ".jsp");      
 	}
 
+	/**
+	 * <p>getIndexPageJspPath.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getIndexPageJspPath(){
 	
 		 return      FileEntry.package2fullPath(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)).substring(FileEntry.package2fullPath(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)).indexOf('/'))+"/jsp";

@@ -10,12 +10,26 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 
 
+/**
+ * <p>XMLAgainstXSDValidation class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public final class XMLAgainstXSDValidation {
 
     private static final String JAXP_SCHEMA_LANGUAGE =  "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
     private static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
     private static final String SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
 
+    /**
+     * <p>validateAgainstXSDSchema.</p>
+     *
+     * @param nameOfFile a {@link java.lang.String} object.
+     * @param content a {@link java.lang.String} object.
+     * @param inputStream a {@link java.io.InputStream} object.
+     * @param includedDocuments a {@link net.anotheria.asg.generator.util.IncludedDocuments} object.
+     */
     public static void validateAgainstXSDSchema(String nameOfFile,String content,InputStream inputStream,IncludedDocuments includedDocuments){
         File tempXSDFile = null;
 

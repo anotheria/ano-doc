@@ -28,7 +28,9 @@ import java.util.Map;
 
 /**
  * Generator class for the CMSFilter.
+ *
  * @author dmetelin
+ * @version $Id: $Id
  */
 public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	
@@ -232,6 +234,12 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	}
 
 	
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param views a {@link java.util.List} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<FileEntry> generate(List<MetaView> views) {
 		List<FileEntry> ret = new ArrayList<FileEntry>(); 
 		try{
@@ -244,10 +252,20 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		return ret;
 	}
 	
+	/**
+	 * <p>getClassSimpleName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getClassSimpleName(){
 		return "CMSMappingsConfigurator";
 	}
 	
+	/**
+	 * <p>getClassName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getClassName(){
 		return getPackageName() + "." + getClassSimpleName();
 	}
@@ -421,18 +439,31 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	 * Deletes an element.
 	 */
 	public static final String ACTION_DELETE = "delete";
+	/** Constant <code>ACTION_VERSIONINFO="versioninfo"</code> */
 	public static final String ACTION_VERSIONINFO = "versioninfo";
+	/** Constant <code>ACTION_DUPLICATE="duplicate"</code> */
 	public static final String ACTION_DUPLICATE = "duplicate";
+	/** Constant <code>ACTION_DEEPCOPY="deepcopy"</code> */
 	public static final String ACTION_DEEPCOPY = "deepcopy";
+	/** Constant <code>ACTION_ADD="add"</code> */
 	public static final String ACTION_ADD 	 = "add";
+	/** Constant <code>ACTION_QUICK_ADD="quickAdd"</code> */
 	public static final String ACTION_QUICK_ADD  = "quickAdd";
+	/** Constant <code>ACTION_EXPORT="export"</code> */
 	public static final String ACTION_EXPORT = "export";
+	/** Constant <code>ACTION_SHOW_QUERIES="showQueries"</code> */
 	public static final String ACTION_SHOW_QUERIES = "showQueries";
+	/** Constant <code>ACTION_EXECUTE_QUERY="execQuery"</code> */
 	public static final String ACTION_EXECUTE_QUERY = "execQuery";
+	/** Constant <code>ACTION_LINKS_TO_ME="LinksToMe"</code> */
 	public static final String ACTION_LINKS_TO_ME = "LinksToMe";
+	/** Constant <code>ACTION_MOVE="move"</code> */
 	public static final String ACTION_MOVE = "move";
+	/** Constant <code>ACTION_SEARCH="search"</code> */
 	public static final String ACTION_SEARCH = "search";
+	/** Constant <code>ACTION_COPY_LANG="copyLang"</code> */
 	public static final String ACTION_COPY_LANG ="copyLang";
+	/** Constant <code>ACTION_SWITCH_MULTILANGUAGE_INSTANCE="switchMultilang"</code> */
 	public static final String ACTION_SWITCH_MULTILANGUAGE_INSTANCE = "switchMultilang";
     /**
      * show usages of an element.
@@ -446,36 +477,96 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	 * Unlocks current document.
 	 */
     public static final String ACTION_UNLOCK = "unLock";
+    /** Constant <code>ACTION_CLOSE="close"</code> */
     public static final String ACTION_CLOSE = "close";
 	/**
 	 * Transfers current document to prod.
 	 */
 	public static final String ACTION_TRANSFER = "transfer";
 	
+	/**
+	 * <p>getPath.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param action a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getPath(MetaDocument doc, String action){
 		return doc.getParentModule().getName().toLowerCase()+StringUtils.capitalize(doc.getName())+StringUtils.capitalize(action);
 	}
+	/**
+	 * <p>getShowQueriesPath.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getShowQueriesPath(MetaDocument doc){
 		return getPath(doc, ACTION_SHOW_QUERIES);
 	}
+	/**
+	 * <p>getShowCMSPath.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getShowCMSPath(MetaDocument doc){
 		return getPath(doc, ACTION_SHOW);
 	}
+	/**
+	 * <p>getDialogFormName.</p>
+	 *
+	 * @param dialog a {@link net.anotheria.asg.generator.view.meta.MetaDialog} object.
+	 * @param document a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getDialogFormName(MetaDialog dialog, MetaDocument document) {
 		return dialog.getName() + document.getParentModule().getName() + document.getName() + "Form";
 	}
+	/**
+	 * <p>getContainerPath.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param container a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @param action a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getContainerPath(MetaDocument doc, MetaContainerProperty container, String action){
 		return doc.getParentModule().getName().toLowerCase()+StringUtils.capitalize(doc.getName())+StringUtils.capitalize(container.getName())+StringUtils.capitalize(action);
 	}
+	/**
+	 * <p>getFormName.</p>
+	 *
+	 * @param form a {@link net.anotheria.asg.generator.forms.meta.MetaForm} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getFormName(MetaForm form){
 	    return StringUtils.capitalize(form.getId())+"AutoForm";
 	}
+	/**
+	 * <p>getFormPath.</p>
+	 *
+	 * @param form a {@link net.anotheria.asg.generator.forms.meta.MetaForm} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getFormPath(MetaForm form){
 	    return form.getId()+StringUtils.capitalize(form.getAction());
 	}
+	/**
+	 * <p>getExecuteQueryPath.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getExecuteQueryPath(MetaDocument doc){
 		return getPath(doc, ACTION_EXECUTE_QUERY);
 	}
+	/**
+	 * <p>getContainerEntryFormName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param property a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getContainerEntryFormName(MetaDocument doc, MetaContainerProperty property){
 		String nameAddy = "XXX";
 		if (property instanceof MetaTableProperty)
@@ -484,6 +575,13 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 			nameAddy = "Element";
 	    return doc.getParentModule().getName().toLowerCase()+StringUtils.capitalize(doc.getName())+StringUtils.capitalize(property.getName())+nameAddy+"Form";
 	}
+	/**
+	 * <p>getContainerQuickAddFormName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param property a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getContainerQuickAddFormName(MetaDocument doc, MetaContainerProperty property){
 		String nameAddy = "XXX";
 		if (property instanceof MetaListProperty)

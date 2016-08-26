@@ -13,22 +13,25 @@ import net.anotheria.moskito.core.predefined.ServiceStatsFactory;
 
 /**
  * Base class for service generators.
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 public class AbstractServiceGenerator extends AbstractGenerator{
 	/**
 	 * Returns the interface name for the CRUD service for this module.
-	 * @param m
-	 * @return
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getInterfaceName(MetaModule m){
 	    return "I"+getServiceName(m);
 	}
 	/**
 	 * Returns the service name for a module.
-	 * @param m
-	 * @return
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static final String getServiceName(MetaModule m){
 	    return m.getName()+"Service";
@@ -36,32 +39,47 @@ public class AbstractServiceGenerator extends AbstractGenerator{
 
 	/**
 	 * Returns the name of the factory class.
-	 * @param m
-	 * @return
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public String getFactoryName(MetaModule m){
 	    return getServiceName(m)+"Factory";
 	}
 	/**
 	 * Returns the implementation name for the service for this MetaModule.
-	 * @param m
-	 * @return
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public String getImplementationName(MetaModule m){
 	    return getServiceName(m)+"Impl";
 	}
 
+	/**
+	 * <p>getPackageName.</p>
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getPackageName(MetaModule module){
 		return GeneratorDataRegistry.getInstance().getContext().getServicePackageName(module);
 	}
 
+	/**
+	 * <p>addAdditionalFactoryImports.</p>
+	 *
+	 * @param clazz a {@link net.anotheria.asg.generator.GeneratedClass} object.
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 */
 	protected void addAdditionalFactoryImports(GeneratedClass clazz, MetaModule module){
 	}
 
 	/**
 	 * Generates a factory class.
-	 * @param module
-	 * @return
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedClass} object.
 	 */
 	protected GeneratedClass generateFactory(MetaModule module){
 
@@ -125,19 +143,31 @@ public class AbstractServiceGenerator extends AbstractGenerator{
 	} 
 	
 	//returns a comma-separated list of all interfaces supported by this impl, which the proxy must map.
+	/**
+	 * <p>getSupportedInterfacesList.</p>
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getSupportedInterfacesList(MetaModule module){
 		return getInterfaceName(module)+".class"+", ASGService.class";
 	}
 	
 	/**
 	 * Returns the base exception name.
-	 * @param module
-	 * @return
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getExceptionName(MetaModule module){
 		return ServiceGenerator.getExceptionName(module);
 	}
 	
+	/**
+	 * <p>getMoskitoSubsystem.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getMoskitoSubsystem(){
 		return "asg";
 	}

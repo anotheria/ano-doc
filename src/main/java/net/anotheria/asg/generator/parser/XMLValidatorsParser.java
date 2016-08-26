@@ -12,7 +12,19 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+/**
+ * <p>XMLValidatorsParser class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class XMLValidatorsParser {
+	/**
+	 * <p>parseValidators.</p>
+	 *
+	 * @param content a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	@SuppressWarnings("unchecked")
 	public static final List<MetaValidator> parseValidators(String content){
 		SAXBuilder reader = new SAXBuilder();

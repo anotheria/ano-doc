@@ -24,7 +24,9 @@ import java.util.Set;
 
 /**
  * This generator generate module-based actions like delete, create, edit, new, update, show and so on.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class ModuleActionsGenerator extends AbstractGenerator implements IGenerator {
     /**
@@ -45,17 +47,20 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	 */
 	public static final String exportCSVSufix = "CSV";
 
-	/**
+    /**
      * Creates a new ModuleActionsGenerator.
-     * @param aView
+     *
+     * @param aView a {@link net.anotheria.asg.generator.view.meta.MetaView} object.
      */
     public ModuleActionsGenerator(MetaView aView){
         view = aView;
     }
 
-    /**
-     * Generates all artefacts.
-     */
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Generates all artefacts.
+	 */
 	@Override public List<FileEntry> generate(IGenerateable g) {
 		 List<FileEntry> files = new ArrayList<FileEntry>();
 
@@ -372,8 +377,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 	/**
 	 * Returns the name of the base action for the given section.
-	 * @param section
-	 * @return
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getBaseActionName(MetaModuleSection section){
 	    return "Base"+getActionSuffix(section);
@@ -382,89 +388,212 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 	/**
 	 * Returns the right part of all action names tied to this section (like ***FooAction).
-	 * @param section
-	 * @return
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getActionSuffix(MetaModuleSection section){
 	    return section.getDocument().getName()+"Action";
 	}
 
+	/**
+	 * <p>getMultiOpActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getMultiOpActionName(MetaModuleSection section){
 	    return "MultiOp"+section.getDocument().getMultiple()+"Action";
 	}
 
+	/**
+	 * <p>getMultiOpDialogActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getMultiOpDialogActionName(MetaModuleSection section){
 	    return "MultiOpDialog"+section.getDocument().getMultiple()+"Action";
 	}
 
+	/**
+	 * <p>getShowActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getShowActionName(MetaModuleSection section){
 	    return "Show"+section.getDocument().getMultiple()+"Action";
 	}
 
+	/**
+	 * <p>getExportActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getExportActionName(MetaModuleSection section){
 		return "Export"+section.getDocument().getMultiple()+"Action";
 	}
 
+	/**
+	 * <p>getSearchActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSearchActionName(MetaModuleSection section){
 	    return "Search"+section.getDocument().getMultiple()+"Action";
 	}
 
+	/**
+	 * <p>getShowQueryActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getShowQueryActionName(MetaModuleSection section){
 		return "Show"+section.getDocument().getMultiple()+"QueriesAction";
 	}
 
+	/**
+	 * <p>getExecuteQueryActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getExecuteQueryActionName(MetaModuleSection section){
 		return "Execute"+section.getDocument().getMultiple()+"QueriesAction";
 	}
 
+	/**
+	 * <p>getEditActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getEditActionName(MetaModuleSection section){
 	    return "Edit"+getActionSuffix(section);
 	}
 
+	/**
+	 * <p>getUpdateActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getUpdateActionName(MetaModuleSection section){
 	    return "Update"+getActionSuffix(section);
 	}
 
+	/**
+	 * <p>getLanguageCopyActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getLanguageCopyActionName(MetaModuleSection section){
 	    return "CopyLang"+getActionSuffix(section);
 	}
 
+	/**
+	 * <p>getSwitchMultilingualityActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSwitchMultilingualityActionName(MetaModuleSection section){
 	    return "SwitchMultilang"+getActionSuffix(section);
 	}
 
+	/**
+	 * <p>getVersionInfoActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getVersionInfoActionName(MetaModuleSection section){
 	    return "VersionInfo"+getActionSuffix(section);
 	}
 
+	/**
+	 * <p>getNewActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getNewActionName(MetaModuleSection section){
 	    return "New"+getActionSuffix(section);
 	}
 
+	/**
+	 * <p>getCreateActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getCreateActionName(MetaModuleSection section){
 	    return "Create"+getActionSuffix(section);
 	}
 
+	/**
+	 * <p>getDeleteActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDeleteActionName(MetaModuleSection section){
 	    return "Delete"+getActionSuffix(section);
 	}
 
+	/**
+	 * <p>getDuplicateActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getDuplicateActionName(MetaModuleSection section){
 		return "Duplicate"+getActionSuffix(section);
 	}
 
+    /**
+     * <p>getLockActionName.</p>
+     *
+     * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String getLockActionName(MetaModuleSection section) {
         return "Lock"+getActionSuffix(section);
     }
 
+    /**
+     * <p>getUnLockActionName.</p>
+     *
+     * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String getUnLockActionName(MetaModuleSection section) {
         return "UnLock"+getActionSuffix(section);
     }
 
+	/**
+	 * <p>getTransferActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 * @since 2.6.3
+	 */
 	public static String getTransferActionName(MetaModuleSection section){
 		return "Transfer"+getActionSuffix(section);
 	}
 
+	/**
+	 * <p>getResourceActionName.</p>
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
+	 * @return a {@link java.lang.String} object.
+	 * @since 2.6.3
+	 */
 	public static String getResourceActionName(MetaModuleSection section){
 		return section.getDocument().getName() + "RestResource";
 	}
@@ -1416,6 +1545,12 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		return element.getName()+"Decorator";
 	}
 
+	/**
+	 * <p>getFilterVariableName.</p>
+	 *
+	 * @param filter a {@link net.anotheria.asg.generator.view.meta.MetaFilter} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getFilterVariableName(MetaFilter filter){
 		return filter.getFieldName()+"Filter"+StringUtils.capitalize(filter.getName());
 	}
@@ -2879,46 +3014,92 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	}
 
 	/**
-	 * @deprecated
-	 * @return
+	 * <p>getPackage.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getPackage(){
 	    return getPackage(GeneratorDataRegistry.getInstance().getContext());
 	}
 
+	/**
+	 * <p>getPackage.</p>
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackage(MetaModule module){
 	    return getPackage(GeneratorDataRegistry.getInstance().getContext(), module);
 	}
 
+	/**
+	 * <p>getPackageRest.</p>
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 * @since 2.6.3
+	 */
 	public static String getPackageRest(MetaModule module){
 		return GeneratorDataRegistry.getInstance().getContext().getPackageName(module) + ".rest";
 	}
 
 	/**
-	 * @deprecated
-	 * @param context
-	 * @return
+	 * <p>getPackage.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getPackage(Context context){
 	    return context.getPackageName()+".action";
 	}
 
+	/**
+	 * <p>getPackage.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackage(Context context, MetaModule module){
 	    return context.getPackageName(module)+".action";
 	}
 
+	/**
+	 * <p>getPackage.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackage(MetaDocument doc){
 	    return GeneratorDataRegistry.getInstance().getContext().getPackageName(doc)+".action";
 	}
 
+	/**
+	 * <p>getServiceInstanceName.</p>
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getServiceInstanceName(MetaModule module){
 	    return module.getName().toLowerCase()+"Service";
 	}
 
+	/**
+	 * <p>getServiceGetterName.</p>
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getServiceGetterName(MetaModule module){
 	    return "get"+module.getName()+"Service";
 	}
 
+	/**
+	 * <p>getServiceGetterCall.</p>
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getServiceGetterCall(MetaModule module){
 	    return getServiceGetterName(module)+"()";
 	}
@@ -2977,26 +3158,68 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	//////////////////////////////////////////////////////////////////////////
 	// TABLE
 
+	/**
+	 * <p>getContainerMultiOpActionName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param property a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerMultiOpActionName(MetaDocument doc, MetaContainerProperty property){
 		return "MultiOp"+doc.getMultiple()+StringUtils.capitalize(property.getName())+"Action";
 	}
 
+	/**
+	 * <p>getContainerShowActionName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param property a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerShowActionName(MetaDocument doc, MetaContainerProperty property){
 		return "Show"+doc.getMultiple()+StringUtils.capitalize(property.getName())+"Action";
 	}
 
+	/**
+	 * <p>getContainerAddEntryActionName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param property a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerAddEntryActionName(MetaDocument doc, MetaContainerProperty property){
 		return "Add"+doc.getMultiple()+StringUtils.capitalize(property.getName())+getContainerNameAddy(property)+"Action";
 	}
 
+	/**
+	 * <p>getContainerQuickAddActionName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param property a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerQuickAddActionName(MetaDocument doc, MetaContainerProperty property){
 		return "QuickAdd"+doc.getMultiple()+StringUtils.capitalize(property.getName())+getContainerNameAddy(property)+"Action";
 	}
 
+	/**
+	 * <p>getContainerDeleteEntryActionName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param property a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerDeleteEntryActionName(MetaDocument doc, MetaContainerProperty property){
 		return "Delete"+doc.getMultiple()+StringUtils.capitalize(property.getName())+getContainerNameAddy(property)+"Action";
 	}
 
+	/**
+	 * <p>getContainerMoveEntryActionName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param property a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getContainerMoveEntryActionName(MetaDocument doc, MetaContainerProperty property){
 		return "Move"+doc.getMultiple()+StringUtils.capitalize(property.getName())+getContainerNameAddy(property)+"Action";
 	}
@@ -3745,6 +3968,12 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		return clazz;
 	}
 
+	/**
+	 * <p>getFormActionName.</p>
+	 *
+	 * @param form a {@link net.anotheria.asg.generator.forms.meta.MetaForm} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getFormActionName(MetaForm form){
 		if (form.getAction().equals("sendMail"))
 			return getSendMailFormActionName(form);
@@ -3755,6 +3984,12 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		return "Send"+StringUtils.capitalize(form.getId())+"FormAction";
 	}
 
+	/**
+	 * <p>generateFormAction.</p>
+	 *
+	 * @param form a {@link net.anotheria.asg.generator.forms.meta.MetaForm} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedClass} object.
+	 */
 	public GeneratedClass generateFormAction(MetaForm form){
 		if (form.getAction().equals("sendMail"))
 			return generateSendMailFormAction(form);

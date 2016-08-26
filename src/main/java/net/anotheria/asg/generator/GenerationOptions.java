@@ -5,8 +5,9 @@ import java.util.Map;
 
 /**
  * Options for the generator.
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 public class GenerationOptions {
 	/**
@@ -30,13 +31,17 @@ public class GenerationOptions {
 	 */
 	private Map<String, GenerationOption> options;
 	
+	/**
+	 * <p>Constructor for GenerationOptions.</p>
+	 */
 	public GenerationOptions(){
 		options = new HashMap<String, GenerationOption>();
 	}
 	/**
 	 * Returns the option stored und the given key.
-	 * @param key
-	 * @return
+	 *
+	 * @param key a {@link java.lang.String} object.
+	 * @return a {@link net.anotheria.asg.generator.GenerationOption} object.
 	 */
 	public GenerationOption get(String key){
 		return options.get(key);
@@ -44,8 +49,9 @@ public class GenerationOptions {
 	
 	/**
 	 * Returns true if the option exists and is equal "true".
-	 * @param key
-	 * @return
+	 *
+	 * @param key a {@link java.lang.String} object.
+	 * @return a boolean.
 	 */
 	public boolean isEnabled(String key){
 		GenerationOption v = options.get(key);
@@ -54,15 +60,17 @@ public class GenerationOptions {
 	
 	/**
 	 * Sets an option with given key and value.
-	 * @param key
-	 * @param value
+	 *
+	 * @param key a {@link java.lang.String} object.
+	 * @param value a {@link java.lang.String} object.
 	 */
 	public void set(String key, String value){
 		options.put(key, new GenerationOption(key,value));
 	}
 	/**
 	 * Sets the option.
-	 * @param option
+	 *
+	 * @param option a {@link net.anotheria.asg.generator.GenerationOption} object.
 	 */
 	public void set(GenerationOption option){
 		options.put(option.getName(), option);

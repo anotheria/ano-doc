@@ -2,8 +2,9 @@ package net.anotheria.asg.generator.meta;
 
 /**
  * Types of storage supported by the generator.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public enum StorageType {
 	/**

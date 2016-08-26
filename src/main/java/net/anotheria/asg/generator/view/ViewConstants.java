@@ -1,8 +1,10 @@
 package net.anotheria.asg.generator.view;
 
 /**
- * Some constants used in the view. 
+ * Some constants used in the view.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public interface ViewConstants {
 	/**

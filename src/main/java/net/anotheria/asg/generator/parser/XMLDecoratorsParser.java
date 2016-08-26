@@ -14,9 +14,17 @@ import org.jdom.input.SAXBuilder;
 
 /**
  * Parser for the decorator definition file.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public final class XMLDecoratorsParser {
+	/**
+	 * <p>parseDecorators.</p>
+	 *
+	 * @param content a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	@SuppressWarnings("unchecked")
 	public static final List<MetaDecorator> parseDecorators(String content){
 		SAXBuilder reader = new SAXBuilder();

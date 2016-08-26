@@ -15,11 +15,13 @@ import net.anotheria.util.StringUtils;
 
 /**
  * Generater for the call context.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class CallContextGenerator extends AbstractGenerator implements IGenerator {
 
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable g) {
 		List<FileEntry> ret = new ArrayList<FileEntry>();
 		ret.add(generateCallContextFactory());
@@ -114,13 +116,31 @@ public class CallContextGenerator extends AbstractGenerator implements IGenerato
 		return context.getTopPackageName()+".util";
 	}
 
+	/**
+	 * <p>getFullFactoryName.</p>
+	 *
+	 * @param c a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getFullFactoryName(Context c){
 		return getPackageName(c)+"."+getFactoryName(c);
 	}
 	
+	/**
+	 * <p>getFactoryName.</p>
+	 *
+	 * @param c a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getFactoryName(Context c){
 		return getPreName(c)+"CallContextFactory";
 	}
+	/**
+	 * <p>getCallContextName.</p>
+	 *
+	 * @param c a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getCallContextName(Context c){
 		return getPreName(c)+"CallContext";
 	}

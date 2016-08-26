@@ -19,6 +19,9 @@ import java.util.regex.PatternSyntaxException;
 
 /**
  * Implementation of DocumentQuery
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class ContainsStringQuery implements DocumentQuery {
 
@@ -106,6 +109,8 @@ public class ContainsStringQuery implements DocumentQuery {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Match method with simple expressions processing support.
 	 */
 	public List<QueryResultEntry> match(DataObject obj) {
@@ -184,6 +189,7 @@ public class ContainsStringQuery implements DocumentQuery {
 		return retEntry;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return "ContainsStringQuery [criteria=" + criteria + ", criteriaMatchRegExPattern=" + criteriaMatchRegExPattern + ", criteriaRegExPattern=" + criteriaRegExPattern + "]";

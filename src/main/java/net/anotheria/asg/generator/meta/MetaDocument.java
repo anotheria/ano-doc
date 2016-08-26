@@ -9,7 +9,9 @@ import net.anotheria.asg.generator.IGenerateable;
 
 /**
  * Internal representation of a document.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class MetaDocument implements IGenerateable{
 	/**
@@ -36,7 +38,8 @@ public class MetaDocument implements IGenerateable{
 	
 	/**
 	 * Creates a new document with the given name.
-	 * @param aName
+	 *
+	 * @param aName a {@link java.lang.String} object.
 	 */
 	public MetaDocument(String aName){
 		name = aName;
@@ -47,6 +50,7 @@ public class MetaDocument implements IGenerateable{
 	
 	/**
 	 * Adds a property to the document.
+	 *
 	 * @param p property to add.
 	 */
 	public void addProperty(MetaProperty p){
@@ -59,7 +63,8 @@ public class MetaDocument implements IGenerateable{
 	
 	/**
 	 * Adds a link to the document.
-	 * @param l
+	 *
+	 * @param l a {@link net.anotheria.asg.generator.meta.MetaLink} object.
 	 */
 	public void addLink(MetaLink l){
 		if (propertyNames.contains(l.getName()))
@@ -69,53 +74,87 @@ public class MetaDocument implements IGenerateable{
 	}
 		
 	/**
-	 * @return
+	 * <p>Getter for the field <code>name</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	public String getName() {
 		return name;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>name</code>.</p>
+	 *
+	 * @param multiple a boolean.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getName(boolean multiple){
 		return multiple? getMultiple(): getName();
 	}
 
 	/**
 	 * Returns all contained properties.
+	 *
+	 * @return a {@link java.util.List} object.
 	 */
 	public List<MetaProperty> getProperties() {
 		return properties;
 	}
 
 	/**
-	 * @param string
+	 * <p>Setter for the field <code>name</code>.</p>
+	 *
+	 * @param string a {@link java.lang.String} object.
 	 */
 	public void setName(String string) {
 		name = string;
 	}
 
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return "D "+name+" "+properties;
 	}
 	
+	/**
+	 * <p>getListName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getListName(){
 		return "LIST_"+getName().toUpperCase();
 	}
 	
+	/**
+	 * <p>getListConstantValue.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getListConstantValue(){
 		return "list_"+getName().toLowerCase();
 	}
 	
+	/**
+	 * <p>getMultiple.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getMultiple(){
 		return getName()+"s";
 	}
 	
+	/**
+	 * <p>getTemporaryVariableName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getTemporaryVariableName(){
 		return "tmp_"+getVariableName();
 	}
 	
 	/**
 	 * Returns the name of the variable to use in generated code for variables of this documents type.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	public String getVariableName(){
 		if (getName().length()<3)
@@ -130,24 +169,27 @@ public class MetaDocument implements IGenerateable{
 	}
 	/**
 	 * Returns the links.
-	 * @return
+	 *
+	 * @return a {@link java.util.List} object.
 	 */
 	public List<MetaProperty> getLinks(){
 		return links;
 	}
 	/**
 	 * Return the name constant for the id holder for this document for cms storage.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	public String getIdHolderName(){
 		return "ID_HOLDER_"+getName().toUpperCase();
 	}
 	
 	/**
-	 * Returns a field with given name. This can be a virtual field for the presentation (id, plainId, documentLastUpdateTimestamp, multilingualInstanceDisabled), a 
+	 * Returns a field with given name. This can be a virtual field for the presentation (id, plainId, documentLastUpdateTimestamp, multilingualInstanceDisabled), a
 	 * MetaProperty or a MetaLink. If nothing is found an IllegalArgumentException is thrown.
+	 *
 	 * @param name name of the field.
-	 * @return
+	 * @return a {@link net.anotheria.asg.generator.meta.MetaProperty} object.
 	 */
 	public MetaProperty getField(String name){
 		
@@ -180,7 +222,8 @@ public class MetaDocument implements IGenerateable{
 	/**
 	 * Returns true if the document contains at list one comparable property or link.
 	 * TODO (leon) I have serious doubts whether this method does what its intended to do.
-	 * @return
+	 *
+	 * @return a boolean.
 	 */
 	public boolean isComparable(){
 		for (int i=0; i<properties.size(); i++){
@@ -197,23 +240,39 @@ public class MetaDocument implements IGenerateable{
 	}
 
 
+	/**
+	 * <p>getFullName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getFullName(){
 		return getParentModule() == null ? 
 				"?."+getName() : getParentModule().getName()+"."+getName();
 	}
 
+	/**
+	 * <p>Getter for the field <code>parentModule</code>.</p>
+	 *
+	 * @return a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 */
 	public MetaModule getParentModule() {
 		return parentModule;
 	}
 
 
 
+	/**
+	 * <p>Setter for the field <code>parentModule</code>.</p>
+	 *
+	 * @param parentModule a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 */
 	public void setParentModule(MetaModule parentModule) {
 		this.parentModule = parentModule;
 	}
 	
 	/**
 	 * Returns all internal links to the given document if any. This is useful if you need to find out at generation time whether one document is linked to another document.
+	 *
 	 * @param anotherDocument the target document.
 	 * @return list of MetaLinks to the targetDocument or an empty list.
 	 */
@@ -229,7 +288,8 @@ public class MetaDocument implements IGenerateable{
 	
 	/**
 	 * Returns true if at least one of the properties or links are multilingual, false otherwise.
-	 * @return
+	 *
+	 * @return a boolean.
 	 */
 	public boolean isMultilingual(){
 		for (MetaProperty p : properties){

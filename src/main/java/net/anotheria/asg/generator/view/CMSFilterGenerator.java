@@ -16,10 +16,17 @@ import java.util.List;
 
 /**
  * Generator class for the CMSFilter.
+ *
  * @author dmetelin
+ * @version $Id: $Id
  */
 public class CMSFilterGenerator extends AbstractGenerator{
 	
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<FileEntry> generate() {
 		List<FileEntry> ret = new ArrayList<FileEntry>(); 
 		try{

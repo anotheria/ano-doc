@@ -6,8 +6,9 @@ import org.configureme.annotations.ConfigureMe;
 
 /**
  * Configuration for rmi services in ano-doc. This config file is configured by the configureme framework.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 @ConfigureMe (allfields=true)
 public class RMIConfig {
@@ -40,22 +41,43 @@ public class RMIConfig {
 		registryPort = DEF_REGISTRY_PORT;
 	}
 		
+	/**
+	 * <p>Getter for the field <code>registryHost</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getRegistryHost(){
 		return registryHost;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>registryPort</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getRegistryPort(){
 		return registryPort;
 	}
 	
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return "RMIConfig "+getRegistryHost()+":"+getRegistryPort();
 	}
 
+	/**
+	 * <p>Setter for the field <code>registryHost</code>.</p>
+	 *
+	 * @param aRegistryHost a {@link java.lang.String} object.
+	 */
 	public void setRegistryHost(final String aRegistryHost) {
 		registryHost = aRegistryHost;
 	}
 
+	/**
+	 * <p>Setter for the field <code>registryPort</code>.</p>
+	 *
+	 * @param aRegistryPort a int.
+	 */
 	public void setRegistryPort(final int aRegistryPort) {
 		registryPort = aRegistryPort;
 	}

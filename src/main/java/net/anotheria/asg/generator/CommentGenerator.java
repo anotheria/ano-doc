@@ -5,13 +5,16 @@ import java.util.List;
 
 /**
  * Helper class that generates comments.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class CommentGenerator extends AbstractGenerator{
 	/**
 	 * Copyright string in the comments.
 	 */
 	public static final String COPYRIGHT = "Copyright (C) 2005 - 2010 Anotheria.net, www.anotheria.net";
+	/** Constant <code>RIGHTS="All Rights Reserved."</code> */
 	public static final String RIGHTS    = "All Rights Reserved.";
 	
 	/**
@@ -55,6 +58,7 @@ public class CommentGenerator extends AbstractGenerator{
 	
 	/**
 	 * Returns a java file comment for given class.
+	 *
 	 * @param className the name of the commented class.
 	 * @return return the content of a comment.
 	 * @deprecated use generateJavaTypeComment(String className, IGenerator generator) instead
@@ -65,6 +69,7 @@ public class CommentGenerator extends AbstractGenerator{
 
 	/**
 	 * Returns a java file comment for given class and a generator.
+	 *
 	 * @param className the name of the commented class.
 	 * @param generator the name/class of the generator which generated the code.
 	 * @return return the content of a comment.
@@ -75,6 +80,7 @@ public class CommentGenerator extends AbstractGenerator{
 	
 	/**
 	 * Generates and returns java file comment for given class. Includes additional line(s) supplied by the user.
+	 *
 	 * @param className the class to comment
 	 * @param additionalInfo an info string to add to the content
 	 * @return the comment for the class.

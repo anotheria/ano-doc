@@ -14,35 +14,44 @@ import net.anotheria.asg.generator.meta.MetaProperty;
 import net.anotheria.util.StringUtils;
 /**
  * Base class for the data objects generators (documents, VOs and more).
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public abstract class AbstractDataObjectGenerator extends AbstractGenerator{
 	
 	/**
 	 * Returns the implementation name of this abstract data object flavour.
-	 * @param doc
-	 * @return
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected abstract String getDataObjectImplName(MetaDocument doc);
 	/**
 	 * Returns the package name for the given document.
-	 * @param doc
-	 * @return
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getPackageName(MetaDocument doc){
 		return GeneratorDataRegistry.getInstance().getContext().getDataPackageName(doc);
 	}
 	
+	/**
+	 * <p>getPackageName.</p>
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackageName(MetaModule module){
 		return GeneratorDataRegistry.getInstance().getContext().getPackageName(module);
 	}
 	
 	
 	/**
-	 * Generates getFootprint method. 
-	 * @param doc 
-	 * @return
+	 * Generates getFootprint method.
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
 	 */
 	protected void generateGetFootprintMethod(MetaDocument doc){
 		appendString("public String getFootprint(){");
@@ -56,6 +65,11 @@ public abstract class AbstractDataObjectGenerator extends AbstractGenerator{
 		append(closeBlock());
 	}
 	
+	/**
+	 * <p>generatePropertyListFootprint.</p>
+	 *
+	 * @param properties a {@link java.util.List} object.
+	 */
 	protected void generatePropertyListFootprint(List<MetaProperty> properties){
 		Context c = GeneratorDataRegistry.getInstance().getContext();
 
@@ -69,6 +83,11 @@ public abstract class AbstractDataObjectGenerator extends AbstractGenerator{
 		}
 	}
 
+	/**
+	 * <p>generateCompareMethod.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 */
 	protected void generateCompareMethod(MetaDocument doc){
 		appendString("public int compareTo("+doc.getName()+" comparable){");
 		appendIncreasedStatement("return compareTo(comparable, "+getSortTypeName(doc)+".SORT_BY_DEFAULT)");
@@ -100,6 +119,12 @@ public abstract class AbstractDataObjectGenerator extends AbstractGenerator{
 		append(closeBlock());
 	}
 
+	/**
+	 * <p>extractSortableProperties.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	protected List<MetaProperty> extractSortableProperties(MetaDocument doc){
 		List<MetaProperty> properties = new ArrayList<MetaProperty>();
 		properties.add(new MetaProperty("id",MetaProperty.Type.STRING));
@@ -117,14 +142,31 @@ public abstract class AbstractDataObjectGenerator extends AbstractGenerator{
 		return properties;
 	}
 
+	/**
+	 * <p>getSortTypeName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSortTypeName(MetaDocument doc){
 		return doc.getName()+"SortType";
 	}
 	
+	/**
+	 * <p>getSortTypeImport.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getSortTypeImport(MetaDocument doc){
 		return GeneratorDataRegistry.getInstance().getContext().getDataPackageName(doc)+"."+getSortTypeName(doc);
 	}
 	
+	/**
+	 * <p>generateDefNameMethod.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 */
 	protected final void generateDefNameMethod(MetaDocument doc){
 		appendString("public String getDefinedName(){");
 		increaseIdent();
@@ -132,6 +174,11 @@ public abstract class AbstractDataObjectGenerator extends AbstractGenerator{
 		append(closeBlock());
 	}
 	
+	/**
+	 * <p>generateDefParentNameMethod.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 */
 	protected final void generateDefParentNameMethod(MetaDocument doc){
 		appendString("public String getDefinedParentName(){");
 		increaseIdent();
@@ -141,13 +188,20 @@ public abstract class AbstractDataObjectGenerator extends AbstractGenerator{
 	
 	/**
 	 * Returns the name for the builder for this document.
-	 * @param doc
-	 * @return
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public String getDocumentBuilderName(MetaDocument doc){
 		return doc.getName()+"Builder";
 	}
 
+	/**
+	 * <p>generateDocumentFactory.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedClass} object.
+	 */
 	protected GeneratedClass generateDocumentFactory(MetaDocument doc){
 		
 		GeneratedClass clazz = new GeneratedClass();
@@ -198,6 +252,11 @@ public abstract class AbstractDataObjectGenerator extends AbstractGenerator{
 		return DataFacadeGenerator.getDocumentFactoryName(doc);
 	}
 	
+	/**
+	 * <p>generateEqualsMethod.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 */
 	protected void generateEqualsMethod(MetaDocument doc){
 		appendString("public boolean equals(Object o){");
 		increaseIdent();

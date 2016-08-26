@@ -2,11 +2,11 @@ package net.anotheria.anodoc.query2;
 
 
 /**
- * Presents the query of abstract DataObjects that have Property with given name 
+ * Presents the query of abstract DataObjects that have Property with given name
  * and its value more then or equal (if including) to the querying value.
- * 
- * @author denis
  *
+ * @author denis
+ * @version $Id: $Id
  */
 public class QueryMoreThenProperty<P extends Comparable<P>> extends QueryProperty{
 	
@@ -18,7 +18,8 @@ public class QueryMoreThenProperty<P extends Comparable<P>> extends QueryPropert
 	private boolean including;
 	
 	/**
-	 * Creates new more then query. 
+	 * Creates new more then query.
+	 *
 	 * @param name of the Property for which query is created
 	 * @param value minimal allowed value of queried Property
 	 */
@@ -27,24 +28,28 @@ public class QueryMoreThenProperty<P extends Comparable<P>> extends QueryPropert
 	}
 	
 	/**
-	 * Creates new more then or equal (if including) query. 
+	 * Creates new more then or equal (if including) query.
+	 *
 	 * @param name of the Property for which query is created
 	 * @param value minimal allowed value of queried Property
-	 * @param including the equal values 
+	 * @param including the equal values
 	 */
 	public QueryMoreThenProperty(String name, P value, boolean including) {
 		super(name, value);
 		this.including = including;
 	}
 
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return getName() + getComparator() + getValue();
 	}
 	
+	/** {@inheritDoc} */
 	@Override public String getComparator(){
 		return including? " >= ": " > ";
 	}
 	
+	/** {@inheritDoc} */
 	@SuppressWarnings("unchecked")
 	@Override public boolean doesMatch(Object o){
 		if(getValue() == null || o == null)

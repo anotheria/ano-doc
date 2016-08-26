@@ -2,7 +2,10 @@ package net.anotheria.anodoc.data;
 
 /**
  * This class represents an integer property (the mapping for int or integer attributes)
+ *
  * @since 1.0
+ * @author another
+ * @version $Id: $Id
  */
 public class IntProperty extends Property{
 	
@@ -13,6 +16,9 @@ public class IntProperty extends Property{
 	
 	/**
 	 * Creates a new IntProperty with given name and value.
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param value a int.
 	 */
 	public IntProperty(String name, int value){
 		this(name, Integer.valueOf(value));
@@ -20,6 +26,9 @@ public class IntProperty extends Property{
 	
 	/**
 	 * Creates a new IntProperty with given name and value.
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param value a {@link java.lang.Integer} object.
 	 */
 	public IntProperty(String name, Integer value){
 		super(name, value);
@@ -27,6 +36,8 @@ public class IntProperty extends Property{
 	
 	/**
 	 * Returns the value of this property as Integer object.
+	 *
+	 * @return a {@link java.lang.Integer} object.
 	 */
 	public Integer getInteger(){
 		return (Integer)getValue();
@@ -34,6 +45,8 @@ public class IntProperty extends Property{
 	
 	/**
 	 * Returns the value of this property as int.
+	 *
+	 * @return a int.
 	 */
 	public int getInt(){
 		return getInteger().intValue();
@@ -41,6 +54,8 @@ public class IntProperty extends Property{
 	
 	/**
 	 * Sets the value of this property to the given int value.
+	 *
+	 * @param aValue a int.
 	 */
 	public void setInt(int aValue){
 		setInteger(Integer.valueOf(aValue));
@@ -48,14 +63,18 @@ public class IntProperty extends Property{
 	
 	/**
 	 * Sets the value of this property to the given Integer value.
+	 *
+	 * @param aValue a {@link java.lang.Integer} object.
 	 */
 	public void setInteger(Integer aValue){
 		super.setValue(aValue);
 	}
 	
 	/**
-	 * Sets the value of this property to the value of the given object. 
-	 * o can be an Integer or a String representing an integer. 
+	 * {@inheritDoc}
+	 *
+	 * Sets the value of this property to the value of the given object.
+	 * o can be an Integer or a String representing an integer.
 	 */
 	@Override public void setValue(Object o){
 		if (o instanceof Integer){
@@ -73,7 +92,9 @@ public class IntProperty extends Property{
 	}
 	
 	/**
-	 * Returns the amount of bytes needed to hold an integer value - 4. 
+	 * {@inheritDoc}
+	 *
+	 * Returns the amount of bytes needed to hold an integer value - 4.
 	 * @see net.anotheria.anodoc.data.Property#getDataSize()
 	 */
 	@Override public long getSizeInBytes() {
@@ -83,10 +104,12 @@ public class IntProperty extends Property{
 	/* (non-Javadoc)
 	 * @see net.anotheria.anodoc.data.Property#cloneValue()
 	 */
+	/** {@inheritDoc} */
 	@Override protected Object cloneValue() {
 		return new Integer(getInt());
 	}
  
+	/** {@inheritDoc} */
 	@Override public PropertyType getPropertyType(){
 		return PropertyType.INT;
 	}

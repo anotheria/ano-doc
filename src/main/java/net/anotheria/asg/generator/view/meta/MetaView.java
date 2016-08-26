@@ -7,7 +7,9 @@ import net.anotheria.asg.generator.IGenerateable;
 
 /**
  * Meta description of the view.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class MetaView implements IGenerateable{
 	/**
@@ -36,7 +38,8 @@ public class MetaView implements IGenerateable{
 	private List<String> requiredRoles;
 	/**
 	 * Creates a new MetaView.
-	 * @param aName
+	 *
+	 * @param aName a {@link java.lang.String} object.
 	 */
 	public MetaView(String aName){
 		name = aName;
@@ -62,12 +65,15 @@ public class MetaView implements IGenerateable{
 	
 	/**
 	 * Adds a section to this view.
+	 *
+	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaSection} object.
 	 */
 	public void addSection(MetaSection section){
 		sections.add(section);	
 	}
 
 	/**
+	 * <p>Getter for the field <code>sections</code>.</p>
 	 *
 	 * @return sections which are part of this view
 	 */
@@ -76,6 +82,7 @@ public class MetaView implements IGenerateable{
 	}
 
 	/**
+	 * <p>Setter for the field <code>sections</code>.</p>
 	 *
 	 * @param list sections of the view
 	 */
@@ -83,10 +90,13 @@ public class MetaView implements IGenerateable{
 		sections = list;
 	}
 
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return "view "+name+", Roles: "+requiredRoles+", Sections: "+sections+" T: "+title;
 	}
 	/**
+	 * <p>Getter for the field <code>name</code>.</p>
+	 *
 	 * @return name of the view
 	 */
 	public String getName() {
@@ -94,6 +104,8 @@ public class MetaView implements IGenerateable{
 	}
 
 	/**
+	 * <p>Getter for the field <code>title</code>.</p>
+	 *
 	 * @return title of the view
 	 */
 	public String getTitle() {
@@ -101,6 +113,8 @@ public class MetaView implements IGenerateable{
 	}
 
 	/**
+	 * <p>Setter for the field <code>title</code>.</p>
+	 *
 	 * @param string title of the view
 	 */
 	public void setTitle(String string) {
@@ -108,16 +122,28 @@ public class MetaView implements IGenerateable{
 	}
 
 
+	/**
+	 * <p>Getter for the field <code>requiredRoles</code>.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<String> getRequiredRoles() {
 		return requiredRoles;
 	}
 
 
+	/**
+	 * <p>Setter for the field <code>requiredRoles</code>.</p>
+	 *
+	 * @param requiredRoles a {@link java.util.List} object.
+	 */
 	public void setRequiredRoles(List<String> requiredRoles) {
 		this.requiredRoles = requiredRoles;
 	}
 
 	/**
+	 * <p>isCms20.</p>
+	 *
 	 * @return flag for cms 2.0 version
 	 */
 	public boolean isCms20() {
@@ -125,6 +151,8 @@ public class MetaView implements IGenerateable{
 	}
 
 	/**
+	 * <p>Setter for the field <code>cms20</code>.</p>
+	 *
 	 * @param cms20 flag for cms 2.0 version
 	 */
 	public void setCms20(boolean cms20) {

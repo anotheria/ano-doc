@@ -13,9 +13,17 @@ import net.anotheria.asg.generator.types.meta.EnumerationType;
 
 /**
  * TODO please remined another to comment this class
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class TypesGenerator extends AbstractAnoDocGenerator{
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param path a {@link java.lang.String} object.
+	 * @param types a {@link java.util.List} object.
+	 */
 	public void generate(String path, List<DataType> types){
 		List<FileEntry> files = new ArrayList<FileEntry>();
 		Context context = GeneratorDataRegistry.getInstance().getContext();

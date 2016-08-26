@@ -3,8 +3,9 @@ package net.anotheria.asg.generator.view.meta;
 
 /**
  * This enum lists sorting possibilites for elements in the cms.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public enum SortingType {
 	/**
@@ -40,14 +41,30 @@ public enum SortingType {
 		 
 	}
 	;
+	/**
+	 * <p>getJavaType.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getJavaType(){
 		return "String"; 
 	}
 	
+	/**
+	 * <p>getCompareCall.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getCompareCall(){
 		return "compareString";
 	}
 	
+	/**
+	 * <p>convertValue.</p>
+	 *
+	 * @param variableName a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String convertValue(String variableName){
 		return variableName;
 	}

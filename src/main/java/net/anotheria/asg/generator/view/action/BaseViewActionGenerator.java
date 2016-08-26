@@ -19,12 +19,20 @@ import net.anotheria.util.StringUtils;
 
 /**
  * This generator generates the base action for a view.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class BaseViewActionGenerator extends AbstractGenerator {
 
 	/* (non-Javadoc)
 	 * @see net.anotheria.anodoc.generator.IGenerator#generate(net.anotheria.anodoc.generator.IGenerateable, net.anotheria.anodoc.generator.Context)
+	 */
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param g a {@link net.anotheria.asg.generator.IGenerateable} object.
+	 * @return a {@link net.anotheria.asg.generator.FileEntry} object.
 	 */
 	public FileEntry generate(IGenerateable g) {
 		
@@ -32,10 +40,22 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 		return new FileEntry(generateViewAction(view));
 	}
 	
+	/**
+	 * <p>getViewActionName.</p>
+	 *
+	 * @param view a {@link net.anotheria.asg.generator.view.meta.MetaView} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getViewActionName(MetaView view){
 		return "Base"+StringUtils.capitalize(view.getName())+"Action";
 	}
 	
+	/**
+	 * <p>generateViewAction.</p>
+	 *
+	 * @param view a {@link net.anotheria.asg.generator.view.meta.MetaView} object.
+	 * @return a {@link net.anotheria.asg.generator.GeneratedClass} object.
+	 */
 	public GeneratedClass generateViewAction(MetaView view){
 
 		GeneratedClass clazz = new GeneratedClass();

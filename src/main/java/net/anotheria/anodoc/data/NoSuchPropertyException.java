@@ -4,6 +4,9 @@ package net.anotheria.anodoc.data;
  * This exception will be thrown when a not existing Property was requested,
  * or the DataHolder with correspoding name is not a Property.
  * I.e. you if you call getProperty("foo") and "foo" is the name of a Document in this context.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class NoSuchPropertyException extends RuntimeException{
 	/**
@@ -13,6 +16,7 @@ public class NoSuchPropertyException extends RuntimeException{
 
 	/**
 	 * Creates a new instance.
+	 *
 	 * @param name name of the property.
 	 * @param type type of the property.
 	 */

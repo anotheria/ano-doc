@@ -8,8 +8,11 @@ import net.anotheria.asg.data.DataObject;
 
 /**
  * Expose documents filtering by first letter of document name.
- * 
+ *
  * (TEST COMMIT)
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class AZDocumentFilter implements DocumentFilter{
 	
@@ -26,10 +29,12 @@ public class AZDocumentFilter implements DocumentFilter{
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override public List<FilterTrigger> getTriggerer(String storedFilterParameter) {
 		return triggerer;
 	}
 
+	/** {@inheritDoc} */
 	@Override public boolean mayPass(DataObject document, String attributeName, String filterParameter) {
 		if (filterParameter==null || filterParameter.length()==0)
 			return true;

@@ -10,8 +10,21 @@ import net.anotheria.asg.generator.view.meta.MetaView;
 
 import java.util.List;
 
+/**
+ * <p>MenuJspGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class MenuJspGenerator extends AbstractJSPGenerator {
 
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param views a {@link java.util.List} object.
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link net.anotheria.asg.generator.FileEntry} object.
+	 */
 	public FileEntry generate(List<MetaView> views , Context context) {
 		
 		FileEntry menu = new FileEntry(generateMenu(views, context));
@@ -19,10 +32,20 @@ public class MenuJspGenerator extends AbstractJSPGenerator {
 		
 	}
 	
+	/**
+	 * <p>getMenuName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getMenuName(){
 		return "MenuMaf";
 	}
 	
+	/**
+	 * <p>getMenuPageName.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getMenuPageName(){
 		return getMenuName()+".jsp";
 	}

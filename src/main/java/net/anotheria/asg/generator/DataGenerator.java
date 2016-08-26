@@ -14,10 +14,18 @@ import net.anotheria.util.ExecutionTimer;
 
 /**
  * TODO please remined another to comment this class
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class DataGenerator extends AbstractAnoDocGenerator{
 	
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param path a {@link java.lang.String} object.
+	 * @param modules a {@link java.util.List} object.
+	 */
 	public void generate(String path, List<MetaModule> modules){
 		Context context = GeneratorDataRegistry.getInstance().getContext();
 		List<FileEntry> todo = new ArrayList<FileEntry>();

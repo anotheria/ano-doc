@@ -20,7 +20,9 @@ import net.anotheria.util.StringUtils;
 
 /**
  * Generator for the queries page. Currently obsolete.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class QueriesPageJspGenerator extends AbstractJSPGenerator implements IGenerator{
 	
@@ -28,6 +30,7 @@ public class QueriesPageJspGenerator extends AbstractJSPGenerator implements IGe
 	/* (non-Javadoc)
 	 * @see net.anotheria.anodoc.generator.IGenerator#generate(net.anotheria.anodoc.generator.IGenerateable, net.anotheria.anodoc.generator.Context)
 	 */
+	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable g) {
 	
 		List<FileEntry> files = new ArrayList<FileEntry>();
@@ -147,6 +150,7 @@ public class QueriesPageJspGenerator extends AbstractJSPGenerator implements IGe
 	}
 	
 
+	/** {@inheritDoc} */
 	@Override
 	protected String getMenuName(MetaView view){
 		return "../../shared/jsp/"+StringUtils.capitalize(view.getName())+"QueriesMenu";		
@@ -190,6 +194,7 @@ public class QueriesPageJspGenerator extends AbstractJSPGenerator implements IGe
 		return jsp;
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	protected String getFooterName(MetaView view){
 		return "../../shared/jsp/"+StringUtils.capitalize(view.getName())+"QueryFooter";		

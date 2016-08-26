@@ -26,10 +26,18 @@ import org.jdom.input.SAXBuilder;
 
 /**
  * XMLParser for the data definition files.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public final class XMLDataParser {
 	
+	/**
+	 * <p>parseModules.</p>
+	 *
+	 * @param content a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	@SuppressWarnings("unchecked")
 	public static final List<MetaModule> parseModules(String content){
 		

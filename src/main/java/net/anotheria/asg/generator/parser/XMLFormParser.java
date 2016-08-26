@@ -19,10 +19,18 @@ import org.jdom.input.SAXBuilder;
 
 /**
  * Parser for the forms.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public final class XMLFormParser {
 	
+	/**
+	 * <p>parseForms.</p>
+	 *
+	 * @param content a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static final List<MetaForm> parseForms(String content){
 		SAXBuilder reader = new SAXBuilder();
 		reader.setValidation(false);

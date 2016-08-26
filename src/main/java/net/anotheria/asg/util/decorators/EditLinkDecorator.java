@@ -6,10 +6,13 @@ import net.anotheria.util.StringUtils;
 
 /**
  * This decorator decorates the link to another object with the name property of the linked object.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class EditLinkDecorator implements IAttributeDecorator{
 
+	/** {@inheritDoc} */
 	@Override public String decorate(DataObject obj, String attributeName, String rule) {
 	    String docName = obj.getDefinedParentName().toLowerCase()+StringUtils.capitalize(obj.getDefinedName());
 		String linkTarget = docName+"Edit?ts="+System.currentTimeMillis()+"&pId="+obj.getId();

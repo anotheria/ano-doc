@@ -28,10 +28,12 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * This storage stores everything in a hashtable and stores this 
+ * This storage stores everything in a hashtable and stores this
  * in the plain form (only IPlanDataObject and ICompositeDataObject)
  * in ONE file.
- * 
+ *
+ * @author another
+ * @version $Id: $Id
  */
 @ConfigureMe (name="anodoc.storage")
 public class CommonHashtableModuleStorage implements IModuleStorage{
@@ -84,10 +86,23 @@ public class CommonHashtableModuleStorage implements IModuleStorage{
 	 */
 	private List<IModuleListener> listeners = new CopyOnWriteArrayList<IModuleListener>();
 
+	/**
+	 * <p>Constructor for CommonHashtableModuleStorage.</p>
+	 *
+	 * @param aFilename a {@link java.lang.String} object.
+	 * @param aFactory a {@link net.anotheria.anodoc.service.IModuleFactory} object.
+	 */
 	public CommonHashtableModuleStorage(String aFilename, IModuleFactory aFactory){
 		this(aFilename, aFactory, DEF_KEY_CFG_STORAGE_DIRECTORY);
 	}
 	
+	/**
+	 * <p>Constructor for CommonHashtableModuleStorage.</p>
+	 *
+	 * @param aFilename a {@link java.lang.String} object.
+	 * @param aFactory a {@link net.anotheria.anodoc.service.IModuleFactory} object.
+	 * @param aCfgKeyStorageDir a {@link java.lang.String} object.
+	 */
 	public CommonHashtableModuleStorage(String aFilename, IModuleFactory aFactory, String aCfgKeyStorageDir){
 		storage = new Hashtable<String,Module>();
 		filename = aFilename;
@@ -97,6 +112,7 @@ public class CommonHashtableModuleStorage implements IModuleStorage{
 		ConfigurationManager.INSTANCE.configure(this);
 	}
 
+	/** {@inheritDoc} */
 	@Override public Module loadModule(String ownerId, String copyId)
 		throws NoStoredModuleEntityException {
 		String key = makeKey(ownerId, copyId);
@@ -105,11 +121,13 @@ public class CommonHashtableModuleStorage implements IModuleStorage{
 		return storage.get(key);
 	} 
 	
+	/** {@inheritDoc} */
 	@Override public void saveModule(Module module) {
 		storage.put(makeKey(module), module);
 		save();
 	}
 	
+	/** {@inheritDoc} */
 	@Override public void deleteModule(String ownerId, String copyId){
 		String key = makeKey(ownerId, copyId);
 		storage.remove(key);
@@ -191,12 +209,19 @@ public class CommonHashtableModuleStorage implements IModuleStorage{
 		return key.substring(key.indexOf('#')+1);
 	}
 	
+	/**
+	 * <p>getFile.</p>
+	 *
+	 * @param aFilename a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getFile(String aFilename){
 		return storageDir + File.separator + aFilename;
 	}
 
 	/**
 	 * Return path for lock file by file name.
+	 *
 	 * @param aFilename file name for dat file.
 	 * @return file name for lock file.
 	 */
@@ -307,13 +332,19 @@ public class CommonHashtableModuleStorage implements IModuleStorage{
 		}
 	}
 
+	/**
+	 * <p>Setter for the field <code>storageDir</code>.</p>
+	 *
+	 * @param value a {@link java.lang.String} object.
+	 */
 	public void setStorageDir(String value){
 		storageDir = value;			
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Adds a service listener to this module storage.
-	 * @param listener the listener to add.
 	 */
 	@Override
 	public void addModuleListener(IModuleListener listener){
@@ -321,8 +352,9 @@ public class CommonHashtableModuleStorage implements IModuleStorage{
 	}
 
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Removes the service listener from the module storage.
-	 * @param listener the listener to remove.
 	 */
 	@Override
 	public void removeModuleListener(IModuleListener listener){
@@ -362,6 +394,9 @@ public class CommonHashtableModuleStorage implements IModuleStorage{
 		fileWatchingTimer.start();
 	}
 
+	/**
+	 * <p>notifyConfigurationFinished.</p>
+	 */
 	@AfterConfiguration public void notifyConfigurationFinished() {
 		load();
 		startFileWatcherTask();

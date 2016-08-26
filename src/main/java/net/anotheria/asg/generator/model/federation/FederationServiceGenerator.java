@@ -24,8 +24,9 @@ import net.anotheria.asg.generator.model.ServiceGenerator;
 
 /**
  * Generator for the FederationService.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class FederationServiceGenerator extends AbstractServiceGenerator implements IGenerator{
 	
@@ -33,6 +34,8 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Generates all artefacts.
 	 */
 	public List<FileEntry> generate(IGenerateable gmodule){
@@ -48,6 +51,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 	}
 	
 	
+	/** Constant <code>FEDERATION_VARIABLE_PREFIX="federated"</code> */
 	public static final String FEDERATION_VARIABLE_PREFIX = "federated";
 	
 	/**
@@ -475,6 +479,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 	    return clazz;
 	}
 	
+	/** {@inheritDoc} */
 	@Override protected String getMoskitoSubsystem(){
 		return super.getMoskitoSubsystem()+"-fed";
 	}

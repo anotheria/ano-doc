@@ -28,21 +28,38 @@ import java.util.List;
 
 /**
  * This is the main class which runs all other generators in order to produce the code.
+ *
  * @author another
+ * @version $Id: $Id
  */
 public class Generator {
 
     private static String BASE_DIR = "";
 
 
+    /**
+     * <p>setBaseDir.</p>
+     *
+     * @param dir a {@link java.lang.String} object.
+     */
     public static void setBaseDir(String dir){
         BASE_DIR = dir;
     }
 
+    /**
+     * <p>getBaseDir.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getBaseDir(){
         return BASE_DIR;
     }
 
+    /**
+     * <p>generate.</p>
+     *
+     * @throws java.lang.Exception if any.
+     */
     public static void generate() throws Exception{
 
         long s1 = System.currentTimeMillis();
@@ -177,10 +194,20 @@ public class Generator {
         System.out.println(name+": "+NumberUtils.getDotedNumber(end-start));
     }
 
+    /**
+     * <p>getVersionString.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getVersionString(){
         return "2.6.3";
     }
 
+    /**
+     * <p>getProductString.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getProductString(){
         return "AnoSiteGenerator (ASG)";
     }

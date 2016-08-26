@@ -1,8 +1,5 @@
 package net.anotheria.asg.generator.model.inmemory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.anotheria.asg.generator.CommentGenerator;
 import net.anotheria.asg.generator.Context;
 import net.anotheria.asg.generator.FileEntry;
@@ -19,13 +16,18 @@ import net.anotheria.asg.generator.model.ServiceGenerator;
 import net.anotheria.asg.service.InMemoryService;
 import net.anotheria.util.ExecutionTimer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Generates an inmemory implementation of a module interface and the according factory.
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 public class InMemoryServiceGenerator extends AbstractServiceGenerator implements IGenerator{
 	
+	/** {@inheritDoc} */
 	@Override public List<FileEntry> generate(IGenerateable gmodule){
 		
 		MetaModule mod = (MetaModule)gmodule;
@@ -48,27 +50,43 @@ public class InMemoryServiceGenerator extends AbstractServiceGenerator implement
 		return ret;
 	}
 
+	/** {@inheritDoc} */
 	@Override public String getImplementationName(MetaModule m){
 	    return "InMemory"+getServiceName(m)+"Impl";
 	}
 	
 	
+	/**
+	 * <p>getInMemoryFactoryName.</p>
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getInMemoryFactoryName(MetaModule m){
 		return "InMemory"+getServiceName(m)+"Factory";
 	}
 	
+	/** {@inheritDoc} */
 	public String getFactoryName(MetaModule m){
 	    return getInMemoryFactoryName(m);
 	}
 	
+	/**
+	 * <p>getInMemoryFactoryImport.</p>
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getInMemoryFactoryImport(MetaModule m){
 	    return getPackageName(GeneratorDataRegistry.getInstance().getContext(), m)+"."+getInMemoryFactoryName(m);
 	}
 	
+	/** {@inheritDoc} */
 	@Override protected String getPackageName(MetaModule module){
 		return getPackageName(GeneratorDataRegistry.getInstance().getContext(), module);
 	}
 	
+	/** {@inheritDoc} */
 	@Override protected void addAdditionalFactoryImports(GeneratedClass clazz, MetaModule module){
 		clazz.addImport(GeneratorDataRegistry.getInstance().getContext().getServicePackageName(module)+"."+getInterfaceName(module));
 		clazz.addImport(InMemoryService.class);
@@ -757,14 +775,23 @@ public class InMemoryServiceGenerator extends AbstractServiceGenerator implement
 	}
 	
 	
+	/**
+	 * <p>getPackageName.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackageName(Context context, MetaModule module){
 		return context.getPackageName(module)+".service.inmemory";
 	}
 	
+	/** {@inheritDoc} */
 	protected String getSupportedInterfacesList(MetaModule module){
 		return super.getSupportedInterfacesList(module)+", InMemoryService.class";
 	}
 
+	/** {@inheritDoc} */
 	@Override protected String getMoskitoSubsystem(){
 		return super.getMoskitoSubsystem()+"-inmem";
 	}

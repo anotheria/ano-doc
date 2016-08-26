@@ -2,7 +2,10 @@ package net.anotheria.anodoc.data;
 
 /**
  * This property represents a long value.
+ *
  * @since 1.0
+ * @author another
+ * @version $Id: $Id
  */
 public class LongProperty extends Property{
 	
@@ -12,7 +15,10 @@ public class LongProperty extends Property{
 	private static final long serialVersionUID = 2177663057004436401L;
 	
 	/**
-     * Creates a new LongProperty with given name and value.
+	 * Creates a new LongProperty with given name and value.
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param value a long.
 	 */
 	public LongProperty(String name, long value){
 		this(name, Long.valueOf(value));
@@ -20,6 +26,9 @@ public class LongProperty extends Property{
 	
 	/**
 	 * Creates a new LongProperty with given name and value.
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 * @param value a {@link java.lang.Long} object.
 	 */
 	public LongProperty(String name, Long value){
 		super(name, value);
@@ -27,6 +36,8 @@ public class LongProperty extends Property{
 	
 	/**
 	 * Returns the value of this property as Long object.
+	 *
+	 * @return a {@link java.lang.Long} object.
 	 */
 	public Long getLong(){
 		return (Long)getValue();
@@ -34,6 +45,8 @@ public class LongProperty extends Property{
 	
 	/**
 	 * Returns the value of this property as long.
+	 *
+	 * @return a long.
 	 */
 	public long getlong(){
 		return getLong().longValue();
@@ -41,6 +54,8 @@ public class LongProperty extends Property{
 
 	/**
 	 * Returns the value of this property as long.
+	 *
+	 * @return a long.
 	 */
 	public long longValue(){
 		return getLong().longValue();
@@ -48,6 +63,8 @@ public class LongProperty extends Property{
 	
 	/**
 	 * Sets the value of this property to the given value.
+	 *
+	 * @param aValue a long.
 	 */
 	public void setLong(long aValue){
 		setLong(Long.valueOf(aValue));
@@ -55,15 +72,18 @@ public class LongProperty extends Property{
 	
 	/**
 	 * Sets the value of this property to the given Long object.
+	 *
+	 * @param aValue a {@link java.lang.Long} object.
 	 */
 	public void setLong(Long aValue){
 		super.setValue(aValue);
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Sets the value of this property to the given value.
-	 * @param o can be a Long or a String.
-	 **/
+	 */
 	public void setValue(Object o){
 		if (o instanceof Long){
 			super.setValue(o);
@@ -80,6 +100,8 @@ public class LongProperty extends Property{
 	}
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Returns the size in bytes (8bytes = 64 bit datatype).
 	 * @see net.anotheria.anodoc.data.Property#getDataSize()
 	 */
@@ -90,10 +112,12 @@ public class LongProperty extends Property{
 	/* (non-Javadoc)
 	 * @see net.anotheria.anodoc.data.Property#cloneValue()
 	 */
+	/** {@inheritDoc} */
 	@Override protected Object cloneValue() {
 		return new Long(getlong());
 	}
 
+	/** {@inheritDoc} */
 	@Override public PropertyType getPropertyType(){
 		return PropertyType.LONG;
 	}

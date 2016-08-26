@@ -11,17 +11,19 @@ import java.util.List;
 
 /**
  * Missing Translation Filter. Pass documents if given property:
- * 
+ *
  * - multilanguage support is enabled
  * - value for default language (context.xml) is set.
  * - value for selected language (selectable in filter) is not set (empty)
  *
  * Using:
  * Viewdef filter definition examples:
- * 
+ *
  * <filter name="MissingTranslation" field="name" />
  * <filter name="MissingTranslation" field="title" />
- * 
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class MissingTranslationFilter implements DocumentFilter{
 
@@ -65,19 +67,22 @@ public class MissingTranslationFilter implements DocumentFilter{
 	
 	/**
 	 * Constructor with parameters. May be used for unit test.
-	 * @param supportedLanguages
-	 * @param defaultLanguage
+	 *
+	 * @param supportedLanguages a {@link java.util.List} object.
+	 * @param defaultLanguage a {@link java.lang.String} object.
 	 */
 	public MissingTranslationFilter(List<String> supportedLanguages, String defaultLanguage) {
 		this.setSupportedLanguages(supportedLanguages);
 		this.setDefaultLanguage(defaultLanguage);				
 	}
 	
+	/** {@inheritDoc} */
 	@Override public List<FilterTrigger> getTriggerer(String storedFilterParameter) {
 		return triggerer;
 	}
 		
 	
+	/** {@inheritDoc} */
 	@Override public boolean mayPass(DataObject document, String attributeName, String filterParameter) {
 		if (filterParameter == null || filterParameter.length() == 0) {
 			return true;
@@ -112,6 +117,8 @@ public class MissingTranslationFilter implements DocumentFilter{
 	/**
 	 * Set supported languages. Method update triggers.
 	 * NOTE: Default language will not be included into triggers.
+	 *
+	 * @param supportedLanguages a {@link java.util.List} object.
 	 */
 	public void setSupportedLanguages(List<String> supportedLanguages) {
 		this.supportedLanguages = supportedLanguages;
@@ -126,14 +133,29 @@ public class MissingTranslationFilter implements DocumentFilter{
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>supportedLanguages</code>.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<String> getSupportedLanguages() {
 		return supportedLanguages;
 	}
 
+	/**
+	 * <p>Setter for the field <code>defaultLanguage</code>.</p>
+	 *
+	 * @param defaultLanguage a {@link java.lang.String} object.
+	 */
 	public void setDefaultLanguage(String defaultLanguage) {
 		this.defaultLanguage = defaultLanguage;
 	}
 
+	/**
+	 * <p>Getter for the field <code>defaultLanguage</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getDefaultLanguage() {
 		return defaultLanguage;
 	}

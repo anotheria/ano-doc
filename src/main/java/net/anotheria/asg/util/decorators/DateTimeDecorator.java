@@ -8,8 +8,9 @@ import net.anotheria.asg.data.DataObject;
 
 /**
  * This decorator decorates long value to date time representation.
- * 
+ *
  * @author Alexandr Bolbat
+ * @version $Id: $Id
  */
 public class DateTimeDecorator implements IAttributeDecorator {
 
@@ -18,6 +19,7 @@ public class DateTimeDecorator implements IAttributeDecorator {
 	 */
 	public static final String DATE_FORMAT = "yyyy/MM/dd HH:mm";
 
+	/** {@inheritDoc} */
 	@Override
 	public String decorate(DataObject obj, String attributeName, String rule) {
 		String caption = "";

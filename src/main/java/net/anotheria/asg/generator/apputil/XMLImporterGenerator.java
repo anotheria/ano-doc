@@ -14,8 +14,21 @@ import net.anotheria.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <p>XMLImporterGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class XMLImporterGenerator extends AbstractGenerator{
 	
+	/**
+	 * <p>generate.</p>
+	 *
+	 * @param modules a {@link java.util.List} object.
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<FileEntry> generate(List<MetaModule> modules, Context context){
 		List<FileEntry> entries = new ArrayList<FileEntry>();
 		
@@ -25,6 +38,12 @@ public class XMLImporterGenerator extends AbstractGenerator{
 		
 	}
 
+	/**
+	 * <p>getImporterClassName.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getImporterClassName(Context context){
 		return StringUtils.capitalize(context.getApplicationName())+"XMLImporter";
 	}

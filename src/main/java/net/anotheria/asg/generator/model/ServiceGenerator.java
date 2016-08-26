@@ -29,13 +29,16 @@ import java.util.List;
 
 /**
  * Controls different sub generators for generation of the service layer. Generates factories and interfaces.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	
 	/**
+	 * {@inheritDoc}
+	 *
 	 * Generates the service layer for a MetaModule.
-	 * @return service layer
 	 */
 	public List<FileEntry> generate(IGenerateable gmodule){
 		
@@ -382,20 +385,29 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	
 	/**
 	 * Returns the name of the base exception class for the service for the given module.
-	 * @param m
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return name of exception
 	 */
 	public static String getExceptionName(MetaModule m){
 	    return getServiceName(m)+"Exception";
 	}
 
+	/**
+	 * <p>getItemNotFoundExceptionName.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getItemNotFoundExceptionName(MetaDocument doc, MetaModule m){
 	    return doc.getName()+"NotFoundIn"+getExceptionName(m);
 	}
 
 	/**
-	 * Returns the interface name for the service for the module. 
-	 * @param module
+	 * Returns the interface name for the service for the module.
+	 *
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return name of interface
 	 */
 	public static String getInterfaceName(MetaModule module){
@@ -403,8 +415,9 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	}
 	
 	/**
-	 * Returns the import (package and class name) for the service interface for the given module. 
-	 * @param m
+	 * Returns the import (package and class name) for the service interface for the given module.
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return import for service
 	 */
 	public static String getInterfaceImport(MetaModule m){
@@ -413,6 +426,7 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	
 	/**
 	 * Returns the base exception name for the service for this module.
+	 *
 	 * @param m the module.
 	 * @return exception name
 	 */
@@ -420,13 +434,21 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 		return getPackageName(GeneratorDataRegistry.getInstance().getContext(),m)+"."+getExceptionName(m);
 	}
 	
+	/**
+	 * <p>getItemNotFoundExceptionImport.</p>
+	 *
+	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getItemNotFoundExceptionImport(MetaDocument doc, MetaModule m){
 		return getPackageName(GeneratorDataRegistry.getInstance().getContext(),m)+"."+getItemNotFoundExceptionName(doc, m);
 	}
 
 	/**
 	 * Returns the service name for this module.
-	 * @param m
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return service name
 	 */
 	public static String getServiceName(MetaModule m){
@@ -435,7 +457,8 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 
 	/**
 	 * Returns the factory name for the service for a metamodule.
-	 * @param m
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return factory name
 	 */
 	public static String getFactoryName(MetaModule m){
@@ -443,17 +466,31 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	}
 	/**
 	 * Returns the import for the factory for the service for a meta-module.
-	 * @param m
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
 	 * @return inport for factory
 	 */
 	public static String getFactoryImport(MetaModule m){
 	    return getPackageName(GeneratorDataRegistry.getInstance().getContext(), m)+"."+getFactoryName(m);
 	}
 
+	/**
+	 * <p>getImplementationName.</p>
+	 *
+	 * @param m a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getImplementationName(MetaModule m){
 	    return getServiceName(m)+"Impl";
 	}
 	
+	/**
+	 * <p>getPackageName.</p>
+	 *
+	 * @param context a {@link net.anotheria.asg.generator.Context} object.
+	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getPackageName(Context context, MetaModule module){
 	    return context.getServicePackageName(module);
 	}

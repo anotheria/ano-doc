@@ -1,7 +1,10 @@
 package net.anotheria.anodoc.query2;
 
 /**
- * Case-insensitive version of {@link QueryLikeProperty}.
+ * Case-insensitive version of {@link net.anotheria.anodoc.query2.QueryLikeProperty}.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public class QueryCaseInsensitiveLikeProperty extends QueryLikeProperty {
 
@@ -15,11 +18,13 @@ public class QueryCaseInsensitiveLikeProperty extends QueryLikeProperty {
         super(aName, aValue);
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getComparator() {
         return " ilike ";
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean doesMatch(Object o) {
         return o == null ? getOriginalValue() == null :
