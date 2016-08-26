@@ -1,16 +1,16 @@
 package net.anotheria.asg.generator.meta;
 
+import net.anotheria.asg.generator.GenerationOptions;
+import net.anotheria.asg.generator.GeneratorDataRegistry;
+import net.anotheria.asg.generator.IGenerateable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.anotheria.asg.generator.GenerationOptions;
-import net.anotheria.asg.generator.GeneratorDataRegistry;
-import net.anotheria.asg.generator.IGenerateable;
-
 /**
- * Representation of a module definiton.
+ * Representation of a module definition.
  * @author another
  */
 public class MetaModule implements IGenerateable{

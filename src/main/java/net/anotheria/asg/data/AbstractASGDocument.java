@@ -1,6 +1,11 @@
 package net.anotheria.asg.data;
 
-import net.anotheria.anodoc.data.*;
+import net.anotheria.anodoc.data.BooleanProperty;
+import net.anotheria.anodoc.data.Document;
+import net.anotheria.anodoc.data.LongProperty;
+import net.anotheria.anodoc.data.NoSuchPropertyException;
+import net.anotheria.anodoc.data.Property;
+import net.anotheria.anodoc.data.StringProperty;
 
 /**
  * Root object for all generated classes of type Document (instead of ano-doc Document used previously).

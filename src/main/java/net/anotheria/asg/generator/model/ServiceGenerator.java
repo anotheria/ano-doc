@@ -1,7 +1,15 @@
 package net.anotheria.asg.generator.model;
 
 import net.anotheria.asg.exception.ASGRuntimeException;
-import net.anotheria.asg.generator.*;
+import net.anotheria.asg.generator.AbstractGenerator;
+import net.anotheria.asg.generator.CommentGenerator;
+import net.anotheria.asg.generator.Context;
+import net.anotheria.asg.generator.FileEntry;
+import net.anotheria.asg.generator.GeneratedClass;
+import net.anotheria.asg.generator.GeneratorDataRegistry;
+import net.anotheria.asg.generator.IGenerateable;
+import net.anotheria.asg.generator.IGenerator;
+import net.anotheria.asg.generator.TypeOfClass;
 import net.anotheria.asg.generator.meta.MetaDocument;
 import net.anotheria.asg.generator.meta.MetaModule;
 import net.anotheria.asg.generator.meta.StorageType;
@@ -192,8 +200,8 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	
 	/**
 	 * Generates the service interface for the module.
-	 * @param module
-	 * @return
+	 * @param module module to generate.
+	 * @return generated clazz.
 	 */
 	private GeneratedClass generateInterface(MetaModule module){
 	    
@@ -212,13 +220,13 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	        clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 	    }
 	    
-	    clazz.addImport("net.anotheria.util.xml.XMLNode");
-	    clazz.addImport("net.anotheria.util.slicer.Segment");
-	    clazz.addImport("net.anotheria.anodoc.query2.DocumentQuery");
+	    clazz.addImport(net.anotheria.util.xml.XMLNode.class);
+	    clazz.addImport(net.anotheria.util.slicer.Segment.class);
+	    clazz.addImport(net.anotheria.anodoc.query2.DocumentQuery.class);
 	   
-	    clazz.addImport("net.anotheria.anodoc.query2.QueryResult");
-	    clazz.addImport("net.anotheria.anodoc.query2.QueryProperty");
-	    clazz.addImport("net.anotheria.asg.service.ASGService");
+	    clazz.addImport(net.anotheria.anodoc.query2.QueryResult.class);
+	    clazz.addImport(net.anotheria.anodoc.query2.QueryProperty.class);
+	    clazz.addImport(net.anotheria.asg.service.ASGService.class);
 
 	    clazz.setType(TypeOfClass.INTERFACE);
 	    clazz.setName(getInterfaceName(module));
@@ -434,7 +442,7 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	    return getServiceName(m)+"Factory";
 	}
 	/**
-	 * Returns the import for the factory for the service for a metamodule.
+	 * Returns the import for the factory for the service for a meta-module.
 	 * @param m
 	 * @return inport for factory
 	 */

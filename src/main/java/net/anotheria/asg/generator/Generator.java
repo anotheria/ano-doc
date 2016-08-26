@@ -2,7 +2,14 @@ package net.anotheria.asg.generator;
 
 import net.anotheria.asg.generator.apputil.AppUtilGenerator;
 import net.anotheria.asg.generator.meta.MetaModule;
-import net.anotheria.asg.generator.parser.*;
+import net.anotheria.asg.generator.parser.XMLContextParser;
+import net.anotheria.asg.generator.parser.XMLDataParser;
+import net.anotheria.asg.generator.parser.XMLDecoratorsParser;
+import net.anotheria.asg.generator.parser.XMLFiltersParser;
+import net.anotheria.asg.generator.parser.XMLPreprocessor;
+import net.anotheria.asg.generator.parser.XMLTypesParser;
+import net.anotheria.asg.generator.parser.XMLValidatorsParser;
+import net.anotheria.asg.generator.parser.XMLViewParser;
 import net.anotheria.asg.generator.types.TypesGenerator;
 import net.anotheria.asg.generator.types.meta.DataType;
 import net.anotheria.asg.generator.util.IncludedDocuments;
@@ -171,7 +178,7 @@ public class Generator {
     }
 
     public static String getVersionString(){
-        return "1.3.3";
+        return "2.6.3";
     }
 
     public static String getProductString(){

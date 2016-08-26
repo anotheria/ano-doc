@@ -1,7 +1,17 @@
 package net.anotheria.asg.generator.model.db;
 
-import net.anotheria.asg.generator.*;
-import net.anotheria.asg.generator.meta.*;
+import net.anotheria.asg.generator.AbstractGenerator;
+import net.anotheria.asg.generator.FileEntry;
+import net.anotheria.asg.generator.GeneratedSQLFile;
+import net.anotheria.asg.generator.GenerationJobManager;
+import net.anotheria.asg.generator.GeneratorDataRegistry;
+import net.anotheria.asg.generator.IGenerateable;
+import net.anotheria.asg.generator.IGenerator;
+import net.anotheria.asg.generator.meta.MetaDocument;
+import net.anotheria.asg.generator.meta.MetaListProperty;
+import net.anotheria.asg.generator.meta.MetaModule;
+import net.anotheria.asg.generator.meta.MetaProperty;
+import net.anotheria.asg.generator.meta.StorageType;
 
 import java.util.ArrayList;
 import java.util.List;
