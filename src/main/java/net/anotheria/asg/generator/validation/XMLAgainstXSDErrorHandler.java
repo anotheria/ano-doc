@@ -8,7 +8,7 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * <p>XMLAgainstXSDErrorHandler class.</p>
  *
- * @author another
+ * @author vzarva
  * @version $Id: $Id
  */
 public class XMLAgainstXSDErrorHandler extends DefaultHandler{

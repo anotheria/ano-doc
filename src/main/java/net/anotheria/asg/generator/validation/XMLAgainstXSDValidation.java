@@ -1,22 +1,31 @@
 package net.anotheria.asg.generator.validation;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.asg.generator.util.IncludedDocuments;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 /**
  * <p>XMLAgainstXSDValidation class.</p>
  *
- * @author another
+ * @author vzarva
  * @version $Id: $Id
  */
 public final class XMLAgainstXSDValidation {
+
+	private static Logger log = LoggerFactory.getLogger(XMLAgainstXSDValidation.class);
 
     private static final String JAXP_SCHEMA_LANGUAGE =  "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
     private static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
@@ -30,11 +39,13 @@ public final class XMLAgainstXSDValidation {
      * @param inputStream a {@link java.io.InputStream} object.
      * @param includedDocuments a {@link net.anotheria.asg.generator.util.IncludedDocuments} object.
      */
+	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
     public static void validateAgainstXSDSchema(String nameOfFile,String content,InputStream inputStream,IncludedDocuments includedDocuments){
         File tempXSDFile = null;
 
-        try {
-            System.out.println("----------Validating "+nameOfFile+" started.");
+		try {
+        	log.debug("----------Validating "+nameOfFile+" started");
+            //System.out.println(;
 
             // create file xsd from input stream to validate xml against it
             tempXSDFile = createTempFile(inputStream);
@@ -55,7 +66,7 @@ public final class XMLAgainstXSDValidation {
             if (contentOfFileAsInputStream != null) {
                 builder.parse(new InputSource(contentOfFileAsInputStream));
             } else {
-                System.out.println("-----File "+nameOfFile+" doesn't exist.");
+                log.error("-----File "+nameOfFile+" doesn't exist.");
             }
 
 
@@ -65,20 +76,15 @@ public final class XMLAgainstXSDValidation {
             // the program will terminate if xml file has errors
             if (XMLAgainstXSDErrorHandler.isHasErrors()){
                 tempXSDFile.delete();
-                System.out.println("-----Validating "+nameOfFile+" finished with errors.");
+				log.error("-----Validating "+nameOfFile+" finished with errors.");
+                System.err.println("-----Validating "+nameOfFile+" finished with errors.");
                 System.exit(-1);
             }
 
-            System.out.println("-----Validating "+nameOfFile+" finished successfully.");
-        } catch (ParserConfigurationException e) {
-            System.out.println("-----Error: ParserConfigurationException "+e.getMessage());
-            throw new RuntimeException("ParserConfigurationException.",e);
-        } catch (SAXException e) {
-            System.out.println("-----Error: SAXException "+e.getMessage());
-            throw new RuntimeException("SAXException.",e);
-        } catch (IOException e) {
-            System.out.println("-----Error: IOException"+e.getMessage());
-            throw new RuntimeException("IOException.",e);
+            log.debug("-----Validating "+nameOfFile+" finished successfully.");
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            log.error("-----Error in parsing  ", e);
+            throw new RuntimeException("Error in validation due to ",e);
         } finally {
             if (tempXSDFile != null) {
                 tempXSDFile.delete();
@@ -102,7 +108,7 @@ public final class XMLAgainstXSDValidation {
 
             return tempFile;
         } catch (IOException e) {
-            System.out.println("-----Error: IOException" + e.getMessage());
+            log.error("-----Error: IOException" + e.getMessage());
             throw new RuntimeException("IOException.",e);
         }
     }

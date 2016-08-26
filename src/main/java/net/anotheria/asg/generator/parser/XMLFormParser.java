@@ -1,21 +1,21 @@
 package net.anotheria.asg.generator.parser;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
-
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.asg.generator.forms.meta.MetaForm;
 import net.anotheria.asg.generator.forms.meta.MetaFormField;
 import net.anotheria.asg.generator.forms.meta.MetaFormSingleField;
 import net.anotheria.asg.generator.forms.meta.MetaFormTableColumn;
 import net.anotheria.asg.generator.forms.meta.MetaFormTableField;
 import net.anotheria.asg.generator.forms.meta.MetaFormTableHeader;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Parser for the forms.
@@ -107,13 +107,14 @@ public final class XMLFormParser {
 		
 		@SuppressWarnings("unchecked")List<Element> columns = table.getChildren("column");
 		for (int i=0; i<columns.size(); i++){
-			MetaFormTableColumn c = parseColumn((Element)columns.get(i));
+			MetaFormTableColumn c = parseColumn(columns.get(i));
 			ret.addColumn(c);
 		}
 
 		return ret;
 	}
-	
+
+	@SuppressFBWarnings("DE_MIGHT_IGNORE")
 	private static MetaFormTableColumn parseColumn(Element e){
 		MetaFormTableColumn column = new MetaFormTableColumn();
 		String type  = e.getAttributeValue("type");

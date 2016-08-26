@@ -1,10 +1,17 @@
 package net.anotheria.asg.generator.parser;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.asg.generator.util.IncludedDocuments;
 import net.anotheria.util.IOUtils;
 import net.anotheria.util.StringUtils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -81,6 +88,7 @@ public final class XMLPreprocessor {
      * @throws IOException
      */
 
+	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
     private static int findLineOfIncludeCommand(String content,String includeTarget) throws IOException{
         File tempFile = null;
         try {

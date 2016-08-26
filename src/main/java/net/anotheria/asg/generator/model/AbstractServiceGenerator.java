@@ -108,7 +108,7 @@ public class AbstractServiceGenerator extends AbstractGenerator{
 	    appendString("public "+getInterfaceName(module)+" create(){");
 	    increaseIdent();
 	    appendStatement("return create"+getServiceName(module)+"()");
-	    append(closeBlock());
+		closeBlockNEW();
 	    emptyline();
 	    
 	    appendString("public static "+getInterfaceName(module)+" create"+getServiceName(module)+"(){");
@@ -126,7 +126,7 @@ public class AbstractServiceGenerator extends AbstractGenerator{
 	    appendString(");");
 	    appendStatement("return ("+getInterfaceName(module)+") proxy.createProxy()");
 	    
-	    append(closeBlock());
+	    closeBlockNEW();
 	    emptyline();
 	    
 	    appendString("private static "+getInterfaceName(module)+" createInstance(){");
@@ -138,7 +138,7 @@ public class AbstractServiceGenerator extends AbstractGenerator{
 	    appendString("static "+getInterfaceName(module)+" getDefaultInstance(){");
 	    increaseIdent();
 	    appendString("return defaultInstance;");
-	    append(closeBlock());
+		closeBlockNEW();
 	    return clazz;
 	} 
 	

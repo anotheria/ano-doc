@@ -1,12 +1,13 @@
 package net.anotheria.asg.generator.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import net.anotheria.util.IOUtils;
+import net.anotheria.util.StringUtils;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import net.anotheria.util.IOUtils;
-import net.anotheria.util.StringUtils;
 
 /**
  * Utility for writing code to files.
@@ -47,6 +48,7 @@ public class FileWriter {
 	 * @param content a {@link java.lang.String} object.
 	 * @param override a boolean.
 	 */
+	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public static final void writeFile(String path, String fileName, String content, boolean override){
 		if (content==null || content.length()==0){
 			//System.out.println("IGNORE emptyfile "+fileName );
