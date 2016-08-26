@@ -1,15 +1,17 @@
 package net.anotheria.asg.generator.parser;
 
-import java.io.IOException;
-import java.util.List;
-
 import net.anotheria.asg.generator.Context;
 import net.anotheria.asg.generator.ContextParameter;
 import net.anotheria.util.IOUtils;
-
 import org.junit.Test;
 
-import static junit.framework.Assert.*;
+import java.io.IOException;
+import java.util.List;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertTrue;
 
 public class XMLContextParserTest {
 	@Test public void testContextParser() throws IOException{
@@ -47,7 +49,7 @@ public class XMLContextParserTest {
 	}
 	
 	private Context loadContext() throws IOException{
-		String content = IOUtils.readFileAtOnceAsString("test/xmldataset/context.xml");
+		String content = IOUtils.readFileAtOnceAsString("src/test/resources/xmldataset/context.xml");
 		
 		assertNotNull(content);
 		assertFalse(content.length()==0);

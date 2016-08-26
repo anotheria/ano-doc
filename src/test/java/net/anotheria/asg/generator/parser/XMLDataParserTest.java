@@ -15,7 +15,7 @@ import static junit.framework.Assert.*;
 
 public class XMLDataParserTest {
 	@Test public void testDataParser() throws Exception{
-		File f = new File("test/xmldataset/datadef.xml");
+		File f = new File("src/test/resources/xmldataset/datadef.xml");
 		String content = XMLPreprocessor.loadFile(f,null);
 		
 		assertNotNull(content);
@@ -104,7 +104,7 @@ public class XMLDataParserTest {
 	}
 	
 	private List<MetaModule> loadFile(String name) throws IOException{
-		String content = XMLPreprocessor.loadFile(new File("test/xmldataset/"+name),null);
+		String content = XMLPreprocessor.loadFile(new File("src/test/resources/xmldataset/"+name),null);
 		assertNotNull(content);
 		assertFalse(content.length()==0);
 		

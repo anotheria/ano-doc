@@ -1,20 +1,19 @@
 package net.anotheria.asg.generator.parser;
 
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertEquals;
+import net.anotheria.asg.generator.view.meta.MetaDecorator;
+import net.anotheria.util.IOUtils;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.List;
 
-import net.anotheria.asg.generator.view.meta.MetaDecorator;
-import net.anotheria.util.IOUtils;
-
-import org.junit.Test;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
 
 public class XMLDecoratorsParserTest {
 	@Test public void testDecoratorsParser() throws IOException{
-		String content = IOUtils.readFileAtOnceAsString("test/xmldataset/decorators.xml");
+		String content = IOUtils.readFileAtOnceAsString("src/test/resources/xmldataset/decorators.xml");
 		
 		assertNotNull(content);
 		assertFalse(content.length()==0);
