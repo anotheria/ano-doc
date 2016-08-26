@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<decorators>
-	<decorator name="decoratorA" class="net.anotheria.asg.util.decorators.DecoratorA"/>
-	<decorator name="bDecorator" class="net.anotheria.asg.util.decorators.BDecorator"/>
-</decorators>
