@@ -49,5 +49,9 @@ public class MetaFederationModule extends MetaModule {
 		return ret == null ? new ArrayList<FederatedDocumentMapping>() : ret;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
 }
 

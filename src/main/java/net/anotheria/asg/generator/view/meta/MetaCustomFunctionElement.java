@@ -37,5 +37,11 @@ public class MetaCustomFunctionElement extends MetaViewElement{
 	public MetaCustomFunctionElement(String name){
 		super(name);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
 }
 

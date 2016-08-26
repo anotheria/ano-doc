@@ -26,4 +26,9 @@ public class MetaCustomSection extends MetaSection{
 		this.path = path;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
 }

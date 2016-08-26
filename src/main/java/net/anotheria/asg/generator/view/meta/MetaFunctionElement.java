@@ -39,4 +39,9 @@ public class MetaFunctionElement extends MetaViewElement{
 		return false;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
 }

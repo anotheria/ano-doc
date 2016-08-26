@@ -1,10 +1,10 @@
 package net.anotheria.asg.generator.view.meta;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.anotheria.asg.generator.meta.MetaDocument;
 import net.anotheria.asg.generator.meta.MetaModule;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A MetaSection which is tied to a module and a document.
@@ -183,5 +183,10 @@ public class MetaModuleSection extends MetaSection{
 		}
 		return false;
 	}
-	
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
 }
