@@ -1,11 +1,11 @@
 package net.anotheria.asg.generator.view.meta;
 
-import java.util.List;
-
 import net.anotheria.util.StringUtils;
 
+import java.util.List;
+
 /**
- * If an element is specified to be multilingual, it's replaced by a multilingualfield element for each language. This way 
+ * If an element is specified to be multilingual, it's replaced by a multilingual field element for each language. This way
  * generation of language specific data for each language is guaranteed.
  * @author another
  *
@@ -88,7 +88,12 @@ public class MultilingualFieldElement extends MetaFieldElement{
 	public String getVariableName(){
 		return getName()+StringUtils.capitalize(language);
 	}
-	
-	
+
+
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+
 
 }

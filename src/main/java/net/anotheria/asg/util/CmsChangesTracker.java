@@ -10,7 +10,7 @@ public class CmsChangesTracker {
 	private CmsChangesTracker() {
 	}
 
-	public static int TRACING_SIZE = 20;
+	public static final int TRACING_SIZE = 20;
 	
 	public static enum Action{
 		CREATE,
