@@ -19,12 +19,12 @@ import java.util.List;
  * @version $Id: $Id
  */
 public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator {
-	
+
 	/**
 	 * Implementation is moved into ano-web, the constant remains.
 	 */
 	public static final String FLAG_FORM_SUBMITTED = "formSubmittedFlag";
-	
+
 	/** Constant <code>FIELD_ML_DISABLED="multilingualInstanceDisabled"</code> */
 	public static final String FIELD_ML_DISABLED = "multilingualInstanceDisabled";
     
@@ -34,14 +34,14 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	/** {@inheritDoc} */
 	public List<FileEntry> generate(IGenerateable g) {
 		List<FileEntry> files = new ArrayList<FileEntry>();
-		
+
 		MetaModuleSection section = (MetaModuleSection)g;
-		
+
 		//System.out.println("Generate section: "+section);
-		
+
 		ExecutionTimer timer = new ExecutionTimer("MafBeanGenerator");
 		timer.startExecution("All");
-		
+
 		timer.startExecution(section.getModule().getName()+"-"+section.getTitle()+"-ListItem");
 		files.add(new FileEntry(generateListItemBean(section)));
 		timer.stopExecution(section.getModule().getName()+"-"+section.getTitle()+"-ListItem");
@@ -51,7 +51,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		for (int i=0; i<dialogs.size(); i++){
 			MetaDialog dlg = dialogs.get(i);
 			files.add(new FileEntry(generateDialogForm(dlg, section.getDocument())));
-			
+
 			MetaDocument doc = section.getDocument();
 			for (int p=0; p<doc.getProperties().size(); p++){
 				MetaProperty pp = doc.getProperties().get(p);
@@ -63,15 +63,15 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		}
 	//	files.add(new FileEntry(FileEntry.package2path(getPackage()), getShowActionName(section), generateShowAction(section)));
 		//files.add(new FileEntry(FileEntry.package2path(getPackage()), getDeleteActionName(section), generateDeleteAction(section)));
-		
+
 		timer.stopExecution("All");
 //		timer.printExecutionTimesOrderedByCreation();
-		
-		
-		
+
+
+
 		return files;
 	}
-	
+
 	private GeneratedClass generateContainerEntryForm(MetaDocument doc, MetaContainerProperty p){
 		if (p instanceof MetaTableProperty){
 			return generateTableRowForm(doc, (MetaTableProperty)p);
@@ -81,32 +81,32 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		}
 		throw new RuntimeException("Unsupported container type: "+p);
 	}
-	
+
 	private GeneratedClass generateContainerQuickAddForm(MetaDocument doc, MetaContainerProperty p){
 		if (p instanceof MetaListProperty)
 			return generateListQuickAddForm(doc, (MetaListProperty)p);
 		System.out.println("WARN Unsupported container type: "+p);
 		return null;
 	}
-	
+
 	private GeneratedClass generateListQuickAddForm(MetaDocument doc, MetaListProperty list){
-		
+
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
-		
+
 		clazz.setPackageName(getPackage(doc));
-		
+
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
-		
+
 		clazz.setName(getContainerQuickAddFormName(list));
 		clazz.addInterface("FormBean");
 
 		startClassBody();
 		appendGenerationPoint("generateListQuickAddForm");
-		
+
 		appendStatement("private String quickAddIds");
 		appendStatement("private String ownerId");
-		
+
 		emptyline();
 		appendString("public void setQuickAddIds(String someIds){");
 		appendIncreasedStatement("quickAddIds = someIds");
@@ -115,9 +115,9 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		appendString("public String getQuickAddIds(){");
 		appendIncreasedStatement("return quickAddIds");
 		appendString("}");
-		
+
 		emptyline();
-		
+
 		emptyline();
 		appendString("public void setOwnerId(String anId){");
 		appendIncreasedStatement("ownerId = anId");
@@ -130,18 +130,18 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 
 		return clazz;
 	}
-	
+
 	private GeneratedClass generateListElementForm(MetaDocument doc, MetaListProperty list){
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
-		
+
 		clazz.setPackageName(getPackage(doc));
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
-		
+
 		if (list.getContainedProperty().isLinked()  || list.getContainedProperty() instanceof MetaEnumerationProperty){
 			clazz.addImport("java.util.List");
 		}
-		
+
 		List<MetaProperty> elements = new ArrayList<MetaProperty>();
 		elements.add(new MetaProperty("ownerId",MetaProperty.Type.STRING));
 		elements.add(new MetaProperty("position",MetaProperty.Type.INT));
@@ -152,7 +152,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		clazz.addInterface("FormBean");
 		startClassBody();
 		appendGenerationPoint("generateListElementForm");
-		
+
 		for (int i=0; i<elements.size(); i++){
 			MetaProperty p = elements.get(i);
 			appendStatement("private "+p.toJavaType()+" "+p.getName());
@@ -162,7 +162,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 				appendStatement("private "+collection.toJavaType()+" "+collection.getName());
 			}
 		}
-		
+
 		emptyline();
 		for (int i=0; i<elements.size(); i++){
 			MetaProperty p = elements.get(i);
@@ -182,36 +182,36 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 				closeBlockNEW();
 				emptyline();
 			}
-			
+
 		}
 		emptyline();
-		
+
 		return clazz;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	private GeneratedClass generateTableRowForm(MetaDocument doc, MetaTableProperty p){
-		
+
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
-		
+
 		clazz.setPackageName(getPackage(doc));
 		clazz.addImport("net.anotheria.webutils.bean.BaseActionForm");
 		clazz.addImport("javax.servlet.http.HttpServletRequest");
 		clazz.addImport("org.apache.struts.action.ActionMapping");
-		
+
 		clazz.setName(getContainerEntryFormName(p));
 		clazz.setParent("BaseActionForm");
 
 		startClassBody();
 		appendGenerationPoint("generateTableRowForm");
-		
+
 		List<MetaProperty> columns = (List<MetaProperty>)((ArrayList)p.getColumns()).clone();
 		columns.add(0, new MetaProperty(p.getName()+"_ownerId", MetaProperty.Type.STRING));
 		columns.add(0, new MetaProperty(p.getName()+"_position", MetaProperty.Type.INT));
 		for (MetaProperty pr : columns)
 			appendStatement("private String "+p.extractSubName(pr));
-		
+
 		emptyline();
 		for (int i=0; i<columns.size(); i++){
 			MetaProperty pr = columns.get(i);
@@ -235,11 +235,11 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		closeBlockNEW();
 		appendString("catch ( java.io.UnsupportedEncodingException e ) {}");
 		closeBlockNEW();
-		
+
 		return clazz;
 	}
-	
-	
+
+
 	/**
 	 * <p>generateDialogForm.</p>
 	 *
@@ -249,21 +249,21 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	 */
 	public GeneratedClass generateDialogForm(MetaDialog dialog, MetaDocument doc){
 
-		
+
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
-		
+
 		clazz.setPackageName(getPackage(doc));
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
-		
+
 		startClassBody();
 		appendGenerationPoint("generateDialogForm");
-		
+
 		//this is only used if the multilingual support is enabled for the project AND document.
 		MetaFieldElement multilingualInstanceDisabledElement = new MetaFieldElement(FIELD_ML_DISABLED);
-		
+
 		List<MetaViewElement> elements = createMultilingualList(dialog.getElements(), doc);
-		
+
 		for (MetaViewElement element : elements){
 			if (element instanceof MetaFieldElement){
 				MetaFieldElement field = (MetaFieldElement)element;
@@ -275,18 +275,18 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 				}
 			}
 		}
-		
+
 		clazz.setName(getDialogBeanName(dialog, doc));
 		clazz.addInterface("FormBean");
-		
+
 		startClassBody();
 		appendGenerationPoint("generateDialogForm");
-	
+
 		for (MetaViewElement element : elements){
 			if (element instanceof MetaFieldElement){
 				MetaFieldElement field = (MetaFieldElement)element;
 				String lang = getElementLanguage(field);
-				
+
 				MetaProperty p = doc.getField(field.getName());
 				MetaProperty tmp = p instanceof MetaListProperty? new MetaProperty(p.getName(),MetaProperty.Type.INT): p;
 				if (element.isValidated()) {	//TODO what about list validation?
@@ -313,7 +313,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 
 					appendStatement("private String "+p.getName()+"IdOfCurrentValue"+(lang==null?"":lang));
 				}
-				
+
 				if (p instanceof MetaEnumerationProperty){
 					MetaProperty collection = new MetaProperty(p.getName()+"Collection",MetaProperty.Type.LIST);
 					appendStatement("private "+collection.toJavaType()+"<LabelValueBean> "+collection.getName());//hacky
@@ -322,7 +322,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 					appendStatement("private String "+p.getName()+"IdOfCurrentValue");
 				}
 			}
-			
+
 		}
 
 		emptyline();
@@ -330,24 +330,32 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 			if (element instanceof MetaFieldElement)
 				generateFieldMethodsInDialog((MetaFieldElement)element, doc);
 		}
-		
+
 		if (doc.isMultilingual()){
 			MetaProperty mlDisProp = doc.getField(multilingualInstanceDisabledElement.getName());
 			appendStatement("private "+mlDisProp.toJavaType()+" "+mlDisProp.getName());
             emptyline();
 			generateFieldMethodsInDialog(multilingualInstanceDisabledElement, doc);
 		}
-		
+
         // add fields!!!! Lock!!!
         generateAdditionalFields(doc,"locked", MetaProperty.Type.BOOLEAN,"LockableObject \"locked\" property. For object Locking.");
         generateAdditionalFields(doc,"lockerId", MetaProperty.Type.STRING,"LockableObject \"lockerId\" property. For userName containing.");
         generateAdditionalFields(doc,"lockingTime", MetaProperty.Type.STRING,"LockableObject \"lockingTime\" property.");
-        
+
+        // add fields links to elements
+        for (MetaViewElement element : elements) {
+            if (element.isShowLink()) {
+                generateAdditionalFields(doc, element.getName()+"link", Type.STRING, "Link to "+element.getName());
+            }
+        }
+
+
         emptyline();
 
 		return clazz;
 	}
-	
+
 	/**
 	 * <p>getPackage.</p>
 	 *
@@ -357,7 +365,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	public static String getPackage(MetaDocument doc){
 	    return getPackage(GeneratorDataRegistry.getInstance().getContext(), doc);
 	}
-	
+
 	/**
 	 * <p>getPackage.</p>
 	 *
@@ -367,7 +375,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	public static String getPackage(MetaModule module){
 	    return getPackage(GeneratorDataRegistry.getInstance().getContext(), module);
 	}
-	
+
 	/**
 	 * <p>getPackage.</p>
 	 *
@@ -378,7 +386,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	public static String getPackage(Context context, MetaModule module){
 	    return context.getPackageName(module)+".bean";
 	}
-	
+
 	/**
 	 * <p>getPackage.</p>
 	 *
@@ -389,7 +397,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	public static String getPackage(Context context, MetaDocument doc){
 	    return context.getPackageName(doc)+".bean";
 	}
-	
+
 	/**
 	 * <p>getDialogBeanName.</p>
 	 *
@@ -400,7 +408,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	public static String getDialogBeanName(MetaDialog dialog, MetaDocument document){
 		return StringUtils.capitalize(dialog.getName())+StringUtils.capitalize(document.getName())+"FB";
 	}
-	
+
 	private void generateFieldMethodsInDialog(MetaFieldElement element, MetaDocument doc){
 		MetaProperty p = null;
 //		String lang = getElementLanguage(element);
@@ -421,12 +429,12 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 				generateMethods(pCurr, new MetaProperty(element.getName()+"CurrentValue", MetaProperty.Type.STRING));
 				generateMethods(pIdOfCurr, new MetaProperty(element.getName()+"IdOfCurrentValue", MetaProperty.Type.STRING));
 			}
-			
+
 		}
 		MetaProperty tmp = p instanceof MetaListProperty? new MetaProperty(p.getName(),MetaProperty.Type.INT): p;
 		generateMethods(element, tmp);
 	}
-	
+
 	 /**
      * Actually allow us add fields  such Lock - etc.
      * @param doc document itself
@@ -444,8 +452,8 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
             generateMethods(fieldElement,maField);
         }
     }
-    
-    
+
+
     private GeneratedClass generateListItemSortType(MetaModuleSection section){
 		List<MetaViewElement> elements = section.getElements();
 		boolean containsComparable = false;
@@ -458,33 +466,33 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 
 		if (!containsComparable)
 			return null;
-			
-		
+
+
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
-		
+
 		clazz.setPackageName(getPackage(section.getDocument()));
 		clazz.addImport("net.anotheria.util.sorter.SortType");
-		
+
 		clazz.setName(getListItemBeanSortTypeName(section.getDocument()));
 		clazz.setParent("SortType");
-		
+
 		startClassBody();
 		appendGenerationPoint("generateListItemSortType");
-		
+
 		MetaViewElement defaultElem = section.getDefaultSortable();
 		String defaultElemName = null;
 		int lastIndex = 1;
-		
+
 		elements = createMultilingualList(elements, section.getDocument());
-		
+
 		for (int i=0; i<elements.size(); i++){
 			MetaViewElement element = elements.get(i);
 			if (element.isComparable()){
 				if (element.equals(defaultElem)){
 					if (element instanceof MultilingualFieldElement){
 						defaultElemName = "SORT_BY_"+section.getDocument().getField(element.getName()).getName(GeneratorDataRegistry.getInstance().getContext().getDefaultLanguage()).toUpperCase();
-					}else{					
+					}else{
 						defaultElemName = "SORT_BY_"+element.getName().toUpperCase();
 					}
 				}
@@ -497,7 +505,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 
 			}
 		}
-		
+
 		appendStatement("public static final int SORT_BY_DEFAULT = "+defaultElemName);
 		emptyline();
 		appendString("public "+getListItemBeanSortTypeName(section.getDocument())+"(){");
@@ -511,13 +519,13 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		appendString("super(method);");
 		closeBlockNEW();
 		emptyline();
-				
+
 		appendString("public "+getListItemBeanSortTypeName(section.getDocument())+"(int method, boolean order){");
 		increaseIdent();
 		appendString("super(method, order);");
 		closeBlockNEW();
 		emptyline();
-		
+
 		appendString("public static int name2method(String name){");
 		increaseIdent();
 		for (int i=0; i<elements.size(); i++){
@@ -528,7 +536,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 					String lang = ((MultilingualFieldElement)element).getLanguage();
 					appendString("if ("+quote(p.getName(lang))+".equals(name))");
 					appendIncreasedStatement("return SORT_BY_"+p.getName(lang).toUpperCase());
-					
+
 				}else{
 					appendString("if ("+quote(p.getName())+".equals(name))");
 					appendIncreasedStatement("return SORT_BY_"+p.getName().toUpperCase());
@@ -538,7 +546,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 
 			}
 		}
-		appendStatement("throw new RuntimeException("+quote("Unknown sort type name: ")+"+name)");		
+		appendStatement("throw new RuntimeException("+quote("Unknown sort type name: ")+"+name)");
 		closeBlockNEW();
 		emptyline();
 
@@ -555,7 +563,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 					String lang = ((MultilingualFieldElement)element).getLanguage();
 					appendString("case SORT_BY_"+p.getName(lang).toUpperCase()+":");
 					appendIncreasedStatement("return "+quote(p.getName(lang)));
-					
+
 				}else{
 					appendString("case SORT_BY_"+p.getName().toUpperCase()+":");
 					appendIncreasedStatement("return "+quote(p.getName()));
@@ -566,10 +574,10 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 			}
 		}
 		closeBlockNEW();
-		appendStatement("throw new RuntimeException("+quote("Unknown sort type method: ")+"+method)");		
+		appendStatement("throw new RuntimeException("+quote("Unknown sort type method: ")+"+method)");
 		closeBlockNEW();
 		emptyline();
-		
+
 		//
 		appendString("public String getMethodAndOrderCode(){");
 		increaseIdent();
@@ -580,18 +588,18 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	}
 
     private boolean debugTest = false;
-    
+
     private GeneratedClass generateListItemBean(MetaModuleSection section){
-    	
+
     	System.out.println("generate list item bean "+section.getDocument().getName());
-		
+
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
 		clazz.setClazzComment("Generated by "+ModuleBeanGenerator.class);
-		
+
 		MetaDocument doc = section.getDocument();
 		List<MetaViewElement> origElements = section.getElements();
-		
+
 		if (doc.getName().equals("BoxType"))
 			debugTest= true;
 		if (doc.getName().equals("Pagex"))
@@ -614,18 +622,18 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		plainId.setReadonly(true);
 		plainId.setDecorator(null);
 		elements.add(versionInfo);
-		
+
 		clazz.setPackageName(getPackage(section.getDocument()));
 
 		boolean containsComparable = false;
 		for (MetaViewElement element : elements){
 			if (element.isComparable()){
 				containsComparable = true;
-				break; 
+				break;
 			}
 		}
-		
-		
+
+
 		for(MetaViewElement element: elements){
 			if (!(element instanceof MetaFieldElement))
 				continue;
@@ -640,10 +648,10 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		clazz.setName(getListItemBeanName(section.getDocument()));
 
         //section.getModule().
-		
+
 		startClassBody();
 		appendGenerationPoint("generateListItemBean");
-		
+
 		for (int i=0; i<elements.size(); i++){
 			MetaViewElement element = elements.get(i);
 			if (element instanceof MetaFieldElement){
@@ -666,7 +674,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 						//appendString("//p: "+p.getName()+", "+p.toJavaType()+", "+p.getClass());
 						if (field.getDecorator()!=null){
 							appendStatement("private String "+tmp.getName());
-							
+
 							if (tmp instanceof MetaListProperty){
 								//TODO this is hotfixing the sorting type
 								element.setSortingType(SortingType.CONTAINERS);
@@ -698,10 +706,10 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 				generateFieldMethods((MetaFieldElement)element, doc);
 			if (element instanceof MetaFunctionElement)
 				generateFunctionMethods((MetaFunctionElement)element);
-			
+
 		}
-		
-		
+
+
 
         // add fields!!!! Lock!!!
         generateAdditionalFields(doc, "locked", MetaProperty.Type.BOOLEAN, "LockableObject \"locked\" property. For object Locking.");
@@ -712,16 +720,16 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
         if (containsComparable){
 			clazz.addImport("net.anotheria.util.sorter.IComparable");
 			clazz.addImport("net.anotheria.util.BasicComparable");
-			
+
 			clazz.addInterface("IComparable");
-			
+
 			emptyline();
 			generateCompareMethod(doc, elements);
 		}
 		if (debugTest){
 			System.out.println("%%% DEBUG OFF %%%");
 		}
-		
+
 		return clazz;
 	}
 
@@ -738,16 +746,16 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		for (MetaViewElement element: elements){
 			if (!element.isComparable())
 				continue;
-			
+
 			MetaFieldElement field = (MetaFieldElement)element;
 			MetaProperty p = doc.getField(field.getName());
-			
+
 			String lang = getElementLanguage(element);
 			String caseDecl = lang != null? getListItemBeanSortTypeName(doc)+".SORT_BY_"+p.getName(lang).toUpperCase():
 				getListItemBeanSortTypeName(doc)+".SORT_BY_"+p.getName().toUpperCase();
-			
+
 			appendString("case "+caseDecl+":");
-			
+
 			String type2compare = p instanceof MetaEnumerationProperty? "String": StringUtils.capitalize(p.toJavaErasedType());
 			String retDecl = "return BasicComparable.compare"+type2compare;
 			if (element.getName().equals("id")){
@@ -763,17 +771,17 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 	}
 
 	private void generateFieldMethods(MetaFieldElement element, MetaDocument doc){
-		
+
 		MetaProperty p = doc.getField(element.getName());
 		if (p instanceof MetaEnumerationProperty){
 			MetaProperty tmp = new MetaProperty(p.getName(), MetaProperty.Type.STRING);
 			generateMethods(element, tmp);
 			return;
 		}
-		
+
 		if (debugTest)
 			System.out.println(element.getName()+" - "+element.getDecorator());
-		
+
 		if (element.getDecorator()!=null){
 			MetaProperty tmpForSorting = (MetaProperty) p.clone();//new MetaProperty(p.getName()+"ForSorting", p.getType());
 			tmpForSorting.setName(tmpForSorting.getName()+"ForSorting");
@@ -781,12 +789,12 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 			//if this field has a decorator we have to generate string methods instaed of original methods.
 			p = new MetaProperty(p.getName(), MetaProperty.Type.STRING, p.isMultilingual());
 		}
-		
+
 		generateMethods(element, p);
 	}
-    
+
 	private void generateMethods(MetaViewElement element, MetaProperty p){
-		
+
 		if (debugTest)
 			System.out.println("  GenerateMethods for "+element+" ... "+p);
 
@@ -798,16 +806,16 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		appendString("public void "+p.toBeanSetter()+"("+p.toJavaType()+" "+p.getName()+" ){");
 		increaseIdent();
 		appendStatement("this."+p.getName()+" = "+p.getName());
-		closeBlockNEW();		
+		closeBlockNEW();
 		emptyline();
 		appendString("public "+p.toJavaType()+" "+p.toBeanGetter()+"(){");
 		increaseIdent();
 		appendStatement("return "+p.getName());
 		closeBlockNEW();
 		emptyline();
-		
+
 	}
-	
+
 	private void generateMethodsForSorting(MetaViewElement element, MetaProperty p){
 
 		if (element instanceof MultilingualFieldElement){
@@ -818,7 +826,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		appendString("public void "+p.toBeanSetter()+"("+p.toJavaType()+" "+p.getName()+" ){");
 		increaseIdent();
 		appendStatement("this."+p.getName()+" = "+element.getSortingType().convertValue(p.getName()));
-		closeBlockNEW();			
+		closeBlockNEW();
 		emptyline();
 
 		if (element.getName().equals("id"))
@@ -829,21 +837,21 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		appendStatement("return "+p.getName());
 		closeBlockNEW();
 		emptyline();
-		
+
 	}
-	
-	
+
+
 		private void generateMethodsMultilinguage(MultilingualFieldElement element, MetaProperty p){
-		
+
 		//System.out.println("--- m "+p+", "+p.getType());
 		if (p.getType() == MetaProperty.Type.LIST)
 			appendString("@SuppressWarnings(\"unchecked\")");
 		appendString("public void "+p.toBeanSetter(element.getLanguage())+"("+p.toJavaType()+" "+p.getName()+" ){");
 		increaseIdent();
 		appendStatement("this."+p.getName(element.getLanguage())+" = "+p.getName());
-		closeBlockNEW();			
+		closeBlockNEW();
 		emptyline();
-			
+
 		if (p.getType() == MetaProperty.Type.LIST)
 			appendString("@SuppressWarnings(\"unchecked\")");
 		appendString("public "+p.toJavaType()+" "+p.toBeanGetter(element.getLanguage())+"(){");
@@ -851,11 +859,11 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		appendStatement("return "+p.getName(element.getLanguage()));
 		closeBlockNEW();
 		emptyline();
-		
+
 	}
-		
-		
-		
+
+
+
 		/**
 		 * <p>getListItemBeanSortTypeImport.</p>
 		 *
@@ -866,7 +874,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getListItemBeanSortTypeImport(Context context, MetaDocument doc){
 			return getPackage(context, doc)+"."+getListItemBeanSortTypeName(doc);
 		}
-		
+
 		/**
 		 * <p>getListItemBeanSortTypeName.</p>
 		 *
@@ -876,7 +884,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getListItemBeanSortTypeName(MetaDocument doc){
 			return getListItemBeanName(doc)+"SortType";
 		}
-		
+
 		/**
 		 * <p>getListItemBeanName.</p>
 		 *
@@ -886,7 +894,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getListItemBeanName(MetaDocument doc){
 			return doc.getName()+"ListItemBean";
 		}
-		
+
 		/**
 		 * <p>getDialogBeanImport.</p>
 		 *
@@ -897,7 +905,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getDialogBeanImport(MetaDialog dialog, MetaDocument doc){
 			return getPackage(GeneratorDataRegistry.getInstance().getContext(), doc)+"."+getDialogBeanName(dialog, doc);
 		}
-		
+
 		/**
 		 * <p>getListItemBeanImport.</p>
 		 *
@@ -908,7 +916,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getListItemBeanImport(Context context, MetaDocument doc){
 			return getPackage(context, doc)+"."+getListItemBeanName(doc);
 		}
-		
+
 		/**
 		 * <p>getContainerEntryFormImport.</p>
 		 *
@@ -919,7 +927,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getContainerEntryFormImport(MetaDocument doc, MetaContainerProperty p){
 			return GeneratorDataRegistry.getInstance().getContext().getPackageName(doc)+".bean."+getContainerEntryFormName(p);
 		}
-		
+
 		/**
 		 * <p>getContainerEntryFormName.</p>
 		 *
@@ -929,7 +937,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getContainerEntryFormName(MetaContainerProperty p){
 			return StringUtils.capitalize(p.getName())+p.getContainerEntryName()+"FB";
 		}
-		
+
 		/**
 		 * <p>getContainerQuickAddFormImport.</p>
 		 *
@@ -940,7 +948,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getContainerQuickAddFormImport(MetaDocument doc, MetaContainerProperty p){
 			return GeneratorDataRegistry.getInstance().getContext().getPackageName(doc)+".bean."+getContainerQuickAddFormName(p);
 		}
-		
+
 		/**
 		 * <p>getContainerQuickAddFormName.</p>
 		 *
@@ -950,7 +958,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getContainerQuickAddFormName(MetaContainerProperty p){
 			return StringUtils.capitalize(p.getName())+"QuickAddFB";
 		}
-		
+
 		/**
 		 * <p>getFormBeanImport.</p>
 		 *
@@ -960,7 +968,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getFormBeanImport(MetaForm form){
 			return getPackage()+"."+getFormBeanName(form);
 		}
-		
+
 		/**
 		 * <p>getPackage.</p>
 		 *
@@ -970,7 +978,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		public static String getPackage(){
 		    return GeneratorDataRegistry.getInstance().getContext().getPackageName()+".bean";
 		}
-		
+
 		/**
 		 * <p>getFormBeanName.</p>
 		 *

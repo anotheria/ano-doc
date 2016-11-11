@@ -238,6 +238,7 @@ public final class XMLViewParser {
         String autocompleteOff = elem.getAttributeValue("autocompleteOff");
 		String rich = elem.getAttributeValue("rich");
 		String datetime = elem.getAttributeValue("datetime");
+		String showLink = elem.getAttributeValue("showLink");
 		MetaFieldElement field = new MetaFieldElement(name); 
 		if (readonly!=null && readonly.equals("true"))
 			field.setReadonly(true);
@@ -247,7 +248,9 @@ public final class XMLViewParser {
             field.setAutocompleteOff(true);
         if (datetime != null && datetime.equals("true"))
 			field.setDatetime(true);
-		
+		if (showLink != null && showLink.equals("true"))
+			field.setShowLink(true);
+
 		return field;
 	}
 	

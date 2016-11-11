@@ -25,12 +25,12 @@ public class MetaViewElement {
 	 */
 	private String name;
 	/**
-	 * The caption of the element. 
+	 * The caption of the element.
 	 * Will be displayed in CMS instead of name.
 	 */
 	private String caption;
 	/**
-	 * The description of the element. 
+	 * The description of the element.
 	 */
 	private String description;
 	/**
@@ -40,11 +40,15 @@ public class MetaViewElement {
 	/**
 	 * If true the element is rich element.
 	 */
-	private boolean rich;	
+	private boolean rich;
 	/**
 	 * If true the element is datetime in long.
 	 */
-	private boolean datetime;	
+	private boolean datetime;
+	/**
+	 * If true the link to the element source need to be shown.
+	 */
+	private boolean showLink;
 	/**
 	 * The decorator for the element.
 	 */
@@ -53,7 +57,7 @@ public class MetaViewElement {
 	 * Validators that will validate sumbitted value.
 	 */
 	private List<MetaValidator> validators;
-	
+
 	/**
 	 * The sorting type of the element.
 	 */
@@ -68,7 +72,7 @@ public class MetaViewElement {
 	public MetaViewElement(String aName){
 		this.name = aName;
 	}
-	
+
 	/**
 	 * <p>isReadonly.</p>
 	 *
@@ -123,7 +127,7 @@ public class MetaViewElement {
 		name = string;
 	}
 
-	
+
 	/**
 	 * <p>isComparable.</p>
 	 *
@@ -169,11 +173,11 @@ public class MetaViewElement {
 	@Override public boolean equals(Object o){
 		return (o instanceof MetaViewElement) && ((MetaViewElement)o).getName().equals(getName());
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override public int hashCode() {
 		assert false : "hashCode not designed";
-		return 42; // any arbitrary constant will do 
+		return 42; // any arbitrary constant will do
 	}
 
 	/**
@@ -193,7 +197,7 @@ public class MetaViewElement {
 	public void setRich(boolean rich) {
 		this.rich = rich;
 	}
-	
+
 	/**
 	 * <p>isDatetime.</p>
 	 *
@@ -210,6 +214,22 @@ public class MetaViewElement {
 	 */
 	public void setDatetime(boolean datetime) {
 		this.datetime = datetime;
+	}
+	/**
+	 * <p>isShowLink.</p>
+	 *
+	 * @return a boolean.
+	 */
+	public boolean isShowLink() {
+		return showLink;
+	}
+	/**
+	 * <p>Setter for the field <code>showLink</code>.</p>
+	 *
+	 * @param showLink a boolean.
+	 */
+	public void setShowLink(boolean showLink) {
+		this.showLink = showLink;
 	}
 
 	/**
@@ -265,7 +285,7 @@ public class MetaViewElement {
 	public List<MetaValidator> getValidators() {
 		return validators;
 	}
-	
+
 	/**
 	 * <p>isValidated.</p>
 	 *
@@ -274,7 +294,7 @@ public class MetaViewElement {
 	public boolean isValidated() {
 		return validators != null && !validators.isEmpty();
 	}
-	
+
 	/**
 	 * <p>isJSValidated.</p>
 	 *
@@ -305,6 +325,7 @@ public class MetaViewElement {
 				", datetime=" + datetime +
 				", decorator=" + decorator +
 				", validators=" + validators +
+				", showLink=" + showLink +
 				'}';
 	}
 
@@ -326,5 +347,5 @@ public class MetaViewElement {
 		this.sortingType = sortingType;
 	}
 
-	
+
 }
