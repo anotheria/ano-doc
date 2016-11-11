@@ -44,7 +44,11 @@ public class MetaViewElement {
 	/**
 	 * If true the element is datetime in long.
 	 */
-	private boolean datetime;	
+	private boolean datetime;
+	/**
+	 * If true the link to the element source need to be shown.
+	 */
+	private boolean showLink;
 	/**
 	 * The decorator for the element.
 	 */
@@ -212,6 +216,14 @@ public class MetaViewElement {
 		this.datetime = datetime;
 	}
 
+	public boolean isShowLink() {
+		return showLink;
+	}
+
+	public void setShowLink(boolean showLink) {
+		this.showLink = showLink;
+	}
+
 	/**
 	 * <p>Setter for the field <code>caption</code>.</p>
 	 *
@@ -305,6 +317,7 @@ public class MetaViewElement {
 				", datetime=" + datetime +
 				", decorator=" + decorator +
 				", validators=" + validators +
+				", showLink=" + showLink +
 				'}';
 	}
 

@@ -342,7 +342,14 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
         generateAdditionalFields(doc,"locked", MetaProperty.Type.BOOLEAN,"LockableObject \"locked\" property. For object Locking.");
         generateAdditionalFields(doc,"lockerId", MetaProperty.Type.STRING,"LockableObject \"lockerId\" property. For userName containing.");
         generateAdditionalFields(doc,"lockingTime", MetaProperty.Type.STRING,"LockableObject \"lockingTime\" property.");
-        
+
+		// add fields links to elements
+		for (MetaViewElement element : elements) {
+			if (element.isShowLink()) {
+				generateAdditionalFields(doc, element.getName()+"link", Type.STRING, "Link to "+element.getName());
+			}
+		}
+
         emptyline();
 
 		return clazz;

@@ -431,6 +431,13 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 				generateValidationParts(element, name, document.getField(element.getName()));
 			append(getElementEditor(section.getDocument(), element));
 			appendString("&nbsp;<i><ano:write name=\"description." + element.getName() + "\" ignore=\"true\"/></i>");
+
+            if (element.isShowLink() && !(document.getField(element.getName()) instanceof MetaListProperty)) {
+                appendString("<a href=" + quote("<ano:write name=" + quote(CMSMappingsConfiguratorGenerator
+                        .getDialogFormName(currentDialog, ((MetaModuleSection) metaSection).getDocument()))
+                        + " property=\"" + element.getName() + "link\"/>") + ">Edit element</a>");
+            }
+
 			decreaseIdent();
 			appendString("</td>");
 			decreaseIdent();
