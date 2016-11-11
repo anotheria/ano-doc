@@ -1249,7 +1249,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 //							tmp = new MetaProperty(p.getName("ForSorting", ((MultilingualFieldElement)element).getLanguage()), p.getType());
 //						else
 //							tmp = new MetaProperty(p.getName()+"ForSorting", p.getType());
-//							
+//
 //						appendStatement("bean."+tmp.toBeanSetter(lang)+"("+value+")");
 //						MetaDecorator d = element.getDecorator();
 //						value = getDecoratorVariableName(element)+".decorate("+doc.getVariableName()+", "+quote(p.getName())+", "+quote(d.getRule())+")";
@@ -1352,8 +1352,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 	    appendString(getExecuteDeclaration());
 	    increaseIdent();
-	    
-/*	    
+
+/*
 	    String listName = doc.getMultiple().toLowerCase();
 	    if (section.getFilters().size()>0){
 		    String unfilteredListName = "_unfiltered_"+listName;
@@ -1376,7 +1376,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    closeBlockNEW();
 	    ret += emptyline();
 	    appendStatement("addBeanToRequest(req, "+quote(listName)+", beans)");
-	
+
 */
 
 	    appendStatement("String criteria = req.getParameter("+quote("criteria")+")");
@@ -1654,7 +1654,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		return clazz;
 	}
 	/**
-	 * Generates the working part of the update action which is used in both multiop and standalone update action. 
+	 * Generates the working part of the update action which is used in both multiop and standalone update action.
 	 * @param section
 	 * @param methodName
 	 */
@@ -2309,6 +2309,15 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 					propertyCopy += "form."+p.toBeanSetter(lang)+"(";
 					propertyCopy += doc.getVariableName()+"."+p.toGetter(lang)+"())";
 					appendStatement(propertyCopy);
+				}
+				if(p.isLinked() && elem.isShowLink() && !(elem instanceof MetaListElement)) {
+
+					MetaLink link = (MetaLink) p;
+					MetaModule targetModule = link.getLinkTarget().indexOf('.') == -1 ? doc.getParentModule() : GeneratorDataRegistry.getInstance().getModule(link.getTargetModuleName());
+					if (targetModule == null) {
+						throw new RuntimeException("Can`t resolve link: " + p + " in document " + doc.getName());
+					}
+					appendStatement("form." + p.toBeanSetter() + "link(\""+targetModule.getName().toLowerCase()+link.getTargetDocumentName()+"Edit?pId="+"\"+" + section.getDocument().getName().toLowerCase() + "." + p.toBeanGetter() + "())");
 				}
 			}
 		}
@@ -3144,7 +3153,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	}
 
 	/**
-	 * Adds standard imports for an action to the clazz. 
+	 * Adds standard imports for an action to the clazz.
 	 * @param clazz
 	 */
 	private void addStandardActionImports(GeneratedClass clazz){
@@ -3902,7 +3911,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("beans.add(bean)");
 		closeBlockNEW();
 		appendStatement("addBeanToRequest(req, "+quote("elements")+", beans)");
-//*/		
+//*/
 		appendStatement("return mapping.findForward(", quote("success"), ")");
 		closeBlockNEW();
 	}
