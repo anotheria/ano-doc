@@ -2310,6 +2310,16 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 					propertyCopy += doc.getVariableName()+"."+p.toGetter(lang)+"())";
 					appendStatement(propertyCopy);
 				}
+				if(p.isLinked() && elem.isShowLink() && !(elem instanceof MetaListElement)) {
+
+					MetaLink link = (MetaLink) p;
+					MetaModule targetModule = link.getLinkTarget().indexOf('.') == -1 ? doc.getParentModule() : GeneratorDataRegistry.getInstance().getModule(link.getTargetModuleName());
+					if (targetModule == null) {
+						throw new RuntimeException("Can`t resolve link: " + p + " in document " + doc.getName());
+					}
+					appendStatement("form." + p.toBeanSetter() + "link(\""+targetModule.getName().toLowerCase()+link.getTargetDocumentName()+"Edit?pId="+"\"+" + section.getDocument().getName().toLowerCase() + "." + p.toBeanGetter() + "())");
+				}
+
 			}
 		}
 
