@@ -435,7 +435,7 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
             if (element.isShowLink() && !(document.getField(element.getName()) instanceof MetaListProperty)) {
                 appendString("<a href=" + quote("<ano:write name=" + quote(CMSMappingsConfiguratorGenerator
                         .getDialogFormName(currentDialog, ((MetaModuleSection) metaSection).getDocument()))
-                        + " property=\"" + element.getName() + "link\"/>") + ">Edit element</a>");
+                        + " property=\"" + element.getName() + "link\" />") + " target=\"_blank\">Edit element</a>");
             }
 
 			decreaseIdent();
