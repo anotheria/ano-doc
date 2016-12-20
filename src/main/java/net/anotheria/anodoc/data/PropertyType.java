@@ -1,4 +1,7 @@
 package net.anotheria.anodoc.data;
+
+import net.anotheria.util.StringUtils;
+
 /**
  * Declaration of supported types for properties.
  *
@@ -9,47 +12,57 @@ public enum PropertyType {
 	/**
 	 * Integer.
 	 */
-	INT('I'),
+	INT('I',IntProperty.class),
 	/**
 	 * Long.
 	 */
-	LONG('L'),
+	LONG('L',LongProperty.class),
 	/**
 	 * Double.
 	 */
-	DOUBLE('D'),
+	DOUBLE('D',DoubleProperty.class),
 	/**
 	 * Float.
 	 */
-	FLOAT('F'),
+	FLOAT('F',FloatProperty.class),
 	/**
 	 * List of properties.
 	 */
-	LIST('['),
+	LIST('[',ListProperty.class),
 	/**
 	 * String.
 	 */
-	STRING('S'),
+	STRING('S',StringProperty.class),
 	/**
 	 * Text. Same as String but with different editors.
 	 */
-	TEXT('T'),
+	TEXT('T',TextProperty.class),
 	/**
 	 * Boolean.
 	 */
-	BOOLEAN('B');
-	
+	BOOLEAN('B',BooleanProperty.class);
+
 	/**
 	 * Indicator for textual representation of the property.
 	 */
 	private char indicator;
-	
+
+	/**
+	 * Indicator for class representation of the property.
+	 */
+	private final Class<? extends Property> clazz;
+
 	/**
 	 * Creates a new property type.
 	 * @param anIndicator
 	 */
-	private PropertyType(char anIndicator){
+	PropertyType(char anIndicator,final Class<? extends Property> cls) {
 		indicator = anIndicator;
+		clazz = cls;
+	}
+
+	public Class<? extends Property> getClazz() {
+		return clazz;
 	}
 	
 	/**
@@ -59,5 +72,11 @@ public enum PropertyType {
 	 */
 	public char getIndicator(){
 		return indicator;
+	}
+
+	public static PropertyType byName(final String name){
+		if(StringUtils.isEmpty(name))
+			throw new IllegalArgumentException("name is not valid");
+		return PropertyType.valueOf(name);
 	}
 }

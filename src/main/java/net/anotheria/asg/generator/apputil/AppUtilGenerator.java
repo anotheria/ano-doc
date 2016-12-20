@@ -38,6 +38,7 @@ public class AppUtilGenerator extends AbstractAnoDocGenerator{
 		files.addAll(new XMLExporterGenerator().generate(modules));
 		files.addAll(new XMLImporterGenerator().generate(modules, context));
 		files.addAll(new LanguageUtilsGenerator().generate(modules, context));
+		files.addAll(new BasicServiceUtilGenerator().generate(modules));
 		//files.addAll(new Log4JConfigurationGenerator().generate(null));
 		
 		
