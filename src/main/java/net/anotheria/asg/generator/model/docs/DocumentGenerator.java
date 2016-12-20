@@ -137,7 +137,9 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 		clazz.setParent("AbstractASGDocument");
 		
 		startClassBody();
-		
+
+		generateEmptyConstructor(doc);
+		emptyline();
 		generateDefaultConstructor(doc);
 		emptyline();
 		generateCloneConstructor(doc);
@@ -220,7 +222,13 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 		}
 		
 	}
-	
+
+	private void generateEmptyConstructor(MetaDocument doc) {
+		appendString("public " + getDocumentName(doc) + "() {");
+		increaseIdent();
+		appendStatement("super(\"\")");
+		closeBlockNEW();
+	}
 	
 	private String generateDefaultConstructor(MetaDocument doc){
 		String ret = "";

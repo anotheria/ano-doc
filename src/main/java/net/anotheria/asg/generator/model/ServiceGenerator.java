@@ -222,7 +222,11 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	        MetaDocument doc = docs.get(i);
 	        clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 	    }
-	    
+		clazz.addImport("java.util.Set");
+		clazz.addImport("org.codehaus.jettison.json.JSONObject");
+		clazz.addImport("org.codehaus.jettison.json.JSONArray");
+		clazz.addImport("net.anotheria.anosite.gen.shared.util.DocumentName");
+
 	    clazz.addImport(net.anotheria.util.xml.XMLNode.class);
 	    clazz.addImport(net.anotheria.util.slicer.Segment.class);
 	    clazz.addImport(net.anotheria.anodoc.query2.DocumentQuery.class);
@@ -354,10 +358,18 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 			if (containsAnyMultilingualDocs && GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()) {
 				appendComment("creates an xml element with selected contained data but only selected languages in multilingual attributes");
 				appendStatement("public XMLNode export"+doc.getMultiple()+"ToXML(String[] languages,List<"+doc.getName()+"> list"+doc.getMultiple()+")" + throwsClause);
-	    }
+	    	}
+
+			emptyline();
+			appendComment("Create json object list dependencies for this " + doc.getName() + " document");
+			appendStatement("public void fetch" + doc.getName() + "(final String id, Set<String> addedDocuments, JSONArray data)" + throwsClause);
+			emptyline();
 
 			//this method checks whether a document with the given document set exists or no.
 	    }
+
+		appendComment("Save transferred document by its own type");
+		appendStatement("public void executeParsingForDocument (final DocumentName documentName, final JSONObject data)" + throwsClause);
 	    
 	    if (containsAnyMultilingualDocs){
 			appendComment("Copies all multilingual fields from sourceLanguage to targetLanguage in all data objects (documents, vo) which are part of this module and managed by this service");
