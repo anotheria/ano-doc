@@ -1962,7 +1962,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.setPackageName(getPackageRest(section.getModule()));
 		String moduleName = section.getModule().getName();
 
-		clazz.addImport("java.lang.reflect.Type");
 		clazz.addImport("java.util.List");
 		clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactory");
 		clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactoryException");
@@ -1975,13 +1974,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("javax.ws.rs.core.Response");
 		clazz.addImport("com.google.gson.Gson");
 		clazz.addImport("com.google.gson.GsonBuilder");
-		clazz.addImport("java.io.IOException");
-		clazz.addImport("java.io.ByteArrayInputStream");
-		clazz.addImport("java.io.ObjectInputStream");
-		clazz.addImport("org.apache.commons.codec.binary.Base64");
+		clazz.addImport("org.codehaus.jettison.json.JSONArray");
+		clazz.addImport("net.anotheria.anosite.gen.shared.util.ParserUtilService");
 		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".data." + doc.getName());
-		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".data." + doc.getName() + "Document");
-		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".data." + doc.getName() + "Factory");
 		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".service.I" + moduleName + "Service");
 		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".service." + moduleName + "ServiceException");
 
@@ -2052,34 +2047,21 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlockNEW();
 
 		emptyline();
-		append("	@POST");
-		emptyline();
-		append("	public Response createTransferredObject(String input) {");
+		appendString("@POST");
+		appendString("@Consumes(\"application/json;charset=utf-8\")");
+		appendString("public Response createTransferredObject(JSONArray input) {");
 		emptyline();
 		increaseIdent();
-
-		appendStatement("ByteArrayInputStream bis = new ByteArrayInputStream(Base64.decodeBase64(input))");
-		appendStatement(doc.getName() + " " + doc.getName().toLowerCase() + " = null");
-
 		openTry();
-		appendStatement("ObjectInputStream ois = new ObjectInputStream(bis)");
-		appendStatement(doc.getName().toLowerCase() + " = (" + doc.getName() + ") ois.readObject()");
-		emptyline();
-		openTry();
-		appendStatement(moduleName.toLowerCase() + "Service.update" + doc.getName() + "(" + doc.getName().toLowerCase() + ")");
+
+		appendString("for (int i = 0; i < input.length(); i++) {");
+		increaseIdent();
+		appendStatement("ParserUtilService.getInstance().executeParsing(input.getJSONObject(i))");
+		closeBlockNEW();
 		appendCatch("Exception");
-		appendStatement(moduleName.toLowerCase() + "Service.import" + doc.getName() + "(" + doc.getName().toLowerCase() + ")");
-		closeBlockNEW();
-		appendCatch(moduleName + "ServiceException");
-		appendStatement("return Response.status(500).build()");
-		appendCatch("IOException");
-		appendStatement("return Response.status(500).build()");
-		appendCatch("ClassNotFoundException");
 		appendStatement("return Response.status(500).build()");
 		closeBlockNEW();
-		emptyline();
 		appendStatement("return Response.status(201).build()");
-
 		closeBlockNEW();
 
 		return clazz;
@@ -2098,27 +2080,26 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 		//write imports...
 		addStandardActionImports(clazz);
-		clazz.addImport(DataFacadeGenerator.getDocumentFactoryImport(GeneratorDataRegistry.getInstance().getContext(), doc));
-		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-		clazz.addImport("java.net.URL");
-		clazz.addImport("java.net.HttpURLConnection");
-		clazz.addImport("java.io.*");
-		clazz.addImport("java.net.MalformedURLException");
-		clazz.addImport("com.google.gson.Gson");
-		clazz.addImport("org.apache.http.client.*");
-		clazz.addImport("org.apache.http.client.methods.*");
-		clazz.addImport("org.apache.http.entity.*");
-		clazz.addImport("org.apache.http.impl.client.*");
-		clazz.addImport("org.apache.http.*");
-		clazz.addImport("org.apache.commons.codec.binary.Base64");
+		clazz.addImport("java.util.HashSet");
+		clazz.addImport("java.io.IOException");
+		clazz.addImport("java.io.PrintWriter");
+		clazz.addImport(ServiceGenerator.getExceptionImport(section.getModule()));
 		clazz.addImport("net.anotheria.anosite.config.DocumentTransferConfig");
 		clazz.addImport("org.configureme.ConfigurationManager");
 		clazz.addImport("org.json.JSONException");
 		clazz.addImport("net.anotheria.maf.json.JSONResponse");
+
+		clazz.addImport("org.codehaus.jettison.json.JSONArray");
+		clazz.addImport("com.sun.jersey.api.client.Client");
+		clazz.addImport("com.sun.jersey.api.client.WebResource");
+		clazz.addImport("com.sun.jersey.api.client.ClientResponse");
+		clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
 		clazz.setName(getTransferActionName(section));
 		clazz.setParent(getBaseActionName(section));
 
 		startClassBody();
+		emptyline();
+		appendStatement("private static final int STATUS_OK = 201");
 		emptyline();
 		appendStatement("private DocumentTransferConfig config = DocumentTransferConfig.getInstance()");
 		emptyline();
@@ -2149,38 +2130,41 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("writeTextToResponse(res, response)");
 		appendStatement("return null");
 		closeBlockNEW();
-
-		openTry();
+		emptyline();
 		appendStatement("String id = getStringParameter(req, PARAM_ID)");
-		appendStatement("HttpClient client = HttpClients.createDefault()");
-		appendStatement("HttpPost post = new HttpPost(config.getDomain() +\"/api/" + section.getDocument().getName().toLowerCase() + "\")");
-		emptyline();
-
-		String documentName = section.getDocument().getName();
-
-		appendStatement("ByteArrayOutputStream baos = new ByteArrayOutputStream()");
-		appendStatement("ObjectOutputStream oos = new ObjectOutputStream(baos)");
-		appendStatement("oos.writeObject(get" + section.getModule().getName() + "Service().get" + documentName + "(id)" + ")");
-		appendStatement("oos.close()");
-		emptyline();
-		appendStatement("post.setEntity(new StringEntity(Base64.encodeBase64String(baos.toByteArray())))");
-		appendStatement("post.setHeader(\"Content-type\", \"text/plain\")");
-		appendStatement("HttpResponse httpResponse = client.execute(post)");
-		appendStatement("res.sendRedirect(" + getShowActionRedirect(doc) + ")");
-		appendCatch("MalformedURLException");
-		appendStatement("e.printStackTrace()");
+		appendStatement("JSONArray data = new JSONArray()");
+		openTry();
+		appendStatement(getServiceGetterCall(section.getModule()) + ".fetch" + doc.getName() + "(id, new HashSet<String>(), data)");
+		appendCatch(ServiceGenerator.getExceptionName(section.getModule()));
+		appendStatement("response.addError(\"Problem occurred when fetching info about documents: \" + e.getMessage())");
+		appendStatement("writeTextToResponse(res, response)");
 		appendStatement("return null");
 		closeBlockNEW();
+		emptyline();
+		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
+		appendStatement("WebResource webResource = client.resource(config.getDomain() + \"/api/" + doc.getName().toLowerCase() + "\")");
+		appendString("ClientResponse clientResponse = webResource.header(\"Content-Type\", \"application/json;charset=utf-8\")");
+		appendString(" .post(ClientResponse.class, data);");
+		emptyline();
+		appendString("if (clientResponse.getStatus() != STATUS_OK) {");
+		increaseIdent();
+		appendStatement("response.addError(\"Couldn't send email, status expected 200, got \", \"Status: \" + clientResponse.getStatus())");
+		appendStatement("writeTextToResponse(res, response)");
 		appendStatement("return null");
 		closeBlockNEW();
+		emptyline();
+		appendStatement("clientResponse.close()");
+		appendStatement("return null");
+		closeBlockNEW();
+		emptyline();
 
 		append("	private void writeTextToResponse(final HttpServletResponse res, final JSONResponse jsonResponse) throws IOException, JSONException {\n" +
-				"        res.setCharacterEncoding(\"UTF-8\");\n" +
-				"        res.setContentType(\"application/json\");\n" +
-				"        PrintWriter writer = res.getWriter();\n" +
-				"        writer.write(jsonResponse.toString());\n" +
-				"        writer.flush();\n" +
-				"    }");
+				"		res.setCharacterEncoding(\"UTF-8\");\n" +
+				"		res.setContentType(\"application/json\");\n" +
+				"		PrintWriter writer = res.getWriter();\n" +
+				"		writer.write(jsonResponse.toString());\n" +
+				"		writer.flush();\n" +
+				"	}\n");
 	}
 
 	/**
