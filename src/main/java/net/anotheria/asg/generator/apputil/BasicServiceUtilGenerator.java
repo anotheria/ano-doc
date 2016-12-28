@@ -117,14 +117,13 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         clazz.addImport("net.anotheria.anosite.gen.shared.service.BasicService");
         clazz.addImport("net.anotheria.asg.exception.ASGRuntimeException");
         clazz.addImport("org.codehaus.jettison.json.JSONObject");
+        clazz.addImport("org.codehaus.jettison.json.JSONArray");
         clazz.addImport("org.codehaus.jettison.json.JSONException");
 
         clazz.setName("ParserUtilService");
         clazz.setParent("BasicService");
         startClassBody();
 
-        appendStatement("private static final Object LOCK = new Object()");
-        emptyline();
         appendStatement("private static final ParserUtilService instance = new ParserUtilService()");
         emptyline();
         appendString("private ParserUtilService() { }");
@@ -134,7 +133,15 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         appendStatement("return instance");
         closeBlockNEW();
         emptyline();
-        appendString("public void executeParsing(final JSONObject data) throws ASGRuntimeException {");
+        appendString("public void executeParsingDocuments (final JSONArray data) throws ASGRuntimeException, JSONException {");
+        increaseIdent();
+        appendString("for (int i = 0; i < data.length(); i++) {");
+        increaseIdent();
+        appendStatement("executeParsingDocument(data.getJSONObject(i))");
+        closeBlockNEW();
+        closeBlockNEW();
+        emptyline();
+        appendString("private void executeParsingDocument(final JSONObject data) throws ASGRuntimeException {");
         increaseIdent();
         appendStatement("final ModuleName moduleName");
         appendStatement("final DocumentName documentName");

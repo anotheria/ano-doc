@@ -1979,12 +1979,15 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".data." + doc.getName());
 		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".service.I" + moduleName + "Service");
 		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".service." + moduleName + "ServiceException");
+		clazz.addImport("org.slf4j.Logger");
+		clazz.addImport("org.slf4j.LoggerFactory");
 
 		clazz.addAnnotation("@Path(\"/" + doc.getName().toLowerCase() + "\")");
 
 		clazz.setName(getResourceActionName(section));
 		startClassBody();
 
+		appendStatement("private static final Logger LOGGER = LoggerFactory.getLogger(" + getResourceActionName(section) + ".class)");
 		appendStatement("private I" + moduleName + "Service " + moduleName.toLowerCase() + "Service");
 		appendStatement("private Gson gson");
 		appendStatement("private GsonBuilder builder");
@@ -2000,6 +2003,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		openTry();
 		appendStatement(moduleName.toLowerCase() + "Service = MetaFactory.get(I" + moduleName + "Service.class)");
 		appendCatch("MetaFactoryException");
+		appendStatement("LOGGER.error(\"Unable to create service: I " + moduleName + "Service\", e)");
 		appendStatement("throw new RuntimeException(\"Unable to create service\", e)");
 		closeBlockNEW();
 		closeBlockNEW();
@@ -2017,6 +2021,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		openTry();
 		appendStatement("result = " + moduleName.toLowerCase() + "Service.get" + doc.getName() + "s()");
 		appendCatch(moduleName + "ServiceException");
+		appendStatement("LOGGER.error(\"Unable to get" + doc.getName() + "s\", e)");
 		appendStatement("return Response.status(500).build()");
 		closeBlockNEW();
 		emptyline();
@@ -2039,6 +2044,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		openTry();
 		appendStatement("result = " + moduleName.toLowerCase() + "Service.get" + doc.getName() + "(id)");
 		appendCatch(moduleName + "ServiceException");
+		appendStatement("LOGGER.error(\"Unable to get" + doc.getName() + " by id\", e)");
 		appendStatement("return Response.status(500).build()");
 		closeBlockNEW();
 		emptyline();
@@ -2053,12 +2059,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		emptyline();
 		increaseIdent();
 		openTry();
-
-		appendString("for (int i = 0; i < input.length(); i++) {");
-		increaseIdent();
-		appendStatement("ParserUtilService.getInstance().executeParsing(input.getJSONObject(i))");
-		closeBlockNEW();
+		appendStatement("ParserUtilService.getInstance().executeParsingDocuments(input)");
 		appendCatch("Exception");
+		appendStatement("LOGGER.error(\"Unable to parsing transferred objects\", e)");
 		appendStatement("return Response.status(500).build()");
 		closeBlockNEW();
 		appendStatement("return Response.status(201).build()");
@@ -2144,11 +2147,11 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
 		appendStatement("WebResource webResource = client.resource(config.getDomain() + \"/api/" + doc.getName().toLowerCase() + "\")");
 		appendString("ClientResponse clientResponse = webResource.header(\"Content-Type\", \"application/json;charset=utf-8\")");
-		appendString(" .post(ClientResponse.class, data);");
+		appendString(" 		.post(ClientResponse.class, data);");
 		emptyline();
 		appendString("if (clientResponse.getStatus() != STATUS_OK) {");
 		increaseIdent();
-		appendStatement("response.addError(\"Couldn't send email, status expected 200, got \", \"Status: \" + clientResponse.getStatus())");
+		appendStatement("response.addError(\"Couldn't save transferred objects, status expected 201, got \", \"Status: \" + clientResponse.getStatus())");
 		appendStatement("writeTextToResponse(res, response)");
 		appendStatement("return null");
 		closeBlockNEW();
