@@ -44,7 +44,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		MULTIPLE_DIALOG,
 	}
 	
-	public static enum SectionAction{
+	public enum SectionAction{
 		SHOW("Show", "Show", OperationType.SINGLE, true),
 		EDIT("Edit", "Edit", OperationType.SINGLE),
 		NEW("New", "Edit", OperationType.SINGLE),
@@ -278,9 +278,9 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		
 		clazz.addImport(Map.class);
 		clazz.addImport(HashMap.class);
-		clazz.addImport("net.anotheria.maf.action.ActionForward");
-		clazz.addImport("net.anotheria.maf.action.ActionMappings");
-		clazz.addImport("net.anotheria.maf.action.ActionMappingsConfigurator");
+		clazz.addImport(net.anotheria.maf.action.ActionForward.class);
+		clazz.addImport(net.anotheria.maf.action.ActionMappings.class);
+		clazz.addImport(net.anotheria.maf.action.ActionMappingsConfigurator.class);
 		clazz.addImport(IndexPageActionGenerator.getIndexPageFullName());
 		
 		
