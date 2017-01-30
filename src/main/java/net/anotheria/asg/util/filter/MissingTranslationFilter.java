@@ -19,8 +19,8 @@ import java.util.List;
  * Using:
  * Viewdef filter definition examples:
  *
- * <filter name="MissingTranslation" field="name" />
- * <filter name="MissingTranslation" field="title" />
+ * &lt;filter name="MissingTranslation" field="name" /&gt;
+ * &lt;filter name="MissingTranslation" field="title" /&gt;
  *
  * @author another
  * @version $Id: $Id

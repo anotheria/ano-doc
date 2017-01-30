@@ -95,14 +95,13 @@ public class IntProperty extends Property{
 	 * {@inheritDoc}
 	 *
 	 * Returns the amount of bytes needed to hold an integer value - 4.
-	 * @see net.anotheria.anodoc.data.Property#getDataSize()
 	 */
 	@Override public long getSizeInBytes() {
 		return 4;
 	}
 
 	/* (non-Javadoc)
-	 * @see net.anotheria.anodoc.data.Property#cloneValue()
+	 * @see net.anotheria.anodoc.data.DataHolder#cloneValue()
 	 */
 	/** {@inheritDoc} */
 	@Override protected Object cloneValue() {

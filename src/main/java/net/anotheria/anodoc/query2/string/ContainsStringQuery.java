@@ -61,9 +61,7 @@ public class ContainsStringQuery implements DocumentQuery {
 	/**
 	 * ContainsStringQuery constructor.
 	 *
-	 * @param aCriteria
-	 *            is expression, that supports {@link ANY_CHAR_EXPRESSION} and
-	 *            {@link ANY_STRING_EXPRESSION} characters
+	 * @param aCriteria is expression, that supports chars.
 	 */
 	public ContainsStringQuery(String aCriteria) {
 		criteria = aCriteria;

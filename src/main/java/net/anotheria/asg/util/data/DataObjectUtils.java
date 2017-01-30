@@ -35,7 +35,6 @@ public class DataObjectUtils {
 	/**
 	 * Returns for the dataObjects the List that is filled with specified property values of each dataObject.
 	 *
-	 * @param <P> - type of dataObject property
 	 * @param propertyName - name of the property to get from dataObjects
 	 * @param propertyClass - class of the property
 	 * @param dataObjects - dataObjects to get property values.
@@ -52,7 +51,7 @@ public class DataObjectUtils {
 	 * Creates Map of dataObjects by their IDs.
 	 *
 	 * @param dataObjects - dataObjects to create map.
-	 * @return Map of pairs ID -> dataObject
+	 * @return Map of pairs ID - dataObject
 	 */
 	public static <T extends DataObject> Map<String,T> createMapById(List<T> dataObjects){
 		Map<String,T> ret = new HashMap<String, T>();
@@ -65,11 +64,10 @@ public class DataObjectUtils {
 	 * Creates Map of dataObjects by specified property. Property value must be unique (key property) for each dataObject.
 	 * In other case only one dataObject with not unique property will be added to the map.
 	 *
-	 * @param <P> - type of the dataObject property
 	 * @param propertyName - name of the property by which Map is created
 	 * @param propertyClass - class of the property
 	 * @param dataObjects - dataObjects to create map.
-	 * @return Map of pairs Property Value -> dataObject
+	 * @return Map of pairs Property Value - dataObject
 	 */
 	public static <T extends DataObject, P> Map<P,T> createMapByKeyProperty(String propertyName, Class<P> propertyClass, List<T> dataObjects){
 		Map<P,T> ret = new HashMap<P, T>();
@@ -81,11 +79,10 @@ public class DataObjectUtils {
 	/**
 	 * Creates Map of groups (arrays) of dataObjects by specified property. DataObjects with equal property values are put to the same group.
 	 *
-	 * @param <P> - type of the dataObject property
 	 * @param propertyName - name of the property by which Map is created
 	 * @param propertyClass - class of the property
 	 * @param dataObjects - dataObjects to create map.
-	 * @return Map of pairs Property Value -> dataObjects group
+	 * @return Map of pairs Property Value - dataObjects group
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T extends DataObject, P> Map<P,T[]> createMapByProperty(String propertyName, Class<P> propertyClass, List<T> dataObjects){

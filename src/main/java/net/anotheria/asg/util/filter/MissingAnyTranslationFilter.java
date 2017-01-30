@@ -23,9 +23,9 @@ import java.util.List;
  * The main feature of this filter realization is that attributeName is ignored in mayPass() method,
  * so viewdef filter definition may be not linked with real field, for example:
  *
- * <filter name="MissingAnyTranslation" field="Any" />
+ * &lt;filter name="MissingAnyTranslation" field="Any" /&gt;
  * or
- * <filter name="MissingAnyTranslation" field="*" />
+ * &lt;filter name="MissingAnyTranslation" field="*" /&gt;
  *
  * @author another
  * @version $Id: $Id

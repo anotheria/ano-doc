@@ -103,7 +103,6 @@ public class LongProperty extends Property{
 	 * {@inheritDoc}
 	 *
 	 * Returns the size in bytes (8bytes = 64 bit datatype).
-	 * @see net.anotheria.anodoc.data.Property#getDataSize()
 	 */
 	@Override public long getSizeInBytes() {
 		return 8;

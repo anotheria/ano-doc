@@ -12,7 +12,6 @@ import java.util.List;
  * TODO Please remain lrosenberg to comment AbstractServiceGenerator.java
  *
  * @author lrosenberg
- * @created on Feb 24, 2005
  * @version $Id: $Id
  */
 public class BasicServiceGenerator extends AbstractGenerator{

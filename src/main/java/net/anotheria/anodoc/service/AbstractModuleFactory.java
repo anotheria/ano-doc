@@ -58,7 +58,7 @@ public abstract class AbstractModuleFactory implements IModuleFactory, Serializa
 	 * {@inheritDoc}
 	 *
 	 * Creates a new Document from a name and a typeidentifier. If this function is not overwritten, it call createDocument(name).
-	 * @retun new Document
+	 * @return new Document
 	 */
 	public Document createDocument(String name, String typeIdentifier){
 		getLog().debug("This Factory doesn't overwrite create document with identifier (Doc:"+name+", identifier:"+typeIdentifier+")"); 

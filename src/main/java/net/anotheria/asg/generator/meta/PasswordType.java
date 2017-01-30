@@ -1,7 +1,7 @@
 package net.anotheria.asg.generator.meta;
 
 /**
- * Representation of password type (<input type="password"...) *
+ * Representation of password type (&lt;input type="password"...) *
  *
  * @author vbezuhlyi
  * @version $Id: $Id

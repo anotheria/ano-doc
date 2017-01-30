@@ -15,7 +15,7 @@ import java.util.List;
  * TODO Please remain lrosenberg to comment BeanGenerator.java
  *
  * @author lrosenberg
- * @created on Feb 25, 2005
+ * @since Feb 25, 2005
  * @version $Id: $Id
  */
 public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator {

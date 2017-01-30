@@ -4,7 +4,6 @@ package net.anotheria.asg.generator.forms.meta;
  * Base class for FormFields which are parts of a Form.
  *
  * @author lrosenberg
- * @created on Mar 14, 2005
  * @version $Id: $Id
  */
 public abstract class MetaFormField {
