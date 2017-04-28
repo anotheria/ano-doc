@@ -515,17 +515,10 @@ public class ShowPageJspGenerator extends AbstractJSPGenerator {
 	 */
 	private String getTransferFunction(String entryName, MetaFunctionElement element){
 		String path = CMSMappingsConfiguratorGenerator.getPath(((MetaModuleSection)currentSection).getDocument(), CMSMappingsConfiguratorGenerator.ACTION_TRANSFER);
-	/*	path += "?pId=<ano:write name="+quote(entryName)+" property=\"plainId\"/>";*/
+		String id = "<ano:write name="+quote(entryName)+" property=\"plainId\"/>";
 
-		return "<a href=\"#\" style=\"position: relative; top:2px;\" onclick=\"" +
-				"$.post('"+path+"', {pId:<ano:write name="+quote(entryName)+" property=\"plainId\"/>}, function(response) {\n" +
-				"\n" +
-				"\t\t\tif (response.errors != undefined && response.errors.length != 0) {\n" +
-				"\t\t\t\tnotification('Current environment does not support this operation');\n" +
-				"\t\t\t} else {location.reload(true);}\n" +
-				"\t\t});" + "\">" +
-				"<img src=\"/cms_static/img/transfer.png\" alt=\"transfer document to prod\" title=\"transfer document to prod\">" +
-				"</a>" ;
+		return "<a href=\"#\" onClick=\"lightboxTransfer('" +path + "', '" + ((MetaModuleSection)currentSection).getDocument().getName() + "', '" + id+"')\">" +
+				"<img src=\"/cms_static/img/transfer.png\" alt=\"transfer document to prod\" title=\"transfer document to prod\"></a>" ;
 	}
 
 	/*

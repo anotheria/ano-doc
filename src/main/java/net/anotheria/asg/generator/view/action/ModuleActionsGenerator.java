@@ -2103,6 +2103,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		startClassBody();
 		emptyline();
 		appendStatement("private static final int STATUS_OK = 201");
+		appendStatement("private static final String ERROR = \"error\"");
 		emptyline();
 		appendStatement("private DocumentTransferConfig config = DocumentTransferConfig.getInstance()");
 		emptyline();
@@ -2129,7 +2130,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		append("		if (ConfigurationManager.INSTANCE.getDefaultEnvironment().expandedStringForm().equals(\"prod\")) {");
 		increaseIdent();
 		emptyline();
-		appendStatement("response.addError(\"UNSUPPORTED_ENVIRONMENT\", \"Environment is prod\")");
+		appendStatement("response.addError(ERROR, \"Environment is prod\")");
 		appendStatement("writeTextToResponse(res, response)");
 		appendStatement("return null");
 		closeBlockNEW();
@@ -2139,7 +2140,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		openTry();
 		appendStatement(getServiceGetterCall(section.getModule()) + ".fetch" + doc.getName() + "(id, new HashSet<String>(), data)");
 		appendCatch(ServiceGenerator.getExceptionName(section.getModule()));
-		appendStatement("response.addError(\"Problem occurred when fetching info about documents: \" + e.getMessage())");
+		appendStatement("response.addError(ERROR, \"Problem occurred when fetching info about documents -\" + e.getMessage())");
 		appendStatement("writeTextToResponse(res, response)");
 		appendStatement("return null");
 		closeBlockNEW();
@@ -2151,7 +2152,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		emptyline();
 		appendString("if (clientResponse.getStatus() != STATUS_OK) {");
 		increaseIdent();
-		appendStatement("response.addError(\"Couldn't save transferred objects, status expected 201, got \", \"Status: \" + clientResponse.getStatus())");
+		appendStatement("clientResponse.close()");
+		appendStatement("response.addError(ERROR, \"Couldn't save transferred objects, status expected 201, got status - \" + clientResponse.getStatus())");
 		appendStatement("writeTextToResponse(res, response)");
 		appendStatement("return null");
 		closeBlockNEW();
