@@ -54,6 +54,9 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 
 		Collection<MetaModule> modules = GeneratorDataRegistry.getInstance().getModules();
 		appendCommentLine(BaseActionGenerator.class.getName());
+
+		clazz.addImport("net.anotheria.anoplass.api.APIFinder");
+		clazz.addImport("net.anotheria.anosite.api.configuration.SystemConfigurationAPI");
 		clazz.addImport("net.anotheria.util.StringUtils");
 		clazz.addImport(ContextManager.class);
 		clazz.addImport("net.anotheria.webutils.actions.*");
@@ -74,6 +77,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		appendGenerationPoint("generateBaseAction");
 		
 		appendStatement("public static final String BEAN_MAIN_NAVIGATION = \"mainNavigation\"");
+		appendStatement("public static final String BEAN_CURRENT_SYSTEM = \"currentSystem\"");
 		appendStatement("public static final String BEAN_SEARCH_SCOPE = \"searchScope\"");
 		appendStatement("public static final String BEAN_DOCUMENT_DEF_NAME = \"documentName\"");
 		appendStatement("public static final String BEAN_MODULE_DEF_NAME = \"moduleName\"");
@@ -98,6 +102,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		for (MetaModule m:modules)
 			appendStatement("private static volatile "+ServiceGenerator.getInterfaceName(m)+" "+ModuleActionsGenerator.getServiceInstanceName(m));
 
+		appendStatement("private static SystemConfigurationAPI systemConfigurationAPI = APIFinder.findAPI(SystemConfigurationAPI.class)");
 		appendStatement("private static CMSUserManager userManager");
 		clazz.addImport("net.anotheria.anosite.cms.user.CMSUserManager");
 		clazz.addImport("net.anotheria.asg.util.locking.config.LockingConfig");
@@ -152,6 +157,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
             closeBlock("if");
         emptyline();
         appendString("prepareMenu(req);");
+		appendStatement("addBeanToSession(req, BEAN_CURRENT_SYSTEM, systemConfigurationAPI.getCurrentSystemExpanded())");
 		closeBlock("preProcess");
 		emptyline();
 		
