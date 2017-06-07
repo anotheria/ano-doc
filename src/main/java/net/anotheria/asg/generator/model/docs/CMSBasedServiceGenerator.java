@@ -633,7 +633,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			appendStatement("String jsonObject = ObjectMapperUtil.getMapperInstance().writeValueAsString(" + doc.getVariableName() + ")");
 			appendStatement("dataObject.put(\"object\", jsonObject)");
 			appendStatement("dataObject.put(\"service\", \"" + module.getName() + "\")");
-			appendStatement("dataObject.put(\"document\", \"" + doc.getName() + "\")");
+			appendStatement("dataObject.put(\"document\", \"" + module.getName() + "_" + doc.getName() + "\")");
 			emptyline();
 			appendStatement("data.put(dataObject)");
 			emptyline();
