@@ -63,7 +63,8 @@ public class MenuJspGenerator extends AbstractJSPGenerator {
 			increaseIdent();
 			appendString("<div class= \"scroll_left\">");
 				increaseIdent();
-				appendString("<img class=\"logo\" src=\"../cms_static/img/logo.gif\" alt=\"CMS Logo\"/>");
+				appendString("<img class=\"logo\" src=\"../cms_static/img/${currentSystem eq 'PROD' ? 'logo2.gif' : 'logo.gif'}\" alt=\"CMS Logo\"/>");
+				appendString("<div class=\"currentSystem\">Environment: ${currentSystem eq 'PROD' ? '<font color=\"red\">PROD</font>' : currentSystem}</div>");
 				appendString("<ano:notEqual name=\"disabledSearchFlag\" value=\"true\">");
 				appendString("<form name=\"Search\" action="+quote(SharedAction.SEARCH.getMappingName())+">");
 					increaseIdent();
