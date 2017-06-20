@@ -76,8 +76,12 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
+		clazz.addImport("net.anotheria.maf.action.ActionMapping");
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
 		clazz.addImport("net.anotheria.webutils.bean.NavigationItemBean");
+
+		clazz.addImport("javax.servlet.http.HttpServletRequest");
+		clazz.addImport("javax.servlet.http.HttpServletResponse");
 
 		clazz.setAbstractClass(true);
 		clazz.setParent(BaseActionGenerator.getBaseActionName());
@@ -96,21 +100,12 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 		appendStatement("return \""+StringUtils.capitalize(view.getTitle())+"\"");
 		append(closeBlock());
 		emptyline();
-		
-		if (view.getRequiredRoles()!=null && view.getRequiredRoles().size()>0){
-			clazz.addImport(Arrays.class);
-			String roles = "";
-			for (String r : view.getRequiredRoles()){
-				if (roles.length()>0)
-					roles += ", ";
-				roles += quote(r);
-			}
-			appendStatement("private static final List<String> MY_ROLES = Arrays.asList(new String[]{"+roles+"})");
-			appendString("protected List<String> getRequiredRoles(){");
-			appendIncreasedStatement("return MY_ROLES");
-			appendString("}");
-		}
-			
+
+		appendString("protected boolean isPermitted(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) {");
+		increaseIdent();
+		appendStatement("return "+!view.getName().toLowerCase().isEmpty());
+		append(closeBlock());
+
 		emptyline();		
 			appendStatement("protected List<NavigationItemBean> getSubNavigation(){");
 			appendStatement("List<NavigationItemBean> subNavi = new ArrayList<NavigationItemBean>()");

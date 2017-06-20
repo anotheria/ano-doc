@@ -163,6 +163,11 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		
 		appendString("public abstract ActionForward anoDocExecute(ActionMapping mapping, T formBean, HttpServletRequest req, HttpServletResponse res) throws Exception;");
 		emptyline();
+		appendString("public ActionForward anoDocExecuteDummy(ActionMapping mapping, T formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {");
+		increaseIdent();
+		appendStatement("return null");
+		closeBlock("anoDocExecuteDummy");
+		emptyline();
 		appendGenerationPoint("generateBaseAction");
 		appendString("@Override");
 		appendString("public ActionForward execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {");
@@ -176,7 +181,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 					appendStatement("String url = req.getRequestURI()");
 					appendStatement("String qs = req.getQueryString()");
 					appendString("if (!StringUtils.isEmpty(qs))");
-					appendIncreasedStatement("url += \"?\"+qs;");
+					appendIncreasedStatement("url += \"?\"+qs");
 					appendStatement("addBeanToSession(req, BEAN_TARGET_ACTION, url)");
 					appendStatement("String redUrl = "+quote(GeneratorDataRegistry.getInstance().getContext().getApplicationURLPath()+"/"+GeneratorDataRegistry.getInstance().getContext().getServletMapping()+"/login"));
 					appendStatement("res.sendRedirect(redUrl)");
@@ -184,7 +189,10 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 				closeBlock("if");
 			closeBlock("if");
         emptyline();
-        appendStatement("checkAccessPermissions(req)");
+		appendString("if (!isPermitted(mapping, formBean, req, res)) {");
+		increaseIdent();
+		appendStatement("return anoDocExecuteDummy(mapping, (T) formBean, req, res)");
+		closeBlock("if");
 		emptyline();
 		appendStatement("addBeanToRequest(req, BEAN_DOCUMENT_DEF_NAME, getCurrentDocumentDefName())");
 		appendStatement("addBeanToRequest(req, BEAN_MODULE_DEF_NAME, getActiveMainNavi())");
@@ -269,45 +277,20 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		closeBlockNEW();
 		emptyline();
 
-		//
-		appendString("private void checkAccessPermissions(HttpServletRequest req){");
+		appendString("protected boolean isPermitted(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) {");
 		increaseIdent();
-		appendStatement("List<String> requiredRoles = getRequiredRoles()");
-		appendString("if (requiredRoles==null || requiredRoles.size()==0)");
-		appendIncreasedStatement("return");
-		appendStatement("String userId = getUserId(req)");
-		appendString("if (userId==null || userId.length()==0)");
-		appendIncreasedStatement("throw new RuntimeException("+quote("Permission denied, uid not found!")+")");
-		appendString("for (String role : requiredRoles){");
-		increaseIdent();
-		appendString("if (userManager.userInRole(userId, role))");
-		appendIncreasedStatement("return");
-		closeBlockNEW();
-		appendStatement("throw new RuntimeException("+quote("Permission denied, expected one of those: ")+"+requiredRoles)");
+		appendStatement("return true");
 		closeBlockNEW();
 		emptyline();
 
-		
-/*		appendString("private boolean isUserInRole(HttpServletRequest req, String role){");
+		appendString("protected boolean isUserHasPermission(HttpServletRequest req, String permission){");
 		increaseIdent();
 		appendStatement("String userId = getUserId(req)");
-		appendStatement("return userId==null ? false : userManager.userInRole(userId, role)");
-		closeBlockNEW();
-		emptyline();
-*/
-		appendString("protected boolean isUserInRole(HttpServletRequest req, String ... roles){");
-		increaseIdent();
-		appendStatement("String userId = getUserId(req)");
-		appendString("if (userId==null)");
+		appendString("if (userId==null || StringUtils.isEmpty(permission))");
 		appendIncreasedStatement("return false");
-		appendString("for (String role : roles){");
-		increaseIdent();
-		appendString("if (userManager.userInRole(userId, role))");
-		appendIncreasedStatement("return true");
+		appendStatement("return true");
 		closeBlockNEW();
-		appendStatement("return false");
-		closeBlockNEW();
-		
+
 		appendString("protected void prepareMenu(HttpServletRequest req) {");
 		increaseIdent();
 		appendString("List<NavigationItemBean> navigation = getMainNavigation(req);");
@@ -336,20 +319,10 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 			else
 				throw new RuntimeException("MetaSection extension Class: " + first.getClass());
 			
-			String statement = "menu.add(makeMenuItemBean("+quote(view.getTitle())+", "+quote(firstPath)+"))";
-			if (view.getRequiredRoles()!=null && view.getRequiredRoles().size()>0){
-				String roles = "";
-				for (String r :view.getRequiredRoles()){
-					if (roles.length()>0)
-						roles += ", ";
-					roles += quote(r);
-				}
-				appendString("if (isUserInRole(req, new String[]{"+roles+"})){");
-				appendIncreasedStatement(statement);
-				appendString("}");
-			}else{
-				appendStatement(statement);
-			}
+			String permission =	"asg." + view.getName().toLowerCase() + ".read";
+			appendString("if (isUserHasPermission(req, "+quote(permission)+")) {");
+			appendIncreasedStatement("menu.add(makeMenuItemBean("+quote(view.getTitle())+", "+quote(firstPath)+"))");
+			appendString("}");
 		}
 	
 		appendString("return menu;");

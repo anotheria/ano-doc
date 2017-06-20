@@ -31,11 +31,7 @@ public class MetaView implements IGenerateable{
 	 * Title of the view.
 	 */
 	private String title;
-	/**
-	 * List of roles required to access this view. Having any of the roles is sufficent to obtain access to the view. If no roles are specified, access is granted to 
-	 * every editor.
-	 */
-	private List<String> requiredRoles;
+
 	/**
 	 * Creates a new MetaView.
 	 *
@@ -44,7 +40,6 @@ public class MetaView implements IGenerateable{
 	public MetaView(String aName){
 		name = aName;
 		sections = new ArrayList<MetaSection>();
-		requiredRoles = new ArrayList<String>();
 	}
 	
 // --- SOFAR NOT USED, HENCE OUTCOMMENTED 	
@@ -92,7 +87,7 @@ public class MetaView implements IGenerateable{
 
 	/** {@inheritDoc} */
 	@Override public String toString(){
-		return "view "+name+", Roles: "+requiredRoles+", Sections: "+sections+" T: "+title;
+		return "view "+name+", Sections: "+sections+" T: "+title;
 	}
 	/**
 	 * <p>Getter for the field <code>name</code>.</p>
@@ -119,26 +114,6 @@ public class MetaView implements IGenerateable{
 	 */
 	public void setTitle(String string) {
 		title = string;
-	}
-
-
-	/**
-	 * <p>Getter for the field <code>requiredRoles</code>.</p>
-	 *
-	 * @return a {@link java.util.List} object.
-	 */
-	public List<String> getRequiredRoles() {
-		return requiredRoles;
-	}
-
-
-	/**
-	 * <p>Setter for the field <code>requiredRoles</code>.</p>
-	 *
-	 * @param requiredRoles a {@link java.util.List} object.
-	 */
-	public void setRequiredRoles(List<String> requiredRoles) {
-		this.requiredRoles = requiredRoles;
 	}
 
 	/**

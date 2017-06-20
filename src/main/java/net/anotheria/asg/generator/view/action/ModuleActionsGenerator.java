@@ -917,11 +917,11 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
         if (isLock) {
             //Locking CASE
             //Actually We does not Care - about admin role in Lock action!  So checkExecutionPermission  2-nd parameter  can be anything!
-            appendIncreasedStatement("DocumentLockingHelper.lock.checkExecutionPermission(lockable,false,getUserId(req))");
+            appendIncreasedStatement("DocumentLockingHelper.lock.checkExecutionPermission(lockable, getUserId(req))");
             appendIncreasedStatement("lock" + doc.getMultiple() + "("+doc.getVariableName()+"Curr, req)");
         } else {
             //Unlocking CASE
-            appendIncreasedStatement("DocumentLockingHelper.unLock.checkExecutionPermission(lockable,isUserInRole(req, \"admin\"),getUserId(req))");
+            appendIncreasedStatement("DocumentLockingHelper.unLock.checkExecutionPermission(lockable, getUserId(req))");
             appendIncreasedStatement("unLock" + doc.getMultiple() + "("+doc.getVariableName()+"Curr, req, false)");
         }
         appendString("}");
@@ -2574,6 +2574,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		//todo formating of generated code is wrong
 	    appendStatement("String[] iDs = req.getParameterValues(PARAM_ID)");
 		appendString("if (iDs == null){");
+		increaseIdent();
 		appendStatement("throw new RuntimeException(\"Parameter \" + PARAM_ID + \" is not set.\")");
 		closeBlockNEW();
 		appendString("for (String id : iDs){");
@@ -2583,7 +2584,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 			appendString("if ("+doc.getVariableName()+"Curr instanceof LockableObject){ ");
 			appendStatement("LockableObject lockable = (LockableObject)" + doc.getVariableName() + "Curr");
 			//Actually We does not Care - about admin role in Delete action!  So checkExecutionPermission  2-nd parameter  can be anything!
-			appendStatement("DocumentLockingHelper.delete.checkExecutionPermission(lockable, false, getUserId(req))");
+			appendStatement("DocumentLockingHelper.delete.checkExecutionPermission(lockable, getUserId(req))");
 			appendString("}");
         }
 	    appendStatement(getServiceGetterCall(section.getModule())+".delete"+doc.getName()+"(id)");
@@ -2958,7 +2959,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 			appendIncreasedStatement("lock.setLockingTime(0)");
 			appendIncreasedStatement(getServiceGetterCall(section.getModule()) + ".update" + doc.getName() + "( " + doc.getVariableName() + ")");
 			appendIncreasedString("if (!unlockByTimeoout){");
-			appendIncreasedStatement("   logger.info("+quote("UnLock-OPERATION, document with id : [") +"+"+doc.getVariableName()+".getId()+"+quote("] was unlocked by: ")+" + getUserId(req) +"+quote("  with 'admin' role :")+" + isUserInRole(req, \"admin\") " +")");
+			appendIncreasedStatement("   logger.info("+quote("UnLock-OPERATION, document with id : [") +"+"+doc.getVariableName()+".getId()+"+quote("] was unlocked by: ")+" + getUserId(req))");
 			appendIncreasedString(" } else { ");
 			appendIncreasedStatement("   logger.info("+quote("UnLock-OPERATION, document with id : [") +"+"+doc.getVariableName()+".getId()+"+quote("] was unlocked by: timeOut")+")");
 			appendIncreasedString("}");
@@ -2981,7 +2982,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 			increaseIdent();
 			appendString("if("+doc.getVariableName()+ " instanceof LockableObject ){");
 			appendString("//Actually - simplest Check! --  exception - if anything happens!!!!");
-			appendIncreasedStatement("DocumentLockingHelper.update.checkExecutionPermission((LockableObject)"+doc.getVariableName()+", false, getUserId(req))");
+			appendIncreasedStatement("DocumentLockingHelper.update.checkExecutionPermission((LockableObject)"+doc.getVariableName()+", getUserId(req))");
 			appendString("}");
 			appendString("if (isTimeoutReached("+ doc.getVariableName() +")) {");
 			appendIncreasedStatement("check"+ doc.getMultiple() + "(" +doc.getVariableName() + ", req)");

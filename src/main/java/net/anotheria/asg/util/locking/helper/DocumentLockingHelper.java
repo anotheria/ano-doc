@@ -49,7 +49,7 @@ public enum DocumentLockingHelper {
      */
     update() {
         @Override
-        public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+        public void checkExecutionPermission(LockableObject document, String currentUser) {
             if (document.isLocked() && !document.getLockerId().equals(currentUser)) {
                 throw new LockingException(currentUser+ ". Permission denied, update action can't be performed, document isLocked by - " + document.getLockerId() + ".");
             }
@@ -61,7 +61,7 @@ public enum DocumentLockingHelper {
      */
     delete() {
         @Override
-        public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+        public void checkExecutionPermission(LockableObject document, String currentUser) {
             if (document.isLocked() && !document.getLockerId().equals(currentUser)) {
                 throw new LockingException(currentUser+ ". Permission denied, delete action can't be performed, document isLocked by - " + document.getLockerId() + ".");
             }
@@ -86,7 +86,7 @@ public enum DocumentLockingHelper {
      */
     lock() {
         @Override
-        public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+        public void checkExecutionPermission(LockableObject document, String currentUser) {
             if (document.isLocked()) {
                 String messageContent = document.getLockerId().equals(currentUser) ? currentUser+ ". Can't perform locking operation, document is allready locked by You!" :
                         currentUser+ ". Permission denied, lock action can't be performed on allready locked document. Locked by - " + document.getLockerId();
@@ -102,9 +102,9 @@ public enum DocumentLockingHelper {
      */
     unLock() {
         @Override
-		public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+		public void checkExecutionPermission(LockableObject document, String currentUser) {
 			if (document.isLocked()) {
-				if (!(userInAdminRole || document.getLockerId().equals(currentUser)))
+				if (!document.getLockerId().equals(currentUser))
 					throw new LockingException(currentUser+ ". Permission denied, expected one of those: 'user with - admin role', or  locker: user - " + document.getLockerId());
 			} else
 				throw new LockingException(currentUser+ ". Permission denied, document is not locked. Can't perform unlocking");
@@ -118,7 +118,7 @@ public enum DocumentLockingHelper {
      */
     multiLanguageSwitch() {
         @Override
-        public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+        public void checkExecutionPermission(LockableObject document, String currentUser) {
             if (document.isLocked() && !document.getLockerId().equals(currentUser)) {
                 throw new LockingException(currentUser+ ". Permission denied, multiLanguageSwitch action can't be performed, document isLocked by - " + document.getLockerId() + ".");
             }
@@ -132,7 +132,7 @@ public enum DocumentLockingHelper {
      */
     copyLang() {
         @Override
-        public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+        public void checkExecutionPermission(LockableObject document, String currentUser) {
             if (document.isLocked() && !document.getLockerId().equals(currentUser)) {
                 throw new LockingException(currentUser+ ". Permission denied, copyLang action can't be performed, document isLocked by - " + document.getLockerId() + ".");
             }
@@ -156,7 +156,7 @@ public enum DocumentLockingHelper {
      */
     containerDelete() {
         @Override
-        public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+        public void checkExecutionPermission(LockableObject document, String currentUser) {
             if (document.isLocked() && !document.getLockerId().equals(currentUser)) {
                 throw new LockingException(currentUser+ ". Permission denied, containerDelete action can't be performed, document isLocked by - " + document.getLockerId() + ".");
             }
@@ -170,7 +170,7 @@ public enum DocumentLockingHelper {
      */
     containerMove() {
         @Override
-        public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+        public void checkExecutionPermission(LockableObject document, String currentUser) {
             if (document.isLocked() && !document.getLockerId().equals(currentUser)) {
                 throw new LockingException(currentUser+ ". Permission denied, containerMove action can't be performed, document isLocked by - " + document.getLockerId() + ".");
             }
@@ -184,7 +184,7 @@ public enum DocumentLockingHelper {
      */
     containerListAddRow() {
         @Override
-        public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+        public void checkExecutionPermission(LockableObject document, String currentUser) {
             if (document.isLocked() && !document.getLockerId().equals(currentUser)) {
                 throw new LockingException(currentUser+ ". Permission denied, containerListAddRow action can't be performed, document isLocked by - " + document.getLockerId() + ".");
             }
@@ -199,7 +199,7 @@ public enum DocumentLockingHelper {
      */
     containerTableAddAction() {
         @Override
-        public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+        public void checkExecutionPermission(LockableObject document, String currentUser) {
             if (document.isLocked() && !document.getLockerId().equals(currentUser)) {
                 throw new LockingException(currentUser+ ". Permission denied, containerTableAddAction action can't be performed, document isLocked by - " + document.getLockerId() + ".");
             }
@@ -214,7 +214,7 @@ public enum DocumentLockingHelper {
      */
     containerListQuickAdd() {
         @Override
-        public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+        public void checkExecutionPermission(LockableObject document, String currentUser) {
             if (document.isLocked() && !document.getLockerId().equals(currentUser)) {
                 throw new LockingException(currentUser+ ". Permission denied, containerListQuickAdd action can't be performed, document isLocked by - " + document.getLockerId() + ".");
             }
@@ -227,10 +227,9 @@ public enum DocumentLockingHelper {
      * RuntimeException will be thrown if action can't be performed.
      *
      * @param document - actually LockableObject instance
-     * @param userInAdminRole - is user in "admin" role, actually for unlock operation only
      * @param currentUser     - current user id
      */
-    public void checkExecutionPermission(LockableObject document, boolean userInAdminRole, String currentUser) {
+    public void checkExecutionPermission(LockableObject document, String currentUser) {
     }
 
 
