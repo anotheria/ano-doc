@@ -2722,6 +2722,13 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 
 		startClassBody();
+		appendString("@Override");
+		appendString("protected String getPermissionName(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) {");
+		increaseIdent();
+		appendString("return \"asg."+view.getName().toLowerCase()+".write\";");
+		appendStatement("return "+quote(CMSMappingsConfiguratorGenerator.PERMISSION_PREFIX+view.getName().toLowerCase()+CMSMappingsConfiguratorGenerator.PERMISSION_WRITE_POSTFIX));
+		closeBlockNEW();
+
 		appendString( getExecuteDeclaration());
 		increaseIdent();
 
@@ -3310,6 +3317,20 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    closeBlockNEW();
 	    emptyline();
 
+		appendString("@Override");
+		appendString("protected String getPermissionName(ActionMapping mapping, FormBean af, HttpServletRequest req, HttpServletResponse res) {");
+		if (containerProperty instanceof MetaListProperty ) {
+			String path = CMSMappingsConfiguratorGenerator.getContainerPath(doc, containerProperty, CMSMappingsConfiguratorGenerator.ACTION_SHOW);
+			increaseIdent();
+			appendString("String path = stripPath(mapping.getPath());");
+			appendString("if (path.equals("+quote(path)+")) {");
+			increaseIdent();
+			appendStatement("return "+quote(CMSMappingsConfiguratorGenerator.PERMISSION_PREFIX+view.getName().toLowerCase()+CMSMappingsConfiguratorGenerator.PERMISSION_READ_POSTFIX));
+			closeBlockNEW();
+		}
+		appendStatement("return "+quote(CMSMappingsConfiguratorGenerator.PERMISSION_PREFIX+view.getName().toLowerCase()+CMSMappingsConfiguratorGenerator.PERMISSION_WRITE_POSTFIX));
+		closeBlockNEW();
+		emptyline();
 
 		if (containerProperty instanceof MetaListProperty ){
 			MetaListProperty list = (MetaListProperty)containerProperty;

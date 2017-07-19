@@ -57,6 +57,10 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 
 		clazz.addImport("net.anotheria.anoplass.api.APIFinder");
 		clazz.addImport("net.anotheria.anosite.api.configuration.SystemConfigurationAPI");
+		clazz.addImport("net.anotheria.anosite.access.AnoSiteAccessAPI");
+		clazz.addImport("net.anotheria.anosite.access.AnoSiteAccessAPIException");
+		clazz.addImport("net.anotheria.access.SOAttribute");
+		clazz.addImport("net.anotheria.access.SecurityObject");
 		clazz.addImport("net.anotheria.util.StringUtils");
 		clazz.addImport(ContextManager.class);
 		clazz.addImport("net.anotheria.webutils.actions.*");
@@ -103,6 +107,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 			appendStatement("private static volatile "+ServiceGenerator.getInterfaceName(m)+" "+ModuleActionsGenerator.getServiceInstanceName(m));
 
 		appendStatement("private static SystemConfigurationAPI systemConfigurationAPI = APIFinder.findAPI(SystemConfigurationAPI.class)");
+		appendStatement("private static AnoSiteAccessAPI anoSiteAccessAPI = APIFinder.findAPI(AnoSiteAccessAPI.class)");
 		appendStatement("private static CMSUserManager userManager");
 		clazz.addImport("net.anotheria.anosite.cms.user.CMSUserManager");
 		clazz.addImport("net.anotheria.asg.util.locking.config.LockingConfig");
@@ -163,10 +168,10 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		
 		appendString("public abstract ActionForward anoDocExecute(ActionMapping mapping, T formBean, HttpServletRequest req, HttpServletResponse res) throws Exception;");
 		emptyline();
-		appendString("public ActionForward anoDocExecuteDummy(ActionMapping mapping, T formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {");
+		appendString("protected ActionForward anoDocExecuteDenied(ActionMapping mapping, T formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {");
 		increaseIdent();
 		appendStatement("return null");
-		closeBlock("anoDocExecuteDummy");
+		closeBlock("anoDocExecuteDenied");
 		emptyline();
 		appendGenerationPoint("generateBaseAction");
 		appendString("@Override");
@@ -191,7 +196,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
         emptyline();
 		appendString("if (!isPermitted(mapping, formBean, req, res)) {");
 		increaseIdent();
-		appendStatement("return anoDocExecuteDummy(mapping, (T) formBean, req, res)");
+		appendStatement("return anoDocExecuteDenied(mapping, (T) formBean, req, res)");
 		closeBlock("if");
 		emptyline();
 		appendStatement("addBeanToRequest(req, BEAN_DOCUMENT_DEF_NAME, getCurrentDocumentDefName())");
@@ -277,19 +282,44 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		closeBlockNEW();
 		emptyline();
 
-		appendString("protected boolean isPermitted(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) {");
+
+		appendString("protected String getPermissionName(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) {");
 		increaseIdent();
-		appendStatement("return true");
+		appendStatement("return null");
 		closeBlockNEW();
 		emptyline();
 
-		appendString("protected boolean isUserHasPermission(HttpServletRequest req, String permission){");
+		appendString("protected boolean isPermitted(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) {");
 		increaseIdent();
-		appendStatement("String userId = getUserId(req)");
-		appendString("if (userId==null || StringUtils.isEmpty(permission))");
-		appendIncreasedStatement("return false");
-		appendStatement("return true");
+		appendStatement("String permissionName = getPermissionName(mapping, formBean, req, res)");
+		appendString("if (StringUtils.isEmpty(permissionName)) {");
+		increaseIdent();
+		appendStatement("permissionName = stripPath(mapping.getPath())");
 		closeBlockNEW();
+		appendStatement("String userId = getUserId(req)");
+		appendStatement("return isPermitted(permissionName, userId)");
+		closeBlockNEW();
+		emptyline();
+
+
+		appendString("protected boolean isPermitted(String permissionName, String userId) {");
+		increaseIdent();
+		appendString("if (StringUtils.isEmpty(userId) || StringUtils.isEmpty(permissionName)) {");
+		increaseIdent();
+		appendStatement("return false");
+		closeBlockNEW();
+		appendStatement("SecurityObject object = new SecurityObject(userId)");
+		appendStatement("SecurityObject subject = new SecurityObject(permissionName)");
+		appendStatement("subject.addAttribute(new SOAttribute(\"enviroment\", systemConfigurationAPI.getCurrentSystemExpanded()))");
+		appendStatement("object.addAttribute(new SOAttribute(\"enviroment\", systemConfigurationAPI.getCurrentSystemExpanded()))");
+		openTry();
+		appendStatement("return anoSiteAccessAPI.isAllowed(permissionName, object, subject)");
+		appendCatch("AnoSiteAccessAPIException");
+		appendStatement("log.error(MarkerFactory.getMarker(\"FATAL\"), \"Error while retrieving permissions\", e)");
+		appendStatement("return false");
+		closeBlockNEW();
+		closeBlockNEW();
+		emptyline();
 
 		appendString("protected void prepareMenu(HttpServletRequest req) {");
 		increaseIdent();
@@ -307,6 +337,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		appendString("protected List<NavigationItemBean> getMainNavigation(HttpServletRequest req) {");
 		increaseIdent();
 		appendString("List<NavigationItemBean> menu = new ArrayList<NavigationItemBean>();");
+		appendString("String userId = getUserId(req);");
 		for (int i=0; i<views.size(); i++){
 			MetaView view = views.get(i);
 			MetaSection first = view.getSections().get(0);
@@ -319,8 +350,8 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 			else
 				throw new RuntimeException("MetaSection extension Class: " + first.getClass());
 			
-			String permission =	"asg." + view.getName().toLowerCase() + ".read";
-			appendString("if (isUserHasPermission(req, "+quote(permission)+")) {");
+			String permission =	CMSMappingsConfiguratorGenerator.PERMISSION_PREFIX + view.getName().toLowerCase() + CMSMappingsConfiguratorGenerator.PERMISSION_READ_POSTFIX;
+			appendString("if (isPermitted("+quote(permission)+", userId)) {");
 			appendIncreasedStatement("menu.add(makeMenuItemBean("+quote(view.getTitle())+", "+quote(firstPath)+"))");
 			appendString("}");
 		}

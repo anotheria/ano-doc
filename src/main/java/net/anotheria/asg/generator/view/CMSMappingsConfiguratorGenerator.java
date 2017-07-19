@@ -483,7 +483,11 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	 * Transfers current document to prod.
 	 */
 	public static final String ACTION_TRANSFER = "transfer";
-	
+
+	public static final String PERMISSION_PREFIX = "asg.";
+	public static final String PERMISSION_READ_POSTFIX = ".read";
+	public static final String PERMISSION_WRITE_POSTFIX = ".write";
+
 	/**
 	 * <p>getPath.</p>
 	 *

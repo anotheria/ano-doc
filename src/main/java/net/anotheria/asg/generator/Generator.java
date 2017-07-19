@@ -144,7 +144,7 @@ public class Generator {
         GeneratorDataRegistry.getInstance().addModules(modules);
 
         AppUtilGenerator utilGen = new AppUtilGenerator(c);
-        utilGen.generate(modules);
+        utilGen.generateFromModules(modules);
 
         long s8 = System.currentTimeMillis();
 
@@ -161,6 +161,7 @@ public class Generator {
             //	System.out.println("Parsed views: "+views);
             ViewGenerator v = new ViewGenerator();
             v.generate("java", views);
+            utilGen.generateFromViews(views);
         }else{
             System.out.println("VIEW_CONTENT = NULL");
         }

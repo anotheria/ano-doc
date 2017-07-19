@@ -54,6 +54,7 @@ public class CMSFilterGenerator extends AbstractGenerator{
 		clazz.addImport("net.anotheria.maf.MAFFilter");
 		clazz.addImport("net.anotheria.maf.action.ActionMappingsConfigurator");
         clazz.addImport("net.anotheria.anosite.cms.user.CMSUserManager");
+        clazz.addImport("net.anotheria.anosite.access.conf.AccessConfigurator");
 
 		clazz.setParent("MAFFilter");
 		clazz.setName("CMSFilter");
@@ -75,7 +76,11 @@ public class CMSFilterGenerator extends AbstractGenerator{
 
         appendStatement("log.info(\"----  Initing CMS user manager...  ------\")");
         appendStatement("CMSUserManager.init()");
-		
+
+		emptyline();
+
+		appendStatement("AccessConfigurator.configure()");
+
 		closeBlock("init");
 		
 		emptyline();

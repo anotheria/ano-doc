@@ -101,10 +101,12 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 		append(closeBlock());
 		emptyline();
 
-		appendString("protected boolean isPermitted(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) {");
+		appendString("@Override");
+		appendString("protected String getPermissionName(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) {");
 		increaseIdent();
-		appendStatement("return "+!view.getName().toLowerCase().isEmpty());
-		append(closeBlock());
+		appendStatement("return "+quote(CMSMappingsConfiguratorGenerator.PERMISSION_PREFIX+view.getName().toLowerCase()+CMSMappingsConfiguratorGenerator.PERMISSION_READ_POSTFIX));
+		closeBlockNEW();
+		emptyline();
 
 		emptyline();		
 			appendStatement("protected List<NavigationItemBean> getSubNavigation(){");
