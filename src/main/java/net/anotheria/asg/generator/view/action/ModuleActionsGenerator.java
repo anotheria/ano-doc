@@ -2725,7 +2725,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendString("@Override");
 		appendString("protected String getPermissionName(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) {");
 		increaseIdent();
-		appendString("return \"asg."+view.getName().toLowerCase()+".write\";");
 		appendStatement("return "+quote(CMSMappingsConfiguratorGenerator.PERMISSION_PREFIX+view.getName().toLowerCase()+CMSMappingsConfiguratorGenerator.PERMISSION_WRITE_POSTFIX));
 		closeBlockNEW();
 
