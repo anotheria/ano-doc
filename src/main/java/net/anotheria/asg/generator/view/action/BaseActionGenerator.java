@@ -108,8 +108,6 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 
 		appendStatement("private static SystemConfigurationAPI systemConfigurationAPI = APIFinder.findAPI(SystemConfigurationAPI.class)");
 		appendStatement("private static AnoSiteAccessAPI anoSiteAccessAPI = APIFinder.findAPI(AnoSiteAccessAPI.class)");
-		appendStatement("private static CMSUserManager userManager");
-		clazz.addImport("net.anotheria.anosite.cms.user.CMSUserManager");
 		clazz.addImport("net.anotheria.asg.util.locking.config.LockingConfig");
 		appendStatement("private static LockingConfig lockConfig;");
 		appendStatement("private static Logger log = LoggerFactory.getLogger("+getBaseActionName()+".class)");
@@ -128,15 +126,6 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 			clazz.addImport(ServiceGenerator.getInterfaceImport(m));
 		}
 
-		//init user manager
-		emptyline();
-		appendComment("//initializing user manager");
-		appendString("try{");
-		appendIncreasedStatement("userManager = CMSUserManager.getInstance()");
-		appendString("}catch(Exception e){");
-		appendIncreasedStatement("log.error(MarkerFactory.getMarker(\"FATAL\"), "+quote("Can't init user manager")+", e)");
-		appendString("}");
-		//end init user manager
 		//initing Lock Config
 		emptyline();
 		appendComment("initializing lockConfig");
@@ -157,7 +146,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
         appendStatement("String userId = (String)getBeanFromSession(req, BEAN_USER_DEF_ID)");
         appendString("if (userId != null) {");
             increaseIdent();
-                appendStatement("String login = CMSUserManager.getLoginById(userId)");
+                appendStatement("String login = anoSiteAccessAPI.getLoginById(userId)");
                 appendStatement("addBeanToSession(req, BEAN_USER_ID, login)");
             closeBlock("if");
         emptyline();
