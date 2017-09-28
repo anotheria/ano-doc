@@ -19,6 +19,92 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         return entries;
     }
 
+    private GeneratedClass generateEnumModules(List<MetaModule> modules) {
+        GeneratedClass clazz = new GeneratedClass();
+        startNewJob(clazz);
+        appendGenerationPoint("generateEnumModules");
+
+        clazz.setPackageName(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".util");
+        clazz.addImport("net.anotheria.util.StringUtils");
+        clazz.setType(TypeOfClass.ENUM);
+        clazz.setName("ModuleName");
+        startClassBody();
+
+        for(MetaModule module: modules) {
+            appendString("SERVICE_" + module.getName().toUpperCase() + "(\"" + module.getName() + "\"),");
+        }
+        appendStatement();
+        emptyline();
+        appendStatement("private String name");
+        emptyline();
+        appendString("ModuleName (String aName) {");
+        increaseIdent();
+        appendStatement("name = aName");
+        closeBlockNEW();
+        emptyline();
+        appendString("public static ModuleName byValue (final String value) {");
+        increaseIdent();
+        appendString("if (StringUtils.isEmpty(value))");
+        increaseIdent();
+        appendStatement("throw new IllegalArgumentException(\"Value is not valid\")");
+        decreaseIdent();
+        appendString("for (ModuleName moduleName: ModuleName.values()) {");
+        increaseIdent();
+        appendString("if (moduleName.name.equals(value)) {");
+        increaseIdent();
+        appendStatement("return moduleName");
+        closeBlockNEW();
+        closeBlockNEW();
+        appendStatement("throw new IllegalArgumentException(\"No such value in DataType\")");
+        closeBlockNEW();
+
+        return clazz;
+    }
+
+    private GeneratedClass generateEnumDocuments (List<MetaModule> modules) {
+        GeneratedClass clazz = new GeneratedClass();
+        startNewJob(clazz);
+        appendGenerationPoint("generateEnumDocuments");
+
+        clazz.setPackageName(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".util");
+        clazz.addImport("net.anotheria.util.StringUtils");
+        clazz.setType(TypeOfClass.ENUM);
+        clazz.setName("DocumentName");
+        startClassBody();
+
+        for (MetaModule module: modules) {
+            for (MetaDocument doc: module.getDocuments()) {
+                appendString("DOCUMENT_" + module.getName().toUpperCase() + "_" + doc.getName().toUpperCase() + "(\"" + module.getName() + "_" + doc.getName() + "\"),");
+            }
+        }
+        appendStatement();
+        emptyline();
+        appendStatement("private String name");
+        emptyline();
+        appendString("DocumentName (String aName) {");
+        increaseIdent();
+        appendStatement("name = aName");
+        closeBlockNEW();
+        emptyline();
+        appendString("public static DocumentName byValue (final String value) {");
+        increaseIdent();
+        appendString("if (StringUtils.isEmpty(value))");
+        increaseIdent();
+        appendStatement("throw new IllegalArgumentException(\"Value is not valid\")");
+        decreaseIdent();
+        appendString("for (DocumentName documentName: DocumentName.values()) {");
+        increaseIdent();
+        appendString("if (documentName.name.equals(value)) {");
+        increaseIdent();
+        appendStatement("return documentName");
+        closeBlockNEW();
+        closeBlockNEW();
+        appendStatement("throw new IllegalArgumentException(\"No such value in DataType\")");
+        closeBlockNEW();
+
+        return clazz;
+    }
+
     private GeneratedClass generateParsingUtilService(List<MetaModule> modules) {
 
         GeneratedClass clazz = new GeneratedClass();
