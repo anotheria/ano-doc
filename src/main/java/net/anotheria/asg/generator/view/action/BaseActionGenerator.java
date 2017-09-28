@@ -146,7 +146,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
         appendStatement("String userId = (String)getBeanFromSession(req, BEAN_USER_DEF_ID)");
         appendString("if (userId != null) {");
             increaseIdent();
-                appendStatement("String login = anoSiteAccessAPI.getLoginById(userId)");
+                appendStatement("String login = anoSiteAccessAPI.getUserLoginById(userId)");
                 appendStatement("addBeanToSession(req, BEAN_USER_ID, login)");
             closeBlock("if");
         emptyline();
