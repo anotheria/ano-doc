@@ -85,7 +85,7 @@ public class StructureUtilsGenerator extends AbstractGenerator {
 
         for (MetaModule module: modules) {
             for (MetaDocument doc: module.getDocuments()) {
-                appendString("DOCUMENT_" + module.getName().toUpperCase() + "_" + doc.getName().toUpperCase() + "(\"" + doc.getName() + "\"),");
+                appendString("DOCUMENT_" + module.getName().toUpperCase() + "_" + doc.getName().toUpperCase() + "(\"" + module.getName() + "_" + doc.getName() + "\"),");
             }
         }
         appendStatement();
