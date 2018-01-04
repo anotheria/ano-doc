@@ -2146,7 +2146,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlockNEW();
 		emptyline();
 		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
-		appendStatement("WebResource webResource = client.resource(config.getDomain() + \"/api/" + doc.getName().toLowerCase() + "\")");
+		appendString("for (String domain :config.getDomains()) {");
+		increaseIdent();
+		appendStatement("WebResource webResource = client.resource(domain + \"/api/" + doc.getName().toLowerCase() + "\")");
 		appendString("ClientResponse clientResponse = webResource.header(\"Content-Type\", \"application/json;charset=utf-8\")");
 		appendString(" 		.post(ClientResponse.class, data);");
 		emptyline();
@@ -2155,10 +2157,10 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("clientResponse.close()");
 		appendStatement("response.addError(ERROR, \"Couldn't save transferred objects, status expected 201, got status - \" + clientResponse.getStatus())");
 		appendStatement("writeTextToResponse(res, response)");
-		appendStatement("return null");
 		closeBlockNEW();
 		emptyline();
 		appendStatement("clientResponse.close()");
+		closeBlockNEW();
 		appendStatement("return null");
 		closeBlockNEW();
 		emptyline();
