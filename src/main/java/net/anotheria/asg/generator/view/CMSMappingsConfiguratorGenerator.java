@@ -294,6 +294,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		
 		appendString("private static final Map<String, String> showActionsRegistry;");
 		appendString("static{");
+		increaseIdent();
 		appendStatement("showActionsRegistry = new HashMap<String,String>()");
 		
 		for(MetaView view: views){
@@ -304,15 +305,17 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 				generateActionsRegistry(s);
 			}
 		}
-		
 		closeBlock("close static block");
+		emptyline();
 		
 		openFun("public static String getActionPath(String parentName, String documentName)");
 		appendStatement("return showActionsRegistry.get(parentName + \".\" + documentName)");
 		closeBlock("getActionPath");
+		emptyline();
 		
 		appendString("@Override");
 		openFun("public void configureActionMappings(ActionMappings mappings)");
+
 		appendStatement("mappings.addMapping(\"index\", " + IndexPageActionGenerator.getIndexPageActionName() + ".class, new ActionForward(\"success\", "+quote(IndexPageJspGenerator.getIndexJspFullName())+"))");
 		appendStatement("mappings.addMapping(\"fileShow\", "+quote(ShowFile.class.getName())+", new ActionForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
 		appendStatement("mappings.addMapping(\"fileUpload\", "+quote(FileAjaxUpload.class.getName())+")");
@@ -327,16 +330,32 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
         appendStatement("mappings.addMapping(\"showUsages\", net.anotheria.anosite.bredcrambs.action.ShowUsagesOfDocumentAction.class)");
 
         generateSharedMappings(clazz);
-		for(MetaView view: views){
+
+        for (MetaView view: views) {
+        	for (MetaSection section: view.getSections()) {
+        		if (!(section instanceof  MetaModuleSection))
+        			continue;
+
+        		MetaModuleSection s = (MetaModuleSection) section;
+        		appendStatement("configureActionMappings" + s.getDocument().getName()  + "(mappings)");
+			}
+		}
+
+		closeBlock("configureActionMappings");
+        emptyline();
+
+
+        for(MetaView view: views){
 			for (MetaSection section: view.getSections()){
 				if (!(section instanceof MetaModuleSection))
 					continue;
 				MetaModuleSection s = (MetaModuleSection)section;
-				
-				
+
+
 //				if(s.getDialogs().size() == 0)
 //					continue;
-				appendCommentLine("Mapping " + s.getDocument().getName());
+				openFun("private void configureActionMappings" + s.getDocument().getName() + "(ActionMappings mappings)");
+
 				generateSectionMappings(clazz, s);
 				emptyline();
 				MetaDocument doc = s.getDocument();
@@ -346,10 +365,10 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 						generateContainerMappings(clazz, s, (MetaContainerProperty)pp);
 					}
 				}
+				closeBlock("configure " + s.getDocument().getName());
 				emptyline();
 			}
 		}
-		closeBlock("configureActionMappings");
 		
 		return clazz;
 	}
