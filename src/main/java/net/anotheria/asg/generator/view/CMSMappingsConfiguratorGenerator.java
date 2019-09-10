@@ -331,31 +331,6 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 
         generateSharedMappings(clazz);
 
-
-
-//        for(MetaView view: views){
-//			for (MetaSection section: view.getSections()){
-//				if (!(section instanceof MetaModuleSection))
-//					continue;
-//				MetaModuleSection s = (MetaModuleSection)section;
-//
-//
-////				if(s.getDialogs().size() == 0)
-////					continue;
-//				appendCommentLine("Mapping " + s.getDocument().getName());
-//				generateSectionMappings(clazz, s);
-//				emptyline();
-//				MetaDocument doc = s.getDocument();
-//				for (int p=0; p<doc.getProperties().size(); p++){
-//					MetaProperty pp = doc.getProperties().get(p);
-//					if (pp instanceof MetaContainerProperty){
-//						generateContainerMappings(clazz, s, (MetaContainerProperty)pp);
-//					}
-//				}
-//				emptyline();
-//			}
-//		}
-
         for (MetaView view: views) {
         	for (MetaSection section: view.getSections()) {
         		if (!(section instanceof  MetaModuleSection))
