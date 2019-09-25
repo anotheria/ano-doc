@@ -2,9 +2,31 @@ package net.anotheria.asg.generator.view.action;
 
 import net.anotheria.asg.data.LockableObject;
 import net.anotheria.asg.exception.ConstantNotFoundException;
-import net.anotheria.asg.generator.*;
-import net.anotheria.asg.generator.forms.meta.*;
-import net.anotheria.asg.generator.meta.*;
+import net.anotheria.asg.generator.AbstractGenerator;
+import net.anotheria.asg.generator.Context;
+import net.anotheria.asg.generator.FileEntry;
+import net.anotheria.asg.generator.GeneratedArtefact;
+import net.anotheria.asg.generator.GeneratedClass;
+import net.anotheria.asg.generator.GeneratorDataRegistry;
+import net.anotheria.asg.generator.IGenerateable;
+import net.anotheria.asg.generator.IGenerator;
+import net.anotheria.asg.generator.forms.meta.MetaForm;
+import net.anotheria.asg.generator.forms.meta.MetaFormField;
+import net.anotheria.asg.generator.forms.meta.MetaFormSingleField;
+import net.anotheria.asg.generator.forms.meta.MetaFormTableColumn;
+import net.anotheria.asg.generator.forms.meta.MetaFormTableField;
+import net.anotheria.asg.generator.forms.meta.MetaFormTableHeader;
+import net.anotheria.asg.generator.meta.MetaContainerProperty;
+import net.anotheria.asg.generator.meta.MetaDocument;
+import net.anotheria.asg.generator.meta.MetaEnumerationProperty;
+import net.anotheria.asg.generator.meta.MetaGenericListProperty;
+import net.anotheria.asg.generator.meta.MetaGenericProperty;
+import net.anotheria.asg.generator.meta.MetaLink;
+import net.anotheria.asg.generator.meta.MetaListProperty;
+import net.anotheria.asg.generator.meta.MetaModule;
+import net.anotheria.asg.generator.meta.MetaProperty;
+import net.anotheria.asg.generator.meta.MetaTableProperty;
+import net.anotheria.asg.generator.meta.StorageType;
 import net.anotheria.asg.generator.model.AbstractDataObjectGenerator;
 import net.anotheria.asg.generator.model.DataFacadeGenerator;
 import net.anotheria.asg.generator.model.ServiceGenerator;
@@ -13,7 +35,18 @@ import net.anotheria.asg.generator.types.meta.EnumerationType;
 import net.anotheria.asg.generator.util.DirectLink;
 import net.anotheria.asg.generator.view.CMSMappingsConfiguratorGenerator;
 import net.anotheria.asg.generator.view.ViewConstants;
-import net.anotheria.asg.generator.view.meta.*;
+import net.anotheria.asg.generator.view.meta.MetaDecorator;
+import net.anotheria.asg.generator.view.meta.MetaDialog;
+import net.anotheria.asg.generator.view.meta.MetaFieldElement;
+import net.anotheria.asg.generator.view.meta.MetaFilter;
+import net.anotheria.asg.generator.view.meta.MetaListElement;
+import net.anotheria.asg.generator.view.meta.MetaModuleSection;
+import net.anotheria.asg.generator.view.meta.MetaView;
+import net.anotheria.asg.generator.view.meta.MetaViewElement;
+import net.anotheria.asg.generator.view.meta.MultilingualFieldElement;
+import net.anotheria.asg.util.action.ActionUtils;
+import net.anotheria.asg.util.helper.cmsview.CMSViewHelperRegistry;
+import net.anotheria.asg.util.helper.cmsview.CMSViewHelperUtil;
 import net.anotheria.util.ExecutionTimer;
 import net.anotheria.util.StringUtils;
 
@@ -849,7 +882,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlock("executeOnValidationError");
 
 		emptyline();
-		appendAddFieldExplanationsMethod(doc);
 	}
 
 	private void generateExecuteMethod(GeneratedClass clazz, MetaDialog dialog, MetaDocument document){
@@ -964,7 +996,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    clazz.addImport("net.anotheria.asg.util.decorators.IAttributeDecorator");
 	    clazz.addImport("net.anotheria.asg.util.filter.DocumentFilter");
 	    clazz.addImport("net.anotheria.util.NumberUtils");
-	    clazz.addImport("net.anotheria.anoplass.api.util.paging.PagingControl");
+	    clazz.addImport(ActionUtils.class);
 	    addStandardActionImports(clazz);
 	    clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 	    clazz.addImport(ModuleBeanGenerator.getListItemBeanImport(GeneratorDataRegistry.getInstance().getContext(), doc));
@@ -1010,7 +1042,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    //generate session attributes constants
 	    appendStatement("public static final String SA_SORT_TYPE = SA_SORT_TYPE_PREFIX+", quote(doc.getName()));
 	    appendStatement("public static final String SA_FILTER = SA_FILTER_PREFIX+", quote(doc.getName()));
-	    appendStatement("private static final List<String> ITEMS_ON_PAGE_SELECTOR = java.util.Arrays.asList(new String[]{\"5\",\"10\",\"20\",\"25\",\"50\",\"100\",\"500\",\"1000\"})");
 
 	    appendStatement("private static Logger log = LoggerFactory.getLogger("+getShowActionName(section)+".class)");
 
@@ -1045,7 +1076,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 		appendString( "public "+getShowActionName(section)+"(){");
 		increaseIdent();
-		appendStatement("super()");
 		if (containsComparable)
 			appendStatement("sorter = new QuickSorter<"+ModuleBeanGenerator.getListItemBeanName(doc)+">()");
 		if (containsDecorators){
@@ -1106,7 +1136,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (containsComparable){
 			String sortType = ModuleBeanGenerator.getListItemBeanSortTypeName(doc);
 			appendStatement("int sortMethod = "+sortType+".SORT_BY_DEFAULT");
-			appendStatement("boolean sortOrder = "+sortType+".ASC");
+			appendStatement("boolean sortOrder = getSortOder(req)");
 			appendStatement("boolean sortParamSet = false");
 			emptyline();
 			appendString( "try{");
@@ -1118,13 +1148,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 			appendIncreasedStatement("String sortMethodName = getStringParameter(req, PARAM_SORT_TYPE_NAME)");
 			appendIncreasedStatement("sortMethod = "+sortType+".name2method(sortMethodName)");
 			appendIncreasedStatement("sortParamSet = true");
-			appendString( "}catch(Exception ignored){}");
-			emptyline();
-			appendString( "try{");
-			increaseIdent();
-			appendString( "sortOrder = getStringParameter(req, PARAM_SORT_ORDER).equals("+quote(ViewConstants.VALUE_SORT_ORDER_ASC)+") ? ");
-			appendIncreasedStatement(""+sortType+".ASC : "+sortType+".DESC");
-			decreaseIdent();
 			appendString( "}catch(Exception ignored){}");
 			emptyline();
 			appendStatement(ModuleBeanGenerator.getListItemBeanSortTypeName(doc)+" sortType = null");
@@ -1180,36 +1203,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    	appendStatement("beans = sorter.sort(beans, sortType)");
 	    }
 
-	    //paging start
-	    appendCommentLine("paging");
-	    appendStatement("int pageNumber = 1");
-	    appendString( "try{");
-	    appendIncreasedStatement("pageNumber = Integer.parseInt(req.getParameter("+quote("pageNumber")+"))");
-	    appendString( "}catch(Exception ignored){}");
-	    appendStatement("Integer lastItemsOnPage = (Integer)req.getSession().getAttribute(\"currentItemsOnPage\")");
-	    appendStatement("int itemsOnPage = lastItemsOnPage == null ? 20 : lastItemsOnPage");
-	    appendString( "try{");
-	    appendIncreasedStatement("itemsOnPage = Integer.parseInt(req.getParameter("+quote("itemsOnPage")+"))");
-	    appendString( "}catch(Exception ignored){}");
-	    appendStatement("Slice<"+ModuleBeanGenerator.getListItemBeanName(doc)+"> slice = Slicer.slice(new Segment(pageNumber, itemsOnPage), beans)");
-	    appendStatement("beans = slice.getSliceData()");
-	    emptyline();
-
-	    appendCommentLine("prepare paging control");
-	    appendStatement("PagingControl pagingControl = new PagingControl(slice.getCurrentSlice(), slice.getElementsPerSlice(), slice.getTotalNumberOfItems())");
-	    appendCommentLine("end paging control");
-
-	    appendStatement("req.setAttribute("+quote("pagingControl")+", pagingControl)");
-	    appendStatement("req.setAttribute("+quote("currentpage")+", pageNumber)");
-	    appendStatement("req.setAttribute("+quote("currentItemsOnPage")+", itemsOnPage)");
-	    appendStatement("req.getSession().setAttribute("+quote("currentItemsOnPage")+", itemsOnPage)");
-	    appendStatement("req.setAttribute("+quote("PagingSelector")+", ITEMS_ON_PAGE_SELECTOR)");
-
-	    emptyline();
-	    //paging end
-
-
-
+	    appendStatement("beans = ActionUtils.sliceDataAndSavePagingInformation(req, beans)");
 	    appendStatement("addBeanToRequest(req, "+quote(listName)+", beans)");
 
 	    //add filters
@@ -2462,8 +2456,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlockNEW();
 		emptyline();
 
-		appendAddFieldExplanationsMethod(doc);
-		emptyline();
 
 		Context context = GeneratorDataRegistry.getInstance().getContext();
 
@@ -2788,8 +2780,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("return mapping.success()");
 		closeBlock("");
 
-		emptyline();
-		appendAddFieldExplanationsMethod(doc);
 
 		return clazz;
 	}
@@ -2859,7 +2849,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	}
 
 	private void appendAddFieldExplanationsMethod(MetaDocument doc) {
-		appendString("private void addFieldExplanations(HttpServletRequest req, "+doc.getName()+" "+doc.getVariableName()+") {");
+		appendString("protected void addFieldExplanations(HttpServletRequest req, "+doc.getName()+" "+doc.getVariableName()+") {");
 		increaseIdent();
 		appendString("if (!CMSViewHelperRegistry.getCMSViewHelpers("+quote(doc.getParentModule().getName()+"."+doc.getName())+").isEmpty()) {");
 		increaseIdent();
@@ -2901,6 +2891,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 			clazz.addImport("net.anotheria.asg.util.locking.helper.DocumentLockingHelper");
 			clazz.addImport("org.slf4j.Logger");
 			clazz.addImport("org.slf4j.LoggerFactory");
+			clazz.addImport(CMSViewHelperRegistry.class);
+			clazz.addImport(CMSViewHelperUtil.class);
 		}
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
 		clazz.setGeneric("T extends FormBean");
@@ -2910,7 +2902,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    startClassBody();
 
 		if(isCMS)
-		appendStatement("private final Logger logger = LoggerFactory.getLogger(\"cms-lock-log\")");
+			appendStatement("private final Logger logger = LoggerFactory.getLogger(\"cms-lock-log\")");
 	    //generate getTitle
 	    appendString( "protected String getTitle(){");
 	    increaseIdent();
@@ -2931,6 +2923,11 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    appendStatement("return "+quote(section.getDocument().getName()));
 	    closeBlock("getCurrentDocumentDefName");
 	    emptyline();
+
+		if (isCMS) {
+			appendAddFieldExplanationsMethod(doc);
+			emptyline();
+		}
 
 		//starting additional methods generation!!!!!! Actually Lock & Unlock!!! + state checker!!!
 

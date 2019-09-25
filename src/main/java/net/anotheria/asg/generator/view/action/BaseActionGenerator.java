@@ -17,6 +17,7 @@ import net.anotheria.asg.generator.view.meta.MetaModuleSection;
 import net.anotheria.asg.generator.view.meta.MetaSection;
 import net.anotheria.asg.generator.view.meta.MetaView;
 import net.anotheria.util.StringUtils;
+import net.anotheria.util.sorter.SortType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,12 +61,13 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.addImport("net.anotheria.util.StringUtils");
 		clazz.addImport(ContextManager.class);
 		clazz.addImport("net.anotheria.webutils.actions.*");
-		clazz.addImport("javax.servlet.http.HttpServletRequest");
-		clazz.addImport("javax.servlet.http.HttpServletResponse");
+		clazz.addImport("javax.servlet.http.HttpServletRequest"); //those imports must be strings dependencywise.
+		clazz.addImport("javax.servlet.http.HttpServletResponse");//those imports must be strings dependencywise.
 		clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
-		clazz.addImport("net.anotheria.maf.action.ActionMapping");
-		clazz.addImport("net.anotheria.maf.bean.FormBean");	
-		clazz.addImport("net.anotheria.webutils.bean.NavigationItemBean");	
+		clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
+		clazz.addImport(net.anotheria.maf.bean.FormBean.class);
+		clazz.addImport(net.anotheria.webutils.bean.NavigationItemBean.class);
+		clazz.addImport(SortType.class);
 
 		clazz.setAbstractClass(true);
 		clazz.setParent("BaseAction");
@@ -167,7 +169,6 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		appendString("@Override");
 		appendString("public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {");
 		increaseIdent();
-		System.out.println("\t\t\t\tHELLO WORLD ANODOC\t\t\t\t\t\t");
 		appendString("if (isAuthorizationRequired()){");
 			increaseIdent();
 				appendStatement("boolean authorized = checkAuthorization(req)");
@@ -256,6 +257,20 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		appendStatement("return path.startsWith("+quote("/")+") ? path.substring(1) : path");
 		closeBlockNEW();
 		emptyline();
+
+		appendString("protected boolean getSortOder(HttpServletRequest req){");
+		increaseIdent();
+		appendString("try{");
+		increaseIdent();
+		appendStatement("return getStringParameter(req, PARAM_SORT_ORDER).equals(\"ASC\") ? SortType.ASC : SortType.DESC");
+		appendCatch("Exception");
+		appendStatement("return SortType.ASC");
+		closeBlockNEW();
+		closeBlockNEW();
+		emptyline();
+
+
+
 
 		//  ading  2  methods  actually -- for  LockConfig ussage....
 		appendString("protected long getLockingTimeout(){");
