@@ -367,7 +367,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 			appendStatement("addBeanToRequest(req, ", quote(getFilterVariableName(f)), ", ", getFilterVariableName(f), ".getTriggerer(\"\"))");
 		}
 
-		appendStatement("return mapping.findForward(\"success\")");
+		appendStatement("return mapping.success()");
 		closeBlockNEW();
 		emptyline();
 
@@ -776,7 +776,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	}
 
 	private void generateExecuteOnValidationErrorMethod(MetaModuleSection section, MetaDocument doc, MetaDialog dialog, List<MetaViewElement> elements) {
-		appendString("public ActionForward executeOnValidationError(ActionMapping mapping, FormBean formBean, List<ValidationError> errors, HttpServletRequest req, HttpServletResponse res) throws Exception {");
+		appendString("public ActionCommand executeOnValidationError(ActionMapping mapping, FormBean formBean, List<ValidationError> errors, HttpServletRequest req, HttpServletResponse res) throws Exception {");
 		increaseIdent();
 
 		appendString("Map<String, ValidationError> errorsMap = new HashMap<String,ValidationError>();");
@@ -857,7 +857,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("net.anotheria.maf.bean.annotations.Form");
 //		clazz.addImport(clazz);
 		appendString("@Override");
-		appendString("public ActionForward execute(ActionMapping mapping, @Form("+formBeanName+".class) FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
+		appendString("public ActionCommand execute(ActionMapping mapping, @Form("+formBeanName+".class) FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
 		increaseIdent();
 		appendStatement("return super.execute(mapping, formBean, req, res)");
 		closeBlock("execute");
@@ -1217,7 +1217,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    	appendStatement("addBeanToRequest(req, ", quote(getFilterVariableName(f)), ", ", getFilterVariableName(f), ".getTriggerer(\""+f.getFieldName()+"\"))");
 	    }
 
-	    appendStatement("return mapping.findForward(\"success\")");
+	    appendStatement("return mapping.success()");
 	    closeBlockNEW();
 	    emptyline();
 
@@ -1402,7 +1402,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    appendStatement("req.setAttribute("+quote("result")+", beans)");
 	    closeBlockNEW();
 
-	    appendStatement("return mapping.findForward(\"success\")");
+	    appendStatement("return mapping.success()");
 	    closeBlockNEW();
 	    return clazz;
 	}
@@ -1490,7 +1490,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		}
 
 
-		appendStatement("return mapping.findForward(\"success\")");
+		appendStatement("return mapping.success()");
 		closeBlockNEW();
 		return clazz;
 	}
@@ -1534,7 +1534,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlockNEW();
 		emptyline();
 
-		appendStatement("return mapping.findForward(\"success\")");
+		appendStatement("return mapping.success()");
 		closeBlockNEW();
 
 		return clazz;
@@ -1607,7 +1607,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("req.setAttribute(",quote("documentType"),", ",doc.getVariableName(),".getClass())");
 		appendStatement("req.setAttribute(",quote("lastUpdate"),", lastUpdateDate)");
 
-		appendStatement("return mapping.findForward("+quote("success")+")");
+		appendStatement("return mapping.success()");
 
 		closeBlockNEW();
 	}
@@ -2458,7 +2458,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    }
 
 
-		appendStatement("return mapping.findForward(\"success\")");
+		appendStatement("return mapping.success()");
 		closeBlockNEW();
 		emptyline();
 
@@ -2785,7 +2785,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("addFieldExplanations(req, null)");
 		emptyline();
 
-		appendStatement("return mapping.findForward(\"success\")");
+		appendStatement("return mapping.success()");
 		closeBlock("");
 
 		emptyline();
@@ -3125,7 +3125,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 	private String getExecuteDeclaration(String methodName, String formBeanName){
 	    String ret = "";
-	    ret += "public ActionForward "+(methodName == null ? "anoDocExecute" : methodName ) + "(";
+	    ret += "public ActionCommand "+(methodName == null ? "anoDocExecute" : methodName ) + "(";
 		ret += "ActionMapping mapping, ";
 		ret += formBeanName + " af, ";
 		ret += "HttpServletRequest req, ";
@@ -3151,9 +3151,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	private void addStandardActionImports(GeneratedClass clazz){
 	    clazz.addImport("javax.servlet.http.HttpServletRequest");
 	    clazz.addImport("javax.servlet.http.HttpServletResponse");
-	    clazz.addImport("net.anotheria.maf.action.ActionForward");
-	    clazz.addImport("net.anotheria.maf.action.ActionMapping");
-	    clazz.addImport("net.anotheria.maf.bean.FormBean");
+	    clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
+	    clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
+	    clazz.addImport(net.anotheria.maf.bean.FormBean.class);
 
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
@@ -3904,7 +3904,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlockNEW();
 		appendStatement("addBeanToRequest(req, "+quote("elements")+", beans)");
 //*/		
-		appendStatement("return mapping.findForward(", quote("success"), ")");
+		appendStatement("return mapping.success()");
 		closeBlockNEW();
 	}
 
@@ -3968,7 +3968,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlockNEW();
 		appendStatement("addBeanToRequest(req, "+quote("rows")+", beans)");
 
-		appendStatement("return mapping.findForward("+quote("success")+")");
+		appendStatement("return mapping.success()");
 		closeBlockNEW();
 
 		return clazz;
@@ -4174,7 +4174,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlockNEW();
 		emptyline();
 
-		appendStatement("return mapping.findForward(\"success\")");
+		appendStatement("return mapping.success()");
 		closeBlockNEW();
 		emptyline();
 

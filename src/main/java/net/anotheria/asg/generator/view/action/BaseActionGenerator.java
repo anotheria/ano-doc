@@ -62,7 +62,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.addImport("net.anotheria.webutils.actions.*");
 		clazz.addImport("javax.servlet.http.HttpServletRequest");
 		clazz.addImport("javax.servlet.http.HttpServletResponse");
-		clazz.addImport("net.anotheria.maf.action.ActionForward");
+		clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 		clazz.addImport("net.anotheria.maf.action.ActionMapping");
 		clazz.addImport("net.anotheria.maf.bean.FormBean");	
 		clazz.addImport("net.anotheria.webutils.bean.NavigationItemBean");	
@@ -161,12 +161,13 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		closeBlock("preProcess");
 		emptyline();
 		
-		appendString("public abstract ActionForward anoDocExecute(ActionMapping mapping, T formBean, HttpServletRequest req, HttpServletResponse res) throws Exception;");
+		appendString("public abstract ActionCommand anoDocExecute(ActionMapping mapping, T formBean, HttpServletRequest req, HttpServletResponse res) throws Exception;");
 		emptyline();
 		appendGenerationPoint("generateBaseAction");
 		appendString("@Override");
-		appendString("public ActionForward execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {");
+		appendString("public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {");
 		increaseIdent();
+		System.out.println("\t\t\t\tHELLO WORLD ANODOC\t\t\t\t\t\t");
 		appendString("if (isAuthorizationRequired()){");
 			increaseIdent();
 				appendStatement("boolean authorized = checkAuthorization(req)");

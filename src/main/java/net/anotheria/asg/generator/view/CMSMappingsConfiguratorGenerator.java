@@ -278,7 +278,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		
 		clazz.addImport(Map.class);
 		clazz.addImport(HashMap.class);
-		clazz.addImport(net.anotheria.maf.action.ActionForward.class);
+		clazz.addImport(net.anotheria.maf.action.CommandForward.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMappings.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMappingsConfigurator.class);
 		clazz.addImport(IndexPageActionGenerator.getIndexPageFullName());
@@ -316,16 +316,16 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		appendString("@Override");
 		openFun("public void configureActionMappings(ActionMappings mappings)");
 
-		appendStatement("mappings.addMapping(\"index\", " + IndexPageActionGenerator.getIndexPageActionName() + ".class, new ActionForward(\"success\", "+quote(IndexPageJspGenerator.getIndexJspFullName())+"))");
-		appendStatement("mappings.addMapping(\"fileShow\", "+quote(ShowFile.class.getName())+", new ActionForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
+		appendStatement("mappings.addMapping(\"index\", " + IndexPageActionGenerator.getIndexPageActionName() + ".class, new CommandForward(\"success\", "+quote(IndexPageJspGenerator.getIndexJspFullName())+"))");
+		appendStatement("mappings.addMapping(\"fileShow\", "+quote(ShowFile.class.getName())+", new CommandForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
 		appendStatement("mappings.addMapping(\"fileUpload\", "+quote(FileAjaxUpload.class.getName())+")");
 		
 		appendStatement("mappings.addMapping(\"showTmpFile\", "+quote(ShowTmpFile.class.getName())+")");
 		appendStatement("mappings.addMapping(\"getFile\", "+quote(GetFile.class.getName())+")");
 		
-		appendStatement("mappings.addMapping(\"login\", net.anotheria.anosite.cms.action.LoginAction.class, new ActionForward(\"success\", \"/net/anotheria/anosite/cms/jsp/Login.jsp\"))");
-		appendStatement("mappings.addMapping(\"logout\", net.anotheria.anosite.cms.action.LogoutAction.class, new ActionForward(\"success\", \"/net/anotheria/anosite/cms/jsp/Login.jsp\"))");
-        appendStatement("mappings.addMapping(\"changePass\", net.anotheria.anosite.cms.action.ChangePassAction.class, new ActionForward(\"success\", \"/net/anotheria/anosite/cms/jsp/ChangePass.jsp\"))");
+		appendStatement("mappings.addMapping(\"login\", net.anotheria.anosite.cms.action.LoginAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/Login.jsp\"))");
+		appendStatement("mappings.addMapping(\"logout\", net.anotheria.anosite.cms.action.LogoutAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/Login.jsp\"))");
+        appendStatement("mappings.addMapping(\"changePass\", net.anotheria.anosite.cms.action.ChangePassAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/ChangePass.jsp\"))");
 
         appendStatement("mappings.addMapping(\"showUsages\", net.anotheria.anosite.bredcrambs.action.ShowUsagesOfDocumentAction.class)");
 
@@ -389,9 +389,9 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 //			String actionName = action.getClassName(section);
 //			clazz.addImport(actionsPackage + "." + actionName);
 			String actionName = actionsPackage + "." + action.getClassName(section);
-			appendStatement("mappings.addMapping("+ quote(action.getMappingName(section)) +", "+  actionName +".class, new ActionForward(\"success\"," + quote(action.getViewFullName(section)+".jsp") + "))");
+			appendStatement("mappings.addMapping("+ quote(action.getMappingName(section)) +", "+  actionName +".class, new CommandForward(\"success\"," + quote(action.getViewFullName(section)+".jsp") + "))");
 			if (validatedUpdateAction && action.equals(SectionAction.UPDATE)) {
-				appendStatement("mappings.addMapping("+ quote(action.getMappingName(section)) +", "+  actionName +".class, new ActionForward(\"validationError\"," + quote(SectionAction.NEW.getViewFullName(section)+".jsp") + "))");
+				appendStatement("mappings.addMapping("+ quote(action.getMappingName(section)) +", "+  actionName +".class, new CommandForward(\"validationError\"," + quote(SectionAction.NEW.getViewFullName(section)+".jsp") + "))");
 			}
 		}
 
@@ -410,7 +410,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 //			String actionName = action.getClassName();
 //			clazz.addImport(actionsPackage + "." + actionName);
 			String actionName = actionsPackage + "." + action.getClassName();
-			appendStatement("mappings.addMapping("+ quote(action.getMappingName()) +", "+  actionName +".class, new ActionForward(\"success\"," + quote(action.getViewFullName()+".jsp") + "))");
+			appendStatement("mappings.addMapping("+ quote(action.getMappingName()) +", "+  actionName +".class, new CommandForward(\"success\"," + quote(action.getViewFullName()+".jsp") + "))");
 		}
 
 	}
@@ -427,7 +427,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 //			String actionName = action.getClassName(doc, container);
 //			clazz.addImport(actionsPackage + "." + actionName);
 			String actionName = actionsPackage + "." + action.getClassName(doc, container);
-			appendStatement("mappings.addMapping("+ quote(action.getMappingName(doc, container)) +", "+  actionName +".class, new ActionForward(\"success\"," + quote(jspPath + action.getViewName(doc, container)+".jsp") + "))");
+			appendStatement("mappings.addMapping("+ quote(action.getMappingName(doc, container)) +", "+  actionName +".class, new CommandForward(\"success\"," + quote(jspPath + action.getViewName(doc, container)+".jsp") + "))");
 		}
 
 	}

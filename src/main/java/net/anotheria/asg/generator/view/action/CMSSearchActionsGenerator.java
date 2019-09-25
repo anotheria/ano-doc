@@ -81,7 +81,7 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		clazz.addImport("net.anotheria.anodoc.query2.string.ContainsStringQuery");
 		clazz.addImport("net.anotheria.asg.exception.ASGRuntimeException");
 		clazz.addImport(getSearchFBFullName());
-		clazz.addImport("net.anotheria.maf.action.ActionForward");
+		clazz.addImport("net.anotheria.maf.action.ActionCommand");
 		clazz.addImport("net.anotheria.maf.action.ActionMapping");
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
 		clazz.addImport("net.anotheria.maf.bean.annotations.Form");
@@ -95,13 +95,13 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		startClassBody();
 
 		appendString("@Override");
-		appendString("public ActionForward execute(ActionMapping mapping, @Form(SearchFB.class) FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
+		appendString("public ActionCommand execute(ActionMapping mapping, @Form(SearchFB.class) FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
 		increaseIdent();
 		appendString("return super.execute(mapping, formBean, req, res);");
 		closeBlock("");
 		emptyline();
 
-		appendString("public ActionForward anoDocExecute(ActionMapping mapping, SearchFB formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
+		appendString("public ActionCommand anoDocExecute(ActionMapping mapping, SearchFB formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
 		increaseIdent();
 		appendString("DocumentQuery query = new ContainsStringQuery(\"*\" + formBean.getCriteria() + \"*(\\r\\n)?\");");
 		appendString("QueryResult result = executeQuery(formBean.getModule(), formBean.getDocument(), query, formBean.getSearchArea());");
