@@ -1,11 +1,5 @@
 package net.anotheria.asg.generator.model.docs;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Iterator;
-
 import net.anotheria.anodoc.util.mapper.ObjectMapperUtil;
 import net.anotheria.asg.generator.CommentGenerator;
 import net.anotheria.asg.generator.Context;
@@ -14,10 +8,20 @@ import net.anotheria.asg.generator.GeneratedClass;
 import net.anotheria.asg.generator.GeneratorDataRegistry;
 import net.anotheria.asg.generator.IGenerateable;
 import net.anotheria.asg.generator.IGenerator;
-import net.anotheria.asg.generator.meta.*;
+import net.anotheria.asg.generator.meta.MetaDocument;
+import net.anotheria.asg.generator.meta.MetaLink;
+import net.anotheria.asg.generator.meta.MetaListProperty;
+import net.anotheria.asg.generator.meta.MetaModule;
+import net.anotheria.asg.generator.meta.MetaProperty;
 import net.anotheria.asg.generator.model.AbstractServiceGenerator;
 import net.anotheria.asg.generator.model.DataFacadeGenerator;
 import net.anotheria.asg.generator.model.ServiceGenerator;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * <p>CMSBasedServiceGenerator class.</p>
@@ -34,7 +38,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 		List<FileEntry> ret = new ArrayList<FileEntry>();
 		ret.add(new FileEntry(generateFactory(mod)));
 		ret.add(new FileEntry(generateImplementation(mod)));
-		ret.addAll(generateCRUDServices(mod));
+		//ret.addAll(generateCRUDServices(mod)); 2019-09-25 removed crud service generation, it is not used anyway and was just generating spam.
 
 		return ret;
 	}
