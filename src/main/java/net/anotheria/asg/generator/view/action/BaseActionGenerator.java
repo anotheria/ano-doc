@@ -80,6 +80,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		
 		appendStatement("public static final String BEAN_MAIN_NAVIGATION = \"mainNavigation\"");
 		appendStatement("public static final String BEAN_CURRENT_SYSTEM = \"currentSystem\"");
+		appendStatement("public static final String BEAN_CURRENT_APPLICATION = \"currentApplication\"");
 		appendStatement("public static final String BEAN_SEARCH_SCOPE = \"searchScope\"");
 		appendStatement("public static final String BEAN_DOCUMENT_DEF_NAME = \"documentName\"");
 		appendStatement("public static final String BEAN_MODULE_DEF_NAME = \"moduleName\"");
@@ -160,6 +161,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
         emptyline();
         appendString("prepareMenu(req);");
 		appendStatement("addBeanToSession(req, BEAN_CURRENT_SYSTEM, systemConfigurationAPI.getCurrentSystemExpanded())");
+		appendStatement("addBeanToSession(req, BEAN_CURRENT_APPLICATION, systemConfigurationAPI.getCurrentApplication())");
 		closeBlock("preProcess");
 		emptyline();
 		
