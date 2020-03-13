@@ -104,7 +104,7 @@ public class IndexPageActionGenerator extends AbstractGenerator {
 		clazz.addImport("javax.servlet.http.HttpServletRequest");
 		clazz.addImport("javax.servlet.http.HttpServletResponse");
 		emptyline();
-		clazz.addImport("net.anotheria.maf.action.ActionForward");
+		clazz.addImport("net.anotheria.maf.action.ActionCommand");
 		clazz.addImport("net.anotheria.maf.action.ActionMapping");
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
 		clazz.addImport("net.anotheria.webutils.bean.NavigationItemBean");
@@ -132,7 +132,7 @@ public class IndexPageActionGenerator extends AbstractGenerator {
 		append(closeBlock());
 		emptyline();
 
-		appendString("public ActionForward anoDocExecute(ActionMapping aMapping, FormBean aAf, HttpServletRequest aReq, HttpServletResponse aRes) throws Exception {");
+		appendString("public ActionCommand anoDocExecute(ActionMapping aMapping, FormBean aAf, HttpServletRequest aReq, HttpServletResponse aRes) throws Exception {");
 		increaseIdent();
 		appendStatement("addBeanToRequest(aReq, FLAG_DISABLED_SEARCH, true)");
 		
@@ -150,7 +150,7 @@ public class IndexPageActionGenerator extends AbstractGenerator {
 		appendString("myList.add(dcFB);");
 		closeBlock("closed for");
 		appendString("aReq.setAttribute(\"changes\", myList);");
-		appendStatement("return aMapping.findForward(\"success\")");
+		appendStatement("return aMapping.success()");
 		append(closeBlock());
 		emptyline();
 		
