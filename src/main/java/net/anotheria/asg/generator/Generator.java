@@ -200,7 +200,7 @@ public class Generator {
      * @return a {@link java.lang.String} object.
      */
     public static String getVersionString(){
-        return "2.6.3";
+        return "2.6.10";
     }
 
     /**
