@@ -131,7 +131,7 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		appendString("req.setAttribute(\"result\", beans);");
 		closeBlock("");
 		appendString("req.setAttribute(\"criteria\", formBean.getCriteria());");
-		appendString("return mapping.findForward(\"success\");");
+		appendString("return mapping.success();");
 		closeBlock("");
 		emptyline();
 		appendString("private QueryResult executeQuery(String sectionName, String documentName, DocumentQuery query, String searchArea) throws ASGRuntimeException{");
