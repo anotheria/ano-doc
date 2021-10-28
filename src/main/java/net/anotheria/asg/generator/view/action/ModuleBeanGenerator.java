@@ -420,9 +420,12 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 			//;
 			if (p.isMultilingual()){
 				String l = getElementLanguage(element);
-				generateMethods(new MultilingualFieldElement(l, pColl), new MetaListProperty(element.getName()+"Collection", new MetaProperty("temp", new ObjectType("LabelValueBean"))));
-				generateMethods(new MultilingualFieldElement(l, pCurr), new MetaProperty(element.getName()+"CurrentValue", MetaProperty.Type.STRING));
-				generateMethods(new MultilingualFieldElement(l, pIdOfCurr), new MetaProperty(element.getName()+"IdOfCurrentValue", MetaProperty.Type.STRING));
+				MetaListProperty pCollProperty = new MetaListProperty(element.getName()+"Collection", new MetaProperty("temp", new ObjectType("LabelValueBean")));
+				pCollProperty.setMultilingual(true);
+				generateMethods(new MultilingualFieldElement(l, pColl), pCollProperty);
+
+				generateMethods(new MultilingualFieldElement(l, pCurr), new MetaProperty(element.getName()+"CurrentValue", MetaProperty.Type.STRING, true));
+				generateMethods(new MultilingualFieldElement(l, pIdOfCurr), new MetaProperty(element.getName()+"IdOfCurrentValue", MetaProperty.Type.STRING, true));
 			}else{
 				generateMethods(pColl, new MetaListProperty(element.getName()+"Collection", new MetaProperty("temp", new ObjectType("LabelValueBean"))));
 				generateMethods(pCurr, new MetaProperty(element.getName()+"CurrentValue", MetaProperty.Type.STRING));

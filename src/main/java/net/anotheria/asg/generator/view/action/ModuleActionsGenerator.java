@@ -2375,7 +2375,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 					appendString( "try{");
 					increaseIdent();
-					String getter = getServiceGetterCall(targetModule)+".get"+targetDocument.getName()+"("+doc.getVariableName()+"."+p.toGetter()+"()).getName()";
+					String getter = getServiceGetterCall(targetModule)+".get"+targetDocument.getName()+"("+doc.getVariableName()+"."+p.toGetter(lang)+"()).getName()";
 
 					String getterUnknown = getServiceGetterCall(targetModule)+".get"+targetDocument.getName()+"("+doc.getVariableName()+"."+p.toGetter()+"())";
 

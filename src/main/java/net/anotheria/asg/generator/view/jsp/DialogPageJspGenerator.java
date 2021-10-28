@@ -319,7 +319,7 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 		// *** CMS2.0 START ***
 
 		List<MetaViewElement> richTextElementsRegistry = new ArrayList<MetaViewElement>();
-		List<String> linkElementsRegistry = new ArrayList<String>();
+		List<LinkElement> linkElementsRegistry = new ArrayList<>();
 		// *** CMS2.0 FINISH ***
 
 		MetaDocument document = ((MetaModuleSection) metaSection).getDocument();
@@ -336,8 +336,14 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 				if (element.isRich() && p.getType() == MetaProperty.Type.TEXT)
 					richTextElementsRegistry.add(element);
 
-				if (p.isLinked())
-					linkElementsRegistry.add(element.getName());
+				if (p.isLinked()) {
+					if (p.isMultilingual()) {
+						linkElementsRegistry.add(new LinkElement(element.getName(), getElementLanguage(element)));
+					} else {
+						linkElementsRegistry.add(new LinkElement(element.getName(), ""));
+					}
+				}
+
 			}
 			// *** CMS2.0 FINISH ***
 
@@ -656,9 +662,11 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 	                         anoNotEmptyEndTag;
 	       }
 			//quoted "name" attr in em, cause w3c validation says it's error
-			ret += "<em id="+quote(StringUtils.capitalize(p.getName())+"CurrentValue")+" name="+quote(p.getName())+" class=\"selectBox\"></em><div id=\""+StringUtils.capitalize(p.getName(lang))+"Selector\"></div>";
-			ret += " (<i>old:</i>&nbsp;<ano:write property="+quote(p.getName()+"CurrentValue")+" name="+quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, ((MetaModuleSection)currentSection).getDocument()))+" filter="+quote("false")+"/>"+
-	                ")&nbsp;"+editLink;
+
+		String langParam = p.isMultilingual() ? lang : "";
+		ret += "<em id="+quote(StringUtils.capitalize(p.getName())+"CurrentValue" + langParam)+" name="+quote(p.getName() + langParam)+" class=\"selectBox\"></em><div id=\""+StringUtils.capitalize(p.getName(lang))+"Selector\"></div>";
+		ret += " (<i>old:</i>&nbsp;<ano:write property="+quote(p.getName()+"CurrentValue" + langParam)+" name="+quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, ((MetaModuleSection)currentSection).getDocument()))+" filter="+quote("false")+"/>"+
+				")&nbsp;"+editLink;
 
 		//*** CMS2.0 FINISH ***
 
@@ -832,30 +840,30 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 		return ret;
 	}
 
-	private void generateLinkElementEditorJS(MetaDocument doc, List<String> linkElements){
+	private void generateLinkElementEditorJS(MetaDocument doc, List<LinkElement> linkElements){
 		appendString("<script type=\"text/javascript\">");
 		increaseIdent();
-		for(String elName: linkElements){
+		for(LinkElement el: linkElements){
 
 			//FIXME: here is assumed that links can't be multilanguage
-			String elCapitalName = StringUtils.capitalize(elName);
+			String elCapitalName = StringUtils.capitalize(el.getName() + el.getLang());
 			String beanName = CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, ((MetaModuleSection)currentSection).getDocument());
 
-			appendString("//Initializing items for " + elName);
-			appendString("var " +elName+ "Json = {items:[");
-			appendString("<ano:iterate id=\"item\" name="+quote(beanName)+" property=\""+elName+"Collection\" type=\"net.anotheria.webutils.bean.LabelValueBean\">");
+			appendString("//Initializing items for " + elCapitalName);
+			appendString("var " +el.getName() + el.getLang() + "Json = {items:[");
+			appendString("<ano:iterate id=\"item\" name="+quote(beanName)+" property=\""+el.getName()+"Collection" + el.getLang() + "\" type=\"net.anotheria.webutils.bean.LabelValueBean\">");
 			increaseIdent();
 			appendString("{id:\"<ano:write name=\"item\" property=\"value\" filter=\"true\"/>\",name:\"<ano:write name=\"item\" property=\"label\" filter=\"true\"/>\"},");
 			//appendString("{id:\"${item.value}\",name:\"${item.label}\"},");
 			decreaseIdent();
 			appendString("</ano:iterate>");
 			appendString("]};");
-			appendString("var selection"+elCapitalName+"Json = {");
+			appendString("var selection" + elCapitalName + "Json = {");
 			increaseIdent();
-			appendString("id:'<ano:write name="+quote(beanName)+" property="+quote(elName)+"/>',name:'<ano:write name="+quote(beanName)+" property="+quote(elName + "CurrentValue")+"/>'");
+			appendString("id:'<ano:write name="+quote(beanName)+" property="+quote(el.getName() + el.getLang())+"/>',name:'<ano:write name="+quote(beanName)+" property="+quote(el.getName() + "CurrentValue" + el.getLang())+"/>'");
 			decreaseIdent();
 			appendString("};");
-			appendString("new YAHOO.anoweb.widget.ComboBox("+quote(elCapitalName+"CurrentValue")+",\""+elCapitalName+"Selector\","+elName+"Json,selection"+elCapitalName+"Json);");
+			appendString("new YAHOO.anoweb.widget.ComboBox("+quote(StringUtils.capitalize(el.getName())+"CurrentValue" + el.getLang())+",\""+elCapitalName+"Selector\","+el.getName() + el.getLang()+"Json,selection"+elCapitalName+"Json);");
 		}
 		decreaseIdent();
 		appendString("</script>");
@@ -1146,4 +1154,29 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
         }
     }
 
+	private static class LinkElement{
+		private String name;
+		private String lang;
+
+		public LinkElement(String name, String lang) {
+			this.name = name;
+			this.lang = lang;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getLang() {
+			return lang;
+		}
+
+		public void setLang(String lang) {
+			this.lang = lang;
+		}
+	}
 }
