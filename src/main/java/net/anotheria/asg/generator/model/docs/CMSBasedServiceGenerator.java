@@ -641,6 +641,39 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			emptyline();
 			appendStatement("data.put(dataObject)");
 			emptyline();
+
+			for (MetaProperty p: doc.getProperties()) {
+				if (p.getType() == MetaProperty.Type.IMAGE || (p.getType() == MetaProperty.Type.LIST && ((MetaListProperty) p).getContainedProperty().getType() == MetaProperty.Type.IMAGE)) {
+					clazz.addImport("net.anotheria.webutils.filehandling.actions.FileStorage");
+					clazz.addImport("java.io.File");
+					clazz.addImport("java.io.FileNotFoundException");
+					clazz.addImport("com.sun.jersey.api.client.Client");
+					clazz.addImport("com.sun.jersey.api.client.WebResource");
+					clazz.addImport("com.sun.jersey.api.client.ClientResponse");
+					clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
+					clazz.addImport("net.anotheria.anosite.config.DocumentTransferConfig");
+					clazz.addImport("com.sun.jersey.multipart.FormDataMultiPart");
+					clazz.addImport("com.sun.jersey.multipart.file.FileDataBodyPart");
+					clazz.addImport("javax.ws.rs.core.MediaType");
+
+
+					appendStatement("File imageFile = FileStorage.getFile(" + doc.getVariableName()  + "." + p.toBeanGetter() + "())");
+					appendStatement("Client client = JerseyClientUtil.getClientInstance()");
+					appendString("for (String domain :DocumentTransferConfig.getInstance().getDomains()) {");
+					increaseIdent();
+					appendStatement("WebResource webResource = client.resource(domain + \"/api/asgimage/upload\")");
+					appendStatement("FormDataMultiPart formDataMultiPart = new FormDataMultiPart()");
+					appendStatement("formDataMultiPart.bodyPart(new FileDataBodyPart(\"file\", imageFile, MediaType.APPLICATION_OCTET_STREAM_TYPE))");
+					appendStatement("ClientResponse response = webResource.type(MediaType.MULTIPART_FORM_DATA_TYPE).post(ClientResponse.class, formDataMultiPart)");
+					appendStatement("String responseResult = response.getEntity(String.class)");
+					appendStatement("log.info(responseResult)");
+					closeBlockNEW();
+
+					appendCatch("FileNotFoundException");
+					appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + " (\"Problem with getting image file for " + doc.getName() + "\" + e.getMessage())");
+				}
+			}
+
 			boolean attachedDocumentExists = metaModules.size() != 0;
 			if(attachedDocumentExists) {
 				Iterator<MetaModule> moduleIteratorFetch = metaModules.iterator();

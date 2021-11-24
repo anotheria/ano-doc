@@ -18,6 +18,7 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         entries.add(new FileEntry(generateParsingUtilService(modules)));
         entries.add(new FileEntry(generateEnumModules(modules)));
         entries.add(new FileEntry(generateEnumDocuments(modules)));
+        entries.add(new FileEntry(generateRestResourceForImages()));
         return entries;
     }
 
@@ -170,6 +171,84 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         appendStatement("log.error(\"There is no needed module\")");
         appendStatement("throw new ASGRuntimeException(\"No such module\")");
         closeBlockNEW();
+        closeBlockNEW();
+
+        return clazz;
+    }
+
+    private GeneratedArtefact generateRestResourceForImages() {
+
+        GeneratedClass clazz = new GeneratedClass();
+        startNewJob(clazz);
+        appendGenerationPoint("generateUploadImageResource");
+
+        clazz.setPackageName(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".rest");
+
+        clazz.addImport("com.sun.jersey.core.header.FormDataContentDisposition");
+        clazz.addImport("com.sun.jersey.multipart.FormDataParam");
+        clazz.addImport("javax.ws.rs.Consumes");
+        clazz.addImport("javax.ws.rs.Produces");
+        clazz.addImport("javax.ws.rs.POST");
+        clazz.addImport("javax.ws.rs.Path");
+        clazz.addImport("javax.ws.rs.core.Context");
+        clazz.addImport("javax.ws.rs.core.MediaType");
+        clazz.addImport("javax.ws.rs.core.Response");
+        clazz.addImport("javax.ws.rs.core.UriInfo");
+        clazz.addImport("java.io.File");
+        clazz.addImport("java.io.FileOutputStream");
+        clazz.addImport("java.io.IOException");
+        clazz.addImport("java.io.InputStream");
+        clazz.addImport("java.io.OutputStream");
+        clazz.addImport("org.slf4j.Logger");
+        clazz.addImport("org.slf4j.LoggerFactory");
+        clazz.addImport("net.anotheria.webutils.filehandling.FileStorageConfig");
+        clazz.addImport("net.anotheria.util.log.LogMessageUtil");
+
+        clazz.addAnnotation("@Path(\"/asgimage\")");
+        clazz.setName("UploadImageResource");
+        startClassBody();
+
+        appendStatement("private static final Logger LOGGER = LoggerFactory.getLogger(UploadImageResource.class)");
+        emptyline();
+        appendStatement("private static final FileStorageConfig CONFIG = FileStorageConfig.getInstance()");
+        emptyline();
+        appendString("@Context");
+        appendStatement("private UriInfo context");
+        emptyline();
+        appendString("public UploadImageResource(){}");
+        emptyline();
+        appendString("@POST");
+        appendString("@Path(\"/upload\")");
+        appendString("@Consumes(MediaType.MULTIPART_FORM_DATA)");
+        appendString("@Produces(MediaType.APPLICATION_JSON)");
+        openFun("public Response uploadFile( @FormDataParam(\"file\") InputStream uploadedInputStream, @FormDataParam(\"file\") FormDataContentDisposition fileDetail)");
+        appendString("if (uploadedInputStream == null || fileDetail == null)");
+        increaseIdent();
+        appendStatement("return Response.status(400).entity(\"Invalid form data\").build()");
+        decreaseIdent();
+        emptyline();
+        appendStatement("String uploadedFileLocation = CONFIG.getDirectory() + File.separator + fileDetail.getFileName()");
+        openTry();
+        appendStatement("writeToFile(uploadedInputStream, uploadedFileLocation)");
+        appendCatch("IOException");
+        appendStatement("String failMsg = LogMessageUtil.failMsg(e)");
+        appendStatement("LOGGER.error(failMsg)");
+        appendStatement("return Response.status(500).entity(failMsg).build()");
+        closeBlockNEW();
+        appendStatement("return Response.status(201).build()");
+        closeBlockNEW();
+        emptyline();
+
+        openFun("private void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) throws IOException");
+        appendStatement("OutputStream out = new FileOutputStream(uploadedFileLocation)");
+        appendStatement("int read = 0");
+        appendStatement("byte[] bytes = new byte[4096];");
+        appendString("while ((read = uploadedInputStream.read(bytes)) != -1) {");
+        increaseIdent();
+        appendStatement("out.write(bytes, 0, read)");
+        closeBlockNEW();
+        appendStatement("out.flush()");
+        appendStatement("out.close()");
         closeBlockNEW();
 
         return clazz;
