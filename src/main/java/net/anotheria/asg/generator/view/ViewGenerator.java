@@ -11,10 +11,16 @@ import net.anotheria.asg.generator.view.action.BaseActionGenerator;
 import net.anotheria.asg.generator.view.action.BaseViewActionGenerator;
 import net.anotheria.asg.generator.view.action.CMSSearchActionsGenerator;
 import net.anotheria.asg.generator.view.action.IndexPageActionGenerator;
+import net.anotheria.asg.generator.view.action.LocalizationBundleExportToTxtActionGenerator;
+import net.anotheria.asg.generator.view.action.LocalizationBundleExportViewActionGenerator;
+import net.anotheria.asg.generator.view.action.LocalizationBundleImportServletGenerator;
+import net.anotheria.asg.generator.view.action.LocalizationBundleImportViewActionGenerator;
 import net.anotheria.asg.generator.view.action.ModuleActionsGenerator;
 import net.anotheria.asg.generator.view.action.ModuleBeanGenerator;
 import net.anotheria.asg.generator.view.jsp.IndexPageJspGenerator;
 import net.anotheria.asg.generator.view.jsp.JspGenerator;
+import net.anotheria.asg.generator.view.jsp.LocalizationBundleExportJspGenerator;
+import net.anotheria.asg.generator.view.jsp.LocalizationBundleImportJspGenerator;
 import net.anotheria.asg.generator.view.jsp.MenuJspGenerator;
 import net.anotheria.asg.generator.view.meta.MetaCustomSection;
 import net.anotheria.asg.generator.view.meta.MetaModuleSection;
@@ -62,6 +68,21 @@ public class ViewGenerator extends AbstractAnoDocGenerator {
 		
 		System.out.println("ViewGenerator: IndexPageActionGenerator");
 		files.add(new IndexPageJspGenerator().generate(context));
+
+        System.out.println("ViewGenerator: LocalizationBundleExportActionGenerator");
+        files.addAll(new LocalizationBundleExportViewActionGenerator().generate(context));
+        System.out.println("ViewGenerator: LocalizationBundleImportActionGenerator");
+        files.addAll(new LocalizationBundleImportViewActionGenerator().generate(context));
+
+        System.out.println("ViewGenerator: LocalizationBundleExportToTxtActionGenerator");
+        files.addAll(new LocalizationBundleExportToTxtActionGenerator().generate(context));
+        System.out.println("ViewGenerator: LocalizationBundleImportServletGenerator");
+        files.addAll(new LocalizationBundleImportServletGenerator().generate());
+
+        System.out.println("ViewGenerator: LocalizationBundleExportJspGenerator");
+        files.add(new LocalizationBundleExportJspGenerator().generate(context));
+        System.out.println("ViewGenerator: LocalizationBundleImportJspGenerator");
+        files.add(new LocalizationBundleImportJspGenerator().generate(context));
 		
 		System.out.println("ViewGenerator: MenuJspGenerator");
 		files.add(new MenuJspGenerator().generate(views, context));

@@ -20,6 +20,7 @@ import net.anotheria.util.StringUtils;
 import net.anotheria.util.sorter.SortType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -342,6 +343,16 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		appendString("protected List<NavigationItemBean> getMainNavigation(HttpServletRequest req) {");
 		increaseIdent();
 		appendString("List<NavigationItemBean> menu = new ArrayList<NavigationItemBean>();");
+        MetaView toolsView = new MetaView("Tools");
+        toolsView.setTitle("Tools");
+        toolsView.setRequiredRoles(Arrays.asList("admin", "developer", "editor"));
+        MetaCustomSection localizationBundleExport = new MetaCustomSection("LocalizationBundleExport");
+        localizationBundleExport.setPath("asgLocalizationBundleExportView");
+        MetaCustomSection localizationBundleImport = new MetaCustomSection("LocalizationBundleImport");
+        localizationBundleImport.setPath("asgLocalizationBundleImportView");
+        toolsView.addSection(localizationBundleExport);
+        toolsView.addSection(localizationBundleImport);
+        views.add(toolsView);
 		for (int i=0; i<views.size(); i++){
 			MetaView view = views.get(i);
 			MetaSection first = view.getSections().get(0);
