@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Generator class for the index page action in cms.
+ * Generator class for localization bundle export page.
  *
- * @author abolbat
+ * @author asamoilich
  * @version $Id: $Id
  */
 public class LocalizationBundleExportViewActionGenerator extends AbstractGenerator {

@@ -9,7 +9,7 @@ import net.anotheria.asg.generator.meta.MetaModule;
 /**
  * <p>LocalizationBundleImportJspGenerator class.</p>
  *
- * @author another
+ * @author asamoilich
  * @version $Id: $Id
  */
 public class LocalizationBundleImportJspGenerator extends AbstractJSPGenerator {

@@ -11,9 +11,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Generator class for the index page action in cms.
+ * Generator class for localization bundle import servlet.
  *
- * @author abolbat
+ * @author asamoilich
  * @version $Id: $Id
  */
 public class LocalizationBundleImportServletGenerator extends AbstractGenerator {
@@ -76,7 +76,7 @@ public class LocalizationBundleImportServletGenerator extends AbstractGenerator 
                 "        try {\n" +
                 "            Part file = request.getPart(\"file\");\n" +
                 "            String locale = request.getParameter(\"locale\");\n" +
-                "            String result = IOUtils.toString(file.getInputStream(), StandardCharsets.UTF_8);\n" +
+                "            String result = IOUtils.toString(file.getInputStream(), StandardCharsets.UTF_8.name());\n" +
                 "            String[] values = result.split(\"\\n\");\n" +
                 "\n" +
                 "            Map<String, Map<String, String>> bundlesMap = new HashMap<>();\n" +
@@ -99,7 +99,7 @@ public class LocalizationBundleImportServletGenerator extends AbstractGenerator 
                 "                    }\n" +
                 "\n" +
                 "                    if (!bundlesMap.containsKey(bundleId)) {\n" +
-                "                        bundlesMap.put(bundleId, new HashMap<>());\n" +
+                "                        bundlesMap.put(bundleId, new HashMap<String, String>());\n" +
                 "                    }\n" +
                 "\n" +
                 "                    Map<String, String> keyValueMap = bundlesMap.get(bundleId);\n" +
