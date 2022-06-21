@@ -423,7 +423,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		emptyline();
 
 
-		//// Actually Section  for  Session working with  Session attribute -- Locking && unlocking!!!
+		//// Actually Section  for  Session working with  Session attribute -- Locking and unlocking!!!
 
 		appendComment("Actually Session Attribute name for holding collection of locked objects....");
 		appendStatement("private static final String LOCKED_OBJECTS_COLLECTION_SESSION_ATTRIBUTE_NAME = \"lokedDocumentsCollection\"");
@@ -435,7 +435,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		emptyline();
 		emptyline();
 
-		appendComment("Adding attribute to the session list as <a>LockedDocumentAttribute</a>. for Locking && Unlocking functionality");
+		appendComment("Adding attribute to the session list as LockedDocumentAttribute. for Locking and Unlocking functionality");
 		appendString("protected void addLockedAttribute(HttpServletRequest req, AbstractASGDocument doc) {");
 		increaseIdent();
 		appendStatement("List<LockedDocumentAttribute> attributes = getLockedAttributesList(req)");
@@ -454,7 +454,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
         closeBlockNEW();
 		emptyline();
 
-		appendComment("Removing attributes List<LockedDocumentAttribute> - from session.");
+		appendComment("Removing attributes List from session.");
 		appendString("protected void removeLockedAttribute(HttpServletRequest req, AbstractASGDocument doc) {");
 		increaseIdent();
 		appendStatement("List<LockedDocumentAttribute> attributes = getLockedAttributesList(req)");
@@ -490,7 +490,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		emptyline();
 		emptyline();
 
-		appendComment("Actually simplest been - which shoul hold information  about document ID  && Clazz.");
+		appendComment("Actually simplest been - which should hold information  about document ID and Clazz.");
 		appendString("public static class LockedDocumentAttribute implements Serializable{");
 		emptyline();
 		increaseIdent();
