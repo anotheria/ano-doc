@@ -296,7 +296,8 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		clazz.addImport(LocalizationBundleExportViewActionGenerator.getLocalizationBundleExportPageFullName());
 		clazz.addImport(LocalizationBundleImportViewActionGenerator.getLocalizationBundleImportPageFullName());
 		clazz.addImport(LocalizationBundleExportToTxtActionGenerator.getLocalizationBundleExportPageFullName());
-		
+		clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleMakeParentsMafAction");
+
 
 		clazz.addInterface("ActionMappingsConfigurator");
 		clazz.setName(getClassSimpleName());
@@ -332,10 +333,10 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		appendStatement("mappings.addMapping(\"index\", " + IndexPageActionGenerator.getIndexPageActionName() + ".class, new CommandForward(\"success\", "+quote(IndexPageJspGenerator.getIndexJspFullName())+"))");
 		appendStatement("mappings.addMapping(\"asgLocalizationBundleExportView\", " + LocalizationBundleExportViewActionGenerator.getLocalizationBundleExportPageActionName() + ".class, new CommandForward(\"success\", "+quote(LocalizationBundleExportJspGenerator.getLocalizationBundleExportJspFullName())+"))");
 		appendStatement("mappings.addMapping(\"asgLocalizationBundleImportView\", " + LocalizationBundleImportViewActionGenerator.getLocalizationBundleImportPageActionName() + ".class, new CommandForward(\"success\", "+quote(LocalizationBundleImportJspGenerator.getLocalizationBundleImportJspFullName())+"))");
+		appendStatement("mappings.addMapping(\"asgLocalizationBundleMakeParentsView\", net.anotheria.anosite.cms.action.LocalizationBundleMakeParentsMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleMakeParents.jsp\"))");
 		appendStatement("mappings.addMapping(\"fileShow\", "+quote(ShowFile.class.getName())+", new CommandForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
 		appendStatement("mappings.addMapping(\"fileUpload\", "+quote(FileAjaxUpload.class.getName())+")");
         appendStatement("mappings.addMapping(\"exportLocalizationBundlesToTxt\", " + LocalizationBundleExportToTxtActionGenerator.getLocalizationBundleExportPageActionName() + ".class)");
-//        appendStatement("mappings.addMapping(\"ImportLocalizationBundle\", " + LocalizationBundleImportActionGenerator.getLocalizationBundleImportPageActionName() + ".class)");
 
 		appendStatement("mappings.addMapping(\"showTmpFile\", "+quote(ShowTmpFile.class.getName())+")");
 		appendStatement("mappings.addMapping(\"getFile\", "+quote(GetFile.class.getName())+")");

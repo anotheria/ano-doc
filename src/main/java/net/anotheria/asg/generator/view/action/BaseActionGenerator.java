@@ -350,8 +350,11 @@ public class BaseActionGenerator extends AbstractActionGenerator {
         localizationBundleExport.setPath("asgLocalizationBundleExportView");
         MetaCustomSection localizationBundleImport = new MetaCustomSection("LocalizationBundleImport");
         localizationBundleImport.setPath("asgLocalizationBundleImportView");
+        MetaCustomSection localizationBundleMakeParents = new MetaCustomSection("LocalizationBundleMakeParents");
+        localizationBundleMakeParents.setPath("asgLocalizationBundleMakeParentsView");
         toolsView.addSection(localizationBundleExport);
         toolsView.addSection(localizationBundleImport);
+        toolsView.addSection(localizationBundleMakeParents);
         views.add(toolsView);
 		for (int i=0; i<views.size(); i++){
 			MetaView view = views.get(i);
