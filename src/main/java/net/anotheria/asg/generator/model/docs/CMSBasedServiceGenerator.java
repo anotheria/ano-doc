@@ -234,7 +234,6 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			emptyline();
 
 			appendComment("Returns the "+doc.getName()+" objects with the specified ids.");
-			appendString("@Override");
 			appendString("public "+listDecl+" get"+doc.getMultiple()+"(List<String> ids){");
 	        increaseIdent();
 	        appendString("if (ids==null || ids.size()==0)");
@@ -253,7 +252,6 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			emptyline();
 
 	        appendComment("Returns the "+doc.getName()+" objects with the specified ids, sorted by given sorttype.");
-			appendString("@Override");
 			appendString("public "+listDecl+" get"+doc.getMultiple()+"(List<String> ids, SortType sortType){");
 	        increaseIdent();
 			appendStatement("return StaticQuickSorter.sort(get"+doc.getMultiple()+"(ids), sortType)");
