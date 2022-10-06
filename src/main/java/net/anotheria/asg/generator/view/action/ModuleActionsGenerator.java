@@ -2183,8 +2183,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		addStandardActionImports(clazz);
 		clazz.addImport(ModuleBeanGenerator.getDialogBeanImport(dialog, doc));
 		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-		clazz.addImport("net.anotheria.asg.util.helper.cmsview.CMSViewHelperUtil");
-		clazz.addImport("net.anotheria.asg.util.helper.cmsview.CMSViewHelperRegistry");
 		if (doc.isMultilingual())
 			clazz.addImport("net.anotheria.asg.data.MultilingualObject");
 
