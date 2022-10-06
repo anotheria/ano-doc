@@ -1001,9 +1001,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 	    clazz.addImport(ModuleBeanGenerator.getListItemBeanImport(GeneratorDataRegistry.getInstance().getContext(), doc));
 
-		clazz.addImport("net.anotheria.util.slicer.Slicer");
-		clazz.addImport("net.anotheria.util.slicer.Slice");
-		clazz.addImport("net.anotheria.util.slicer.Segment");
         //LOckableObject import!!!
         if(StorageType.CMS.equals(doc.getParentModule().getStorageType())){
            clazz.addImport("net.anotheria.asg.data.LockableObject");
