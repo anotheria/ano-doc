@@ -198,14 +198,12 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
 		clazz.addImport("net.anotheria.asg.util.filter.DocumentFilter");
+		clazz.addImport(ActionUtils.class);
 		clazz.addImport("net.anotheria.util.xml.XMLNode");
 		addStandardActionImports(clazz);
 		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 		clazz.addImport(DataFacadeGenerator.getSortTypeImport(doc));
 
-		clazz.addImport("net.anotheria.util.slicer.Slicer");
-		clazz.addImport("net.anotheria.util.slicer.Slice");
-		clazz.addImport("net.anotheria.util.slicer.Segment");
 		clazz.addImport("net.anotheria.asg.util.bean.PagingLink");
 		clazz.addImport("org.slf4j.Logger");
 		clazz.addImport("org.slf4j.LoggerFactory");
@@ -367,28 +365,12 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		}
 		emptyline();
 
-		//paging start
-		appendCommentLine("paging");
-		appendStatement("int pageNumber = 1");
-		appendString("try{");
-		appendIncreasedStatement("pageNumber = Integer.parseInt(req.getParameter(" + quote("pageNumber") + "))");
-		appendString("}catch(Exception ignored){}");
-		appendStatement("Integer lastItemsOnPage = (Integer)req.getSession().getAttribute(\"currentItemsOnPage\")");
-		appendStatement("int itemsOnPage = lastItemsOnPage == null ? 20 : lastItemsOnPage");
-		appendString("try{");
-		appendIncreasedStatement("itemsOnPage = Integer.parseInt(req.getParameter(" + quote("itemsOnPage") + "))");
-		appendString("}catch(Exception ignored){}");
-		appendStatement("Slice<" + doc.getName() + "> slice = Slicer.slice(new Segment(pageNumber, itemsOnPage), "+listName+")");
-		appendStatement(listName+"= slice.getSliceData()");
+		appendStatement("addBeanToRequest(req, "+quote(listName)+", "+listName+")");
 		emptyline();
 
 		appendStatement("XMLNode beans = " + getServiceGetterCall(section.getModule()) + ".export" + doc.getMultiple() + "ToXML(" + listName + ")");
 		emptyline();
 
-		appendStatement("req.setAttribute(" + quote("currentpage") + ", pageNumber)");
-		appendStatement("req.setAttribute(" + quote("currentItemsOnPage") + ", itemsOnPage)");
-		appendStatement("req.getSession().setAttribute(" + quote("currentItemsOnPage") + ", itemsOnPage)");
-		appendStatement("req.setAttribute(" + quote("PagingSelector") + ", ITEMS_ON_PAGE_SELECTOR)");
 		emptyline();
 		//paging end
 		appendComment("for XML node - page");
