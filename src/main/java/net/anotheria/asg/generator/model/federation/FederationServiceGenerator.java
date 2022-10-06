@@ -162,7 +162,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 	    	emptyline();
 	    }
 	    
-	    //initialize federated servises;
+	    //initialize federated services;
 	    appendStatement("federatedServiceMap = new HashMap<String, Object>("+federatedModules.size()+")");
 	    for (FederatedModuleDef fedDef : federatedModules){
 	    	MetaModule target = targetModules.get(fedDef.getKey());
@@ -264,7 +264,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 	        
 	        //delete multiple
 	        appendComment("Deletes multiple "+doc.getName()+" objects.");
-	        appendStatement("public void delete"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause+"{");
+			appendString("public void delete"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause+"{");
 	        increaseIdent();
 	        appendStatement("throw new RuntimeException("+quote("Not yet implemented")+")");
 	        closeBlockNEW();
@@ -316,7 +316,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 	        
 	        //create multiple
 	        appendComment("Creates multiple new "+doc.getName()+" objects.\nReturns the created versions.");
-	        appendStatement("public "+listDecl+" create"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause+"{");
+			appendString("public "+listDecl+" create"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause+"{");
 	        increaseIdent();
 	        appendStatement("throw new AssertionError(\"not implemented.\")");
 	        closeBlockNEW();
@@ -325,7 +325,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 	        
 	        //update multiple
 	        appendComment("Updates multiple new "+doc.getName()+" objects.\nReturns the updated versions.");
-	        appendStatement("public "+listDecl+" update"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause+"{");
+			appendString("public "+listDecl+" update"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause+"{");
 	        increaseIdent();
 	        appendStatement("throw new RuntimeException("+quote("Not yet implemented")+")");
 	        closeBlockNEW();
@@ -381,14 +381,14 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 			emptyline();
 			
 			appendComment("Returns all "+doc.getName()+" objects, where property matches.");
-	        appendStatement("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(QueryProperty... property)"+throwsClause+"{");
+			appendString("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(QueryProperty... property)"+throwsClause+"{");
 	        increaseIdent();
 	        appendStatement("throw new RuntimeException(\"Not yet implemented\")");
 	        closeBlockNEW();
 	        emptyline();
 	        
 			appendComment("Returns all "+doc.getName()+" objects, where property matches, sorted");
-			appendStatement("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(SortType sortType, QueryProperty... property)"+throwsClause+"{");
+			appendString("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(SortType sortType, QueryProperty... property)"+throwsClause+"{");
 	        increaseIdent();
 	        appendStatement("throw new RuntimeException(\"Not yet implemented\")");
 	        closeBlockNEW();
@@ -418,7 +418,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 			// get elements Segment
 			// TODO need make implementation
 			appendComment("Returns " + doc.getName() + " objects segment.");
-			appendStatement("public " + listDecl + " get" + doc.getMultiple() + "(Segment aSegment)" + throwsClause + "{");
+			appendString("public " + listDecl + " get" + doc.getMultiple() + "(Segment aSegment)" + throwsClause + "{");
 			increaseIdent();
 			appendStatement("throw new RuntimeException(\"Not yet implemented\")");
 			closeBlockNEW();
@@ -428,7 +428,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 			// get elements Segment with FILTER
 			// TODO need make implementation
 			appendComment("Returns " + doc.getName() + " objects segment, where property matched.");
-			appendStatement("public " + listDecl + " get" + doc.getMultiple() + "ByProperty(Segment aSegment, QueryProperty... aProperty)"
+			appendString("public " + listDecl + " get" + doc.getMultiple() + "ByProperty(Segment aSegment, QueryProperty... aProperty)"
 					+ throwsClause + "{");
 			increaseIdent();
 			appendStatement("throw new RuntimeException(\"Not yet implemented\")");
@@ -439,7 +439,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 			// get elements Segment with SORTING, FILTER
 			// TODO need make implementation
 			appendComment("Returns " + doc.getName() + " objects segment, where property matched, sorted.");
-			appendStatement("public " + listDecl + " get" + doc.getMultiple()
+			appendString("public " + listDecl + " get" + doc.getMultiple()
 					+ "ByProperty(Segment aSegment, SortType aSortType, QueryProperty... aProperty)" + throwsClause + "{");
 			increaseIdent();
 			appendStatement("throw new RuntimeException(\"Not yet implemented\")");
@@ -477,7 +477,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 			emptyline();
 			for(FederatedDocumentMapping mapping: mappings) {
 				MetaDocument targetDoc = targetModules.get(mapping.getTargetKey()).getDocumentByName(mapping.getTargetDocument());
-				appendString("if (target" + doc.getName() + "Id.charAt(0) == \'" + mapping.getTargetKey() + "\')");
+				appendString("if (target" + doc.getName() + "Id.charAt(0) == '" + mapping.getTargetKey() + "')");
 				increaseIdent();
 				appendStatement("get" + targetDoc.getParentModule().getName() + "Service().fetch" + targetDoc.getName() + "(target" + doc.getName() + "Id.substring(2), addedDocuments, data)");
 				decreaseIdent();
