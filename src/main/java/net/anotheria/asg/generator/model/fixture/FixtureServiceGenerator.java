@@ -434,7 +434,7 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 	    	appendIncreasedStatement("ret.addChildNode("+DataFacadeGenerator.getXMLHelperName(d)+".toXML(object))");
 	    	appendStatement("return ret");
 	    	closeBlockNEW();
-	    	appendStatement("catch("+getExceptionName(module)+" e){");
+			appendString("catch("+getExceptionName(module)+" e){");
 	    	increaseIdent();
 	    	appendStatement("throw new RuntimeException("+quote("export"+d.getMultiple()+"ToXML() failure: ")+" , e)");
 	    	closeBlockNEW();
@@ -464,7 +464,7 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 	    	appendIncreasedStatement("ret.addChildNode("+DataFacadeGenerator.getXMLHelperName(d)+".toXML(object, languages))");
 	    	appendStatement("return ret");
 	    	closeBlockNEW();
-	    	appendStatement("catch("+getExceptionName(module)+" e){");
+			appendString("catch("+getExceptionName(module)+" e){");
 	    	increaseIdent();
 	    	appendStatement("throw new RuntimeException("+quote("export"+d.getMultiple()+"ToXML() failure: ")+" , e)");
 	    	closeBlockNEW();
