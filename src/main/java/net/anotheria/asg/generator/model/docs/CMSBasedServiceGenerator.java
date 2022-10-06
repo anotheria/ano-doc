@@ -235,7 +235,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			appendString("public "+listDecl+" get"+doc.getMultiple()+"(List<String> ids){");
 	        increaseIdent();
 	        appendString("if (ids==null || ids.size()==0)");
-	        appendIncreasedStatement("return new ArrayList<"+doc.getName()+">(0)");
+	        appendIncreasedStatement("return new ArrayList<>(0)");
 	        appendStatement(listDecl, " all = get",doc.getMultiple(), "()");
 	        appendStatement(listDecl, " ret = new ArrayList<>", "()");
 	        appendString("for ("+doc.getName()+" "+doc.getVariableName()+" : all){");
@@ -442,7 +442,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        appendString("try{");
 	        increaseIdent();
 	        appendStatement("Property property = (("+DocumentGenerator.getDocumentName(doc)+")"+doc.getVariableName()+").getProperty(propertyName)");
-	        appendStatement("if (property.getValue()==null && value==null){");
+			appendString("if (property.getValue()==null && value==null){");
 	        appendIncreasedStatement("ret.add("+doc.getVariableName()+")");
 	        appendString("}else{");
 	        increaseIdent();
