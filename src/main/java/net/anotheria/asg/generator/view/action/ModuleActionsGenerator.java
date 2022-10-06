@@ -198,7 +198,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
 		clazz.addImport("net.anotheria.asg.util.filter.DocumentFilter");
-		clazz.addImport(ActionUtils.class);
 		clazz.addImport("net.anotheria.util.xml.XMLNode");
 		addStandardActionImports(clazz);
 		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
