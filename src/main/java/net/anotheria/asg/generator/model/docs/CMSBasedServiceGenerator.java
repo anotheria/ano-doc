@@ -360,7 +360,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 	        //create multiple
 	        appendComment("Creates multiple new "+doc.getName()+" objects.\nReturns the created versions.");
-	        appendStatement("public "+listDecl+" create"+doc.getMultiple()+"("+listDecl+" list){");
+			appendString("public "+listDecl+" create"+doc.getMultiple()+"("+listDecl+" list){");
 	        increaseIdent();
 	        appendStatement(module.getModuleClassName()+" module = "+getModuleGetterCall(module));
 	        appendStatement(listDecl+" ret = new ArrayList<"+doc.getName()+">()");
@@ -502,10 +502,10 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			appendString("//first the slow version, the fast version is a todo.");
 			appendStatement(listDecl+" ret = new ArrayList<"+doc.getName()+">()");
 			appendStatement(listDecl+" src = get"+doc.getMultiple()+"()");
-			appendStatement("for ( "+doc.getName()+" "+doc.getVariableName() +" : src){");
+			appendString("for ( "+doc.getName()+" "+doc.getVariableName() +" : src){");
 			increaseIdent();
 			appendStatement("boolean mayPass = true");
-			appendStatement("for (QueryProperty qp : property){");
+			appendString("for (QueryProperty qp : property){");
 			increaseIdent();
 			appendStatement("mayPass = mayPass && qp.doesMatch("+doc.getVariableName()+".getPropertyValue(qp.getName()))");
 			closeBlockNEW();
@@ -551,10 +551,10 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			appendStatement("int pOffset = aSegment.getSliceNumber() * aSegment.getElementsPerSlice() - aSegment.getElementsPerSlice()");
 			appendStatement(listDecl + " ret = new ArrayList<" + doc.getName() + ">()");
 			appendStatement(listDecl + " src = get" + doc.getMultiple() + "()");
-			appendStatement("for (" + doc.getName() + " " + doc.getVariableName() + " : src) {");
+			appendString("for (" + doc.getName() + " " + doc.getVariableName() + " : src) {");
 			increaseIdent();
 			appendStatement("boolean mayPass = true");
-			appendStatement("for (QueryProperty qp : property) {");
+			appendString("for (QueryProperty qp : property) {");
 			increaseIdent();
 			appendStatement("mayPass = mayPass && qp.doesMatch(" + doc.getVariableName() + ".getPropertyValue(qp.getName()))");
 			closeBlockNEW();
@@ -782,7 +782,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	    //generate export function
 	    emptyline();
 	    for (MetaDocument d : docs){
-	    	appendStatement("public XMLNode export"+d.getMultiple()+"ToXML(){");
+			appendString("public XMLNode export"+d.getMultiple()+"ToXML(){");
 	    	increaseIdent();
 	    	appendStatement("XMLNode ret = new XMLNode("+quote(d.getMultiple())+")");
 	    	appendStatement("List<"+d.getName()+"> list = get"+d.getMultiple()+"()");
@@ -793,7 +793,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	    	closeBlockNEW();
 	    	emptyline();
 
-            appendStatement("public XMLNode export"+d.getMultiple()+"ToXML(List<"+d.getName()+"> list){");
+			appendString("public XMLNode export"+d.getMultiple()+"ToXML(List<"+d.getName()+"> list){");
 	    	increaseIdent();
 	    	appendStatement("XMLNode ret = new XMLNode("+quote(d.getMultiple())+")");
 	    	appendStatement("ret.addAttribute(new XMLAttribute("+quote("count")+", list.size()))");
@@ -805,7 +805,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 
 		    if (containsAnyMultilingualDocs && GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()){
-		    	appendStatement("public XMLNode export"+d.getMultiple()+"ToXML(String[] languages){");
+				appendString("public XMLNode export"+d.getMultiple()+"ToXML(String[] languages){");
 		    	increaseIdent();
 		    	appendStatement("XMLNode ret = new XMLNode("+quote(d.getMultiple())+")");
 		    	appendStatement("List<"+d.getName()+"> list = get"+d.getMultiple()+"()");
@@ -816,7 +816,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 		    	closeBlockNEW();
 		    	emptyline();
 
-				appendStatement("public XMLNode export"+d.getMultiple()+"ToXML(String[] languages, List<"+d.getName()+"> list){");
+				appendString("public XMLNode export"+d.getMultiple()+"ToXML(String[] languages, List<"+d.getName()+"> list){");
 		    	increaseIdent();
 		    	appendStatement("XMLNode ret = new XMLNode("+quote(d.getMultiple())+")");
 		    	appendStatement("ret.addAttribute(new XMLAttribute("+quote("count")+", list.size()))");
