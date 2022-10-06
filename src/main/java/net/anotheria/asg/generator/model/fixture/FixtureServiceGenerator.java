@@ -40,9 +40,9 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 		
 		MetaModule mod = (MetaModule)gmodule;
 		if (!mod.isEnabledByOptions(GenerationOptions.FIXTURE))
-			return new ArrayList<FileEntry>();
+			return new ArrayList<>();
 	
-		List<FileEntry> ret = new ArrayList<FileEntry>();
+		List<FileEntry> ret = new ArrayList<>();
 		
 		ExecutionTimer timer = new ExecutionTimer("Fixture Generator");
 		timer.startExecution(mod.getName()+"Factory");
@@ -242,7 +242,7 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 	        
 	        appendString("@Override public "+doc.getName()+" create"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+")"+throwsClause+"{");
 	        increaseIdent();
-	        appendStatement("String nextId = \"\"+"+getIdHolderName(doc)+".incrementAndGet();");
+	        appendStatement("String nextId = \"\"+"+getIdHolderName(doc)+".incrementAndGet()");
 	        if (module.getStorageType()==StorageType.DB){
 	        	appendCommentLine("//DB Specific code");
 	        	clazz.addImport(VOGenerator.getDocumentImport(GeneratorDataRegistry.getInstance().getContext(), doc));
@@ -332,7 +332,7 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 			emptyline();
 
 			appendComment("Returns all "+doc.getName()+" objects, where property matches.");
-	        appendStatement("@Override public "+listDecl+" get"+doc.getMultiple()+"ByProperty(QueryProperty... properties)"+throwsClause+"{");
+			appendString("@Override public "+listDecl+" get"+doc.getMultiple()+"ByProperty(QueryProperty... properties)"+throwsClause+"{");
 	        increaseIdent();
 	        appendStatement(listDecl+" list = get"+doc.getMultiple()+"()");
 	        appendString("if (properties==null || properties.length==0)");
@@ -355,7 +355,7 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 	        emptyline();
 	        
 			appendComment("Returns all "+doc.getName()+" objects, where property matches, sorted");
-			appendStatement("@Override public "+listDecl+" get"+doc.getMultiple()+"ByProperty(SortType sortType, QueryProperty... property)"+throwsClause+"{");
+			appendString("@Override public "+listDecl+" get"+doc.getMultiple()+"ByProperty(SortType sortType, QueryProperty... property)"+throwsClause+"{");
 	        increaseIdent();
 	        appendStatement("return StaticQuickSorter.sort(get"+doc.getMultiple()+"ByProperty(property), sortType)");
 	        closeBlockNEW();
@@ -385,8 +385,8 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 			increaseIdent();
 			appendStatement("int pLimit = aSegment.getElementsPerSlice()");
 			appendStatement("int pOffset = aSegment.getSliceNumber() * aSegment.getElementsPerSlice() - aSegment.getElementsPerSlice()");
-			appendStatement(listDecl + " ret = new ArrayList<" + doc.getName() + ">()");
-			appendStatement(listDecl + " src = new ArrayList<" + doc.getName() + ">()");
+			appendStatement(listDecl + " ret = new ArrayList<>()");
+			appendStatement(listDecl + " src = new ArrayList<>()");
 			appendStatement("src.addAll(" + getMapName(doc) + ".values())");
 			appendStatement("for (" + doc.getName() + " " + doc.getVariableName() + " : src) {");
 			increaseIdent();
