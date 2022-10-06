@@ -28,7 +28,7 @@ import net.anotheria.util.StringUtils;
 public class DataFacadeGenerator extends AbstractDataObjectGenerator implements IGenerator{
 
 	/** Constant <code>PROPERTY_DECLARATION="public static final String "</code> */
-	public static final String PROPERTY_DECLARATION = "public static final String ";
+	public static final String PROPERTY_DECLARATION = "String ";
 	
 	/**
 	 * The id property.
@@ -425,13 +425,13 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 	
 	private void generateLanguageCopyMethods(MetaDocument doc){
 		appendComment("Copies all multilingual properties from source language to destination language ");
-		appendString("public void "+getCopyMethodName()+"(String sourceLanguge, String destLanguage);");
+		appendString("void "+getCopyMethodName()+"(String sourceLanguge, String destLanguage);");
 		emptyline();
 		for (String srclang : GeneratorDataRegistry.getInstance().getContext().getLanguages()){
 			for (String targetlang : GeneratorDataRegistry.getInstance().getContext().getLanguages()){
 				if (!srclang.equals(targetlang)){
 					appendComment("Copies all multilingual properties from language "+srclang+" to language "+targetlang);
-					appendString("public void "+getCopyMethodName(srclang, targetlang)+"();");
+					appendString("void "+getCopyMethodName(srclang, targetlang)+"();");
 					emptyline();
 				}
 			}
@@ -525,7 +525,7 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 		}
 		
 		appendComment("Returns the value of the "+p.getName()+" attribute.");
-		appendString("public "+p.toJavaType()+" get"+p.getAccesserName()+"();");
+		appendString(p.toJavaType()+" get"+p.getAccesserName()+"();");
 		
 	}
 	
@@ -540,7 +540,7 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 		}
 		
 		appendComment("Returns the value of the "+p.getName()+" attribute.");
-		appendString("public "+p.toJavaType()+" get"+p.getAccesserName()+"(){");
+		appendString(p.toJavaType()+" get"+p.getAccesserName()+"(){");
 		appendIncreasedStatement("return "+p.getName());
 		appendString("}");
 		
@@ -549,11 +549,11 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 	private void generatePropertyGetterMethodMultilingual(MetaProperty p){
 		for (String l : GeneratorDataRegistry.getInstance().getContext().getLanguages()){
 			appendComment("Returns the value of the "+p.getName()+" attribute in the \""+l+"\" domain.");
-			appendString("public "+p.toJavaType()+" get"+p.getAccesserName(l)+"();");
+			appendString(p.toJavaType()+" get"+p.getAccesserName(l)+"();");
 			emptyline();
 		}
 		appendComment("Returns the current value of the "+p.getName()+" attribute.\nCurrent means in the currently selected domain.");
-		appendString("public "+p.toJavaType()+" get"+p.getAccesserName()+"();");
+		appendString(p.toJavaType()+" get"+p.getAccesserName()+"();");
 		emptyline();
 	}
 	
@@ -597,7 +597,7 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 		}
 
 		appendComment("Sets the value of the "+p.getName()+" attribute.");
-		appendString("public void set"+p.getAccesserName()+"("+p.toJavaType()+" value);");
+		appendString("void set"+p.getAccesserName()+"("+p.toJavaType()+" value);");
 		
 	}
 	
@@ -623,11 +623,11 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 	private void generatePropertySetterMethodMultilingual(MetaProperty p){
 		for (String l : GeneratorDataRegistry.getInstance().getContext().getLanguages()){
 			appendComment("Sets the value of the "+p.getName()+" attribute in the domain \""+l+"\"");
-			appendString("public void set"+p.getAccesserName(l)+"("+p.toJavaType()+" value);");
+			appendString("void set"+p.getAccesserName(l)+"("+p.toJavaType()+" value);");
 			emptyline();
 		}
 		appendComment("Sets the value of the "+p.getName()+" attribute in the current domain. Current means in the currently selected domain.");
-		appendString("public void set"+p.getAccesserName()+"("+p.toJavaType()+" value);");
+		appendString("void set"+p.getAccesserName()+"("+p.toJavaType()+" value);");
 	}
 
 	private void generateListPropertySetterMethods(MetaListProperty p){
@@ -691,7 +691,7 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 		if (container.isMultilingual())
 			generateContainerMethodsMultilingual(container);
 		appendComment("Returns the number of elements in the \""+container.getName()+"\" container");
-		appendString("public int "+getContainerSizeGetterName(container)+"();");
+		appendString("int "+getContainerSizeGetterName(container)+"();");
 		emptyline();
 		
 	}
@@ -699,7 +699,7 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 	private void generateContainerMethodsMultilingual(MetaContainerProperty container){
 		for (String l : GeneratorDataRegistry.getInstance().getContext().getLanguages()){
 			appendComment("Returns the number of elements in the \""+container.getName()+"\" container");
-			appendString("public int "+getContainerSizeGetterName(container, l)+"();");
+			appendString("int "+getContainerSizeGetterName(container, l)+"();");
 			emptyline();
 		}
 	}
@@ -710,22 +710,22 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 		
 		MetaProperty c = list.getContainedProperty();
 		appendComment("Adds a new element to the list.");
-		String decl = "public void "+getContainerEntryAdderName(list)+"(";
+		String decl = "void "+getContainerEntryAdderName(list)+"(";
 		decl += c.toJavaType()+" "+c.getName();
 		decl += ");";
 		appendString(decl);
 		emptyline();
 		
 		appendComment("Removes the element at position index from the list.");
-		appendString("public void "+getContainerEntryDeleterName(list)+"(int index);");
+		appendString("void "+getContainerEntryDeleterName(list)+"(int index);");
 		emptyline();
 		
 		appendComment("Swaps elements at positions index1 and index2 in the list.");
-		appendString("public void "+getContainerEntrySwapperName(list)+"(int index1, int index2);");
+		appendString("void "+getContainerEntrySwapperName(list)+"(int index1, int index2);");
 		emptyline();
 		
 		appendComment("Returns the element at the position index in the list.");
-		appendString("public "+c.toJavaType()+ " "+getListElementGetterName(list)+"(int index);");
+		appendString(""+c.toJavaType()+ " "+getListElementGetterName(list)+"(int index);");
 		emptyline();
 	}
 	
@@ -734,22 +734,22 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 		
 			MetaProperty c = list.getContainedProperty();
 			appendComment("Adds a new element to the list.");
-			String decl = "public void "+getContainerEntryAdderName(list, l)+"(";
+			String decl = "void "+getContainerEntryAdderName(list, l)+"(";
 			decl += c.toJavaType()+" "+c.getName();
 			decl += ");";
 			appendString(decl);
 			emptyline();
 			
 			appendComment("Removes the element at position index from the list.");
-			appendString("public void "+getContainerEntryDeleterName(list, l)+"(int index);");
+			appendString("void "+getContainerEntryDeleterName(list, l)+"(int index);");
 			emptyline();
 			
 			appendComment("Swaps elements at positions index1 and index2 in the list.");
-			appendString("public void "+getContainerEntrySwapperName(list, l)+"(int index1, int index2);");
+			appendString("void "+getContainerEntrySwapperName(list, l)+"(int index1, int index2);");
 			emptyline();
 			
 			appendComment("Returns the element at the position index in the list.");
-			appendString("public "+c.toJavaType()+ " "+getListElementGetterName(list, l)+"(int index);");
+			appendString(c.toJavaType()+ " "+getListElementGetterName(list, l)+"(int index);");
 			emptyline();
 		}
 	}
@@ -757,7 +757,7 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 	private void generateTableMethods(MetaTableProperty table){
 		List<MetaProperty> columns = table.getColumns();
 		
-		String decl = "public void "+getContainerEntryAdderName(table)+"(";
+		String decl = "void "+getContainerEntryAdderName(table)+"(";
 		for (int i =0; i<columns.size(); i++){
 			MetaProperty p = columns.get(i);
 			decl += "String "+table.extractSubName(p);
@@ -768,13 +768,13 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 		appendString(decl);
 		emptyline();
 		
-		appendString("public void "+getContainerEntryDeleterName(table)+"(int index);");
+		appendString("void "+getContainerEntryDeleterName(table)+"(int index);");
 		emptyline();
 		
-		appendString("public List<String> get"+StringUtils.capitalize(table.getName())+"Row(int index);");
+		appendString("List<String> get"+StringUtils.capitalize(table.getName())+"Row(int index);");
 		emptyline();
 
-		appendString("public List<List<String>> "+getTableGetterName(table)+"();");
+		appendString(" List<List<String>> "+getTableGetterName(table)+"();");
 		emptyline();
 	}
 	

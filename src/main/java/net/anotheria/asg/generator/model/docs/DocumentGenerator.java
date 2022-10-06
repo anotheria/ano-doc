@@ -96,18 +96,12 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 
 		for (MetaProperty p:doc.getProperties()){
 			if (p instanceof MetaContainerProperty){
-//				appendImport("java.util.List");
 				clazz.addImport("java.util.List");
 				if (p instanceof MetaTableProperty)
 					clazz.addImport("java.util.ArrayList");
-//					appendImport("java.util.ArrayList");
-				
+
 				if(p instanceof MetaListProperty)
 					clazz.addImport("net.anotheria.anodoc.data." + StringUtils.capitalize(((MetaListProperty)p).getContainedProperty().toJavaType()) + "Property");
-//				appendImport("net.anotheria.anodoc.data.StringProperty");
-//				listImported = true;
-								
-//				break;
 			}
 		}
 		
