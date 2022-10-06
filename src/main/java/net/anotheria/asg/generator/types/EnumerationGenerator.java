@@ -103,17 +103,17 @@ public class EnumerationGenerator extends AbstractGenerator implements IGenerato
 		List<String> values = type.getValues();
 		for (int i=0; i<values.size(); i++){
 			String v = values.get(i);
-			appendStatement("static final int "+v+" = "+(i+1));
+			appendStatement("int "+v+" = "+(i+1));
 		}
 		emptyline();
 		
 		for (String v : values){
-			appendStatement("static final String "+v+"_NAME = "+quote(v));
+			appendStatement("String "+v+"_NAME = "+quote(v));
 		}
 
 		emptyline();
 		
-		appendString("static final int "+type.getName().toUpperCase()+"_VALUES[] = {");
+		appendString("int "+type.getName().toUpperCase()+"_VALUES[] = {");
         for (String v : values) {
             appendIncreasedString(v + ",");
         }
@@ -122,7 +122,7 @@ public class EnumerationGenerator extends AbstractGenerator implements IGenerato
 		emptyline();
 		
 		
-		appendString("static final String "+type.getName().toUpperCase()+"_NAMES[] = {");
+		appendString("String "+type.getName().toUpperCase()+"_NAMES[] = {");
         for (String v : values) {
             appendIncreasedString(v + "_NAME,");
         }
