@@ -248,100 +248,91 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	        MetaDocument doc = docs.get(i);
 	        String listDecl = "List<"+doc.getName()+">";
 	        appendComment("Returns all "+doc.getMultiple()+" objects stored.");
-	        appendStatement("public "+listDecl+" get"+doc.getMultiple()+"()"+throwsClause);
+	        appendStatement(listDecl+" get"+doc.getMultiple()+"()"+throwsClause);
 	        emptyline();
 			appendComment("Returns all "+doc.getMultiple()+" objects sorted by given sortType.");
-			appendStatement("public "+listDecl+" get"+doc.getMultiple()+"(SortType sortType)"+throwsClause);
+			appendStatement(listDecl+" get"+doc.getMultiple()+"(SortType sortType)"+throwsClause);
 			emptyline();
 
-			//get multiple by id
-//			appendComment("Returns the "+doc.getName()+" objects with the specified ids.");
-//	        appendStatement("public "+listDecl+" get"+doc.getMultiple()+"(List<String> ids)"+throwsClause);
-//	        emptyline();
-
-//	        appendComment("Returns the "+doc.getName()+" objects with the specified ids, sorted by given sorttype.");
-//	        appendStatement("public "+listDecl+" get"+doc.getMultiple()+"(List<String> ids, SortType sortType)"+throwsClause);
-//	        emptyline();
-
 	        appendComment("Deletes a "+doc.getName()+" object by id.");
-	        appendStatement("public void delete"+doc.getName()+"(String id)"+throwsClause);
+	        appendStatement("void delete"+doc.getName()+"(String id)"+throwsClause);
 	        emptyline();
 	        appendComment("Deletes a "+doc.getName()+" object.");
-	        appendStatement("public void delete"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+")"+throwsClause);
+	        appendStatement("void delete"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+")"+throwsClause);
 	        emptyline();
 	        appendComment("Deletes multiple "+doc.getName()+" object.");
-	        appendStatement("public void delete"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause);
+	        appendStatement("void delete"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause);
 	        emptyline();
 	        appendComment("Returns the "+doc.getName()+" object with the specified id.");
-	        appendStatement("public "+doc.getName()+" get"+doc.getName()+"(String id)"+throwsClause);
+	        appendStatement(doc.getName()+" get"+doc.getName()+"(String id)"+throwsClause);
 	        emptyline();
 
 
 	        appendComment("Imports a new "+doc.getName()+" object.\nReturns the created version.");
-	        appendStatement("public "+doc.getName()+" import"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+")"+throwsClause);
+	        appendStatement(doc.getName()+" import"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+")"+throwsClause);
 	        emptyline();
 
             appendComment("Imports multiple new  "+doc.getName()+" object.\nReturns the created versions.");
-            appendStatement("public "+listDecl+" import"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause);
+            appendStatement(listDecl+" import"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause);
 	        emptyline();
             
 
 	        appendComment("Creates a new "+doc.getName()+" object.\nReturns the created version.");
-	        appendStatement("public "+doc.getName()+" create"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+")"+throwsClause);
+	        appendStatement(doc.getName()+" create"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+")"+throwsClause);
 	        emptyline();
 	        
 	        appendComment("Creates multiple new "+doc.getName()+" objects.\nReturns the created versions.");
-	        appendStatement("public "+listDecl+" create"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause);
+	        appendStatement(listDecl+" create"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause);
 	        emptyline();
 
 	        appendComment("Updates a "+doc.getName()+" object.\nReturns the updated version.");
-	        appendStatement("public "+doc.getName()+" update"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+")"+throwsClause);
+	        appendStatement(doc.getName()+" update"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+")"+throwsClause);
 	        emptyline();
 
 	        appendComment("Updates mutiple "+doc.getName()+" objects.\nReturns the updated versions.");
-	        appendStatement("public "+listDecl+" update"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause);
+	        appendStatement(listDecl+" update"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause);
 	        emptyline();
 	        
 	        
 	        //special functions
 	        appendComment("Returns all "+doc.getName()+" objects, where property with given name equals object.");
-	        appendStatement("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(String propertyName, Object value)"+throwsClause);
+	        appendStatement(listDecl+" get"+doc.getMultiple()+"ByProperty(String propertyName, Object value)"+throwsClause);
 	        emptyline();
 			appendComment("Returns all "+doc.getName()+" objects, where property with given name equals object, sorted");
-			appendStatement("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(String propertyName, Object value, SortType sortType)"+throwsClause);
+			appendStatement(listDecl+" get"+doc.getMultiple()+"ByProperty(String propertyName, Object value, SortType sortType)"+throwsClause);
 			emptyline();
 			appendComment("Executes a query");
-			appendStatement("public QueryResult executeQueryOn"+doc.getMultiple()+"(DocumentQuery query)"+throwsClause);
+			appendStatement("QueryResult executeQueryOn"+doc.getMultiple()+"(DocumentQuery query)"+throwsClause);
 			emptyline();
 	        appendComment("Returns all "+doc.getName()+" objects, where property matches.");
-	        appendStatement("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(QueryProperty... property)"+throwsClause);
+	        appendStatement(listDecl+" get"+doc.getMultiple()+"ByProperty(QueryProperty... property)"+throwsClause);
 	        emptyline();
 			appendComment("Returns all "+doc.getName()+" objects, where property matches, sorted");
-			appendStatement("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(SortType sortType, QueryProperty... property)"+throwsClause);
+			appendStatement(listDecl+" get"+doc.getMultiple()+"ByProperty(SortType sortType, QueryProperty... property)"+throwsClause);
 			emptyline();
 			
 			// get elements COUNT
 			appendComment("Returns all " + doc.getMultiple() + " count.");
-			appendStatement("public int get" + doc.getMultiple() + "Count()" + throwsClause);
+			appendStatement("int get" + doc.getMultiple() + "Count()" + throwsClause);
 			emptyline();
 			// end get elements COUNT
 
 			// get elements Segment
 			appendComment("Returns " + doc.getMultiple() + " objects segment.");
-			appendStatement("public " + listDecl + " get" + doc.getMultiple() + "(Segment aSegment)" + throwsClause);
+			appendStatement( listDecl + " get" + doc.getMultiple() + "(Segment aSegment)" + throwsClause);
 			emptyline();
 			// end get elements Segment
 
 			// get elements Segment with FILTER
 			appendComment("Returns " + doc.getName() + " objects segment, where property matches.");
-			appendStatement("public " + listDecl + " get" + doc.getMultiple() + "ByProperty(Segment aSegment, QueryProperty... aProperty)"
+			appendStatement( listDecl + " get" + doc.getMultiple() + "ByProperty(Segment aSegment, QueryProperty... aProperty)"
 					+ throwsClause);
 			emptyline();
 			// end get elements Segment with FILTER
 
 			// get elements Segment with SORTING, FILTER
 			appendComment("Returns " + doc.getName() + " objects segment, where property matches, sorted.");
-			appendStatement("public " + listDecl + " get" + doc.getMultiple()
+			appendStatement(  listDecl + " get" + doc.getMultiple()
 					+ "ByProperty(Segment aSegment, SortType aSortType, QueryProperty... aProperty)" + throwsClause);
 			emptyline();
 			// end get elements Segment with SORTING, FILTER
