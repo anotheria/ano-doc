@@ -234,6 +234,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			emptyline();
 
 			appendComment("Returns the "+doc.getName()+" objects with the specified ids.");
+			appendString("@Override");
 			appendString("public "+listDecl+" get"+doc.getMultiple()+"(List<String> ids){");
 	        increaseIdent();
 	        appendString("if (ids==null || ids.size()==0)");
@@ -252,6 +253,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			emptyline();
 
 	        appendComment("Returns the "+doc.getName()+" objects with the specified ids, sorted by given sorttype.");
+			appendString("@Override");
 			appendString("public "+listDecl+" get"+doc.getMultiple()+"(List<String> ids, SortType sortType){");
 	        increaseIdent();
 			appendStatement("return StaticQuickSorter.sort(get"+doc.getMultiple()+"(ids), sortType)");
@@ -259,6 +261,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        emptyline();
 
 
+			appendString("@Override");
 	        appendString("public void delete"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+"){");
 	        increaseIdent();
 	        appendStatement("delete"+doc.getName()+"("+doc.getVariableName()+".getId())");
@@ -269,6 +272,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        closeBlockNEW();
 	        emptyline();
 
+			appendString("@Override");
 	        appendString("public void delete"+doc.getName()+"(String id){");
 	        increaseIdent();
             appendStatement(module.getModuleClassName()+" module = "+getModuleGetterCall(module));
@@ -284,6 +288,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 
 	        //deletemultiple
+			appendString("@Override");
 	        appendString("public void delete"+doc.getMultiple()+"("+listDecl+" list){");
 	        increaseIdent();
 
@@ -304,6 +309,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        closeBlockNEW();
 	        emptyline();
 
+			appendString("@Override");
 	        appendString("public "+doc.getName()+" get"+doc.getName()+"(String id){");
 	        increaseIdent();
 	        appendStatement("return "+getModuleGetterCall(module)+".get"+doc.getName()+"(id)");
@@ -311,6 +317,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        emptyline();
 
 	        //import
+			appendString("@Override");
 	        appendString("public "+doc.getName()+" import"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+"){");
 	        increaseIdent();
 	        appendStatement(module.getModuleClassName()+" module = "+getModuleGetterCall(module));
@@ -325,6 +332,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        emptyline();
 
             //importList
+			appendString("@Override");
 	        appendString("public "+listDecl+" import"+doc.getMultiple()+"("+listDecl+" list){");
 	        increaseIdent();
 	        appendStatement(module.getModuleClassName()+" module = "+getModuleGetterCall(module));
@@ -347,6 +355,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        emptyline();
 
 	        //create
+			appendString("@Override");
 	        appendString("public "+doc.getName()+" create"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+"){");
 	        increaseIdent();
 	        appendStatement(module.getModuleClassName()+" module = "+getModuleGetterCall(module));
@@ -360,6 +369,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 
 	        //create multiple
+			appendString("@Override");
 	        appendComment("Creates multiple new "+doc.getName()+" objects.\nReturns the created versions.");
 			appendString("public "+listDecl+" create"+doc.getMultiple()+"("+listDecl+" list){");
 	        increaseIdent();
@@ -384,6 +394,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        emptyline();
 
 
+			appendString("@Override");
 	        appendString("public ",doc.getName()," update",doc.getName(),"(",doc.getName()," ",doc.getVariableName(),"){");
 	        increaseIdent();
 	        appendStatement(doc.getName()+" oldVersion = null");
@@ -406,6 +417,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 
 	        //updatemultiple
+			appendString("@Override");
 	        appendString("public "+listDecl+" update"+doc.getMultiple()+"("+listDecl+" list){");
 	        increaseIdent();
 	        appendStatement(listDecl+" oldList = null");
@@ -434,6 +446,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 
 
+			appendString("@Override");
 	        appendString("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(String propertyName, Object value){");
 	        increaseIdent();
 	        appendStatement(listDecl+" all"+doc.getMultiple()+" = get"+doc.getMultiple()+"()");
