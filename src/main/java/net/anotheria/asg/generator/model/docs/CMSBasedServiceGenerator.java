@@ -217,10 +217,9 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 	        String listDecl = "List<"+doc.getName()+">";
 
-	        appendString("@SuppressWarnings(\"unchecked\")");
 	        appendString("public "+listDecl+" get"+doc.getMultiple()+"(){");
 	        increaseIdent();
-	        appendStatement("List "+doc.getMultiple().toLowerCase()+" = new ArrayList()");
+	        appendStatement(listDecl+" "+doc.getMultiple().toLowerCase()+" = new ArrayList<>()");
             appendStatement(doc.getMultiple().toLowerCase()+".addAll("+getModuleGetterCall(module)+".get"+doc.getMultiple()+"())");
 	        appendStatement("return "+doc.getMultiple().toLowerCase());
 	        closeBlockNEW();
@@ -238,7 +237,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        appendString("if (ids==null || ids.size()==0)");
 	        appendIncreasedStatement("return new ArrayList<"+doc.getName()+">(0)");
 	        appendStatement(listDecl, " all = get",doc.getMultiple(), "()");
-	        appendStatement(listDecl, " ret = new ArrayList<"+doc.getName()+">", "()");
+	        appendStatement(listDecl, " ret = new ArrayList<>", "()");
 	        appendString("for ("+doc.getName()+" "+doc.getVariableName()+" : all){");
 	        increaseIdent();
 	        appendString("if(ids.contains("+doc.getVariableName()+".getId())){");
@@ -327,7 +326,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        appendString("public "+listDecl+" import"+doc.getMultiple()+"("+listDecl+" list){");
 	        increaseIdent();
 	        appendStatement(module.getModuleClassName()+" module = "+getModuleGetterCall(module));
-            appendStatement(listDecl+" ret = new ArrayList<"+doc.getName()+">()");
+            appendStatement(listDecl+" ret = new ArrayList<>()");
 	        appendString("for ("+doc.getName()+" "+doc.getVariableName()+" : list){");
 	        increaseIdent();
 	        appendStatement(doc.getName()+" imported = module.import"+doc.getName()+"(("+DocumentGenerator.getDocumentName(doc)+")"+doc.getVariableName()+")");
@@ -363,7 +362,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			appendString("public "+listDecl+" create"+doc.getMultiple()+"("+listDecl+" list){");
 	        increaseIdent();
 	        appendStatement(module.getModuleClassName()+" module = "+getModuleGetterCall(module));
-	        appendStatement(listDecl+" ret = new ArrayList<"+doc.getName()+">()");
+	        appendStatement(listDecl+" ret = new ArrayList<>()");
 	        appendString("for ("+doc.getName()+" "+doc.getVariableName()+" : list){");
 	        increaseIdent();
 	        appendStatement(doc.getName()+" created = module.create"+doc.getName()+"(("+DocumentGenerator.getDocumentName(doc)+")"+doc.getVariableName()+")");
@@ -409,7 +408,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        increaseIdent();
 	        appendStatement(listDecl+" oldList = null");
 	        appendString("if (hasServiceListeners())");
-	        appendIncreasedStatement("oldList = new ArrayList<"+doc.getName()+">(list.size())");
+	        appendIncreasedStatement("oldList = new ArrayList<>(list.size())");
 
 	        appendStatement(module.getModuleClassName()+" module = "+getModuleGetterCall(module));
 
@@ -436,7 +435,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        appendString("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(String propertyName, Object value){");
 	        increaseIdent();
 	        appendStatement(listDecl+" all"+doc.getMultiple()+" = get"+doc.getMultiple()+"()");
-	        appendStatement(listDecl+" ret = new ArrayList<"+doc.getName()+">()");
+	        appendStatement(listDecl+" ret = new ArrayList<>()");
 	        appendString("for (int i=0; i<all"+doc.getMultiple()+".size(); i++){");
 	        increaseIdent();
 	        appendStatement(doc.getName()+" "+doc.getVariableName()+" = all"+doc.getMultiple()+".get(i)");
@@ -500,7 +499,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			appendString("public "+listDecl+" get"+doc.getMultiple()+"ByProperty(QueryProperty... property){");
 			increaseIdent();
 			appendString("//first the slow version, the fast version is a todo.");
-			appendStatement(listDecl+" ret = new ArrayList<"+doc.getName()+">()");
+			appendStatement(listDecl+" ret = new ArrayList<>()");
 			appendStatement(listDecl+" src = get"+doc.getMultiple()+"()");
 			appendString("for ( "+doc.getName()+" "+doc.getVariableName() +" : src){");
 			increaseIdent();
@@ -549,7 +548,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			increaseIdent();
 			appendStatement("int pLimit = aSegment.getElementsPerSlice()");
 			appendStatement("int pOffset = aSegment.getSliceNumber() * aSegment.getElementsPerSlice() - aSegment.getElementsPerSlice()");
-			appendStatement(listDecl + " ret = new ArrayList<" + doc.getName() + ">()");
+			appendStatement(listDecl + " ret = new ArrayList<>()");
 			appendStatement(listDecl + " src = get" + doc.getMultiple() + "()");
 			appendString("for (" + doc.getName() + " " + doc.getVariableName() + " : src) {");
 			increaseIdent();
@@ -720,7 +719,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 				appendString("public void copyMultilingualAttributesInAll"+doc.getMultiple()+"(String sourceLanguage, String targetLanguage){");
 				increaseIdent();
 				appendStatement("List<"+doc.getName()+"> allDocumentsSrc = get"+doc.getMultiple()+"()");
-				appendStatement("List<"+doc.getName()+"> allDocuments = new ArrayList<"+doc.getName()+">(allDocumentsSrc.size())");
+				appendStatement("List<"+doc.getName()+"> allDocuments = new ArrayList<>(allDocumentsSrc.size())");
 				appendStatement("allDocuments.addAll(allDocumentsSrc)");
 				appendString("for ("+doc.getName()+" document : allDocuments){");
 				increaseIdent();

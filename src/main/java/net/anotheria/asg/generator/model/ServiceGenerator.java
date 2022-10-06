@@ -345,7 +345,7 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 			}
 
 			appendComment("creates an xml element with selected contained data");
-			appendStatement("public XMLNode export"+doc.getMultiple()+"ToXML(List<"+doc.getName()+"> list"+doc.getMultiple()+") "+throwsClause);
+			appendStatement("XMLNode export"+doc.getMultiple()+"ToXML(List<"+doc.getName()+"> list"+doc.getMultiple()+") "+throwsClause);
 			if (containsAnyMultilingualDocs && GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()) {
 				appendComment("creates an xml element with selected contained data but only selected languages in multilingual attributes");
 				appendStatement("public XMLNode export"+doc.getMultiple()+"ToXML(String[] languages,List<"+doc.getName()+"> list"+doc.getMultiple()+")" + throwsClause);
@@ -353,34 +353,34 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 
 			emptyline();
 			appendComment("Create json object list dependencies for this " + doc.getName() + " document");
-			appendStatement("public void fetch" + doc.getName() + "(final String id, Set<String> addedDocuments, JSONArray data)" + throwsClause);
+			appendStatement("void fetch" + doc.getName() + "(final String id, Set<String> addedDocuments, JSONArray data)" + throwsClause);
 			emptyline();
 
 			//this method checks whether a document with the given document set exists or no.
 	    }
 
 		appendComment("Save transferred document by its own type");
-		appendStatement("public void executeParsingForDocument (final DocumentName documentName, final JSONObject data)" + throwsClause);
+		appendStatement("void executeParsingForDocument (final DocumentName documentName, final JSONObject data)" + throwsClause);
 	    
 	    if (containsAnyMultilingualDocs){
 			appendComment("Copies all multilingual fields from sourceLanguage to targetLanguage in all data objects (documents, vo) which are part of this module and managed by this service");
-			appendStatement("public void copyMultilingualAttributesInAllObjects(String sourceLanguage, String targetLanguage)"+throwsClause);
+			appendStatement(" void copyMultilingualAttributesInAllObjects(String sourceLanguage, String targetLanguage)"+throwsClause);
 			emptyline();
 	    }
 	    
 	    appendComment("Executes a query on all data objects (documents, vo) which are part of this module and managed by this service");
-	    appendStatement("public QueryResult executeQueryOnAllObjects(DocumentQuery query)" +throwsClause);
+	    appendStatement("QueryResult executeQueryOnAllObjects(DocumentQuery query)" +throwsClause);
 	    
 	    
 		
 	    appendComment("creates an xml element with all contained data.");
-		appendStatement("public XMLNode exportToXML()"+throwsClause);
+		appendStatement("XMLNode exportToXML()"+throwsClause);
 		
 		emptyline();
 	    
 	    if (containsAnyMultilingualDocs && GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()){
 	    	appendComment("creates an xml element with all contained data but only selected languages in multilingual attributes");
-	    	appendStatement("public XMLNode exportToXML(String[] languages)"+throwsClause);
+	    	appendStatement("XMLNode exportToXML(String[] languages)"+throwsClause);
 	    }
 
 	    return clazz;
