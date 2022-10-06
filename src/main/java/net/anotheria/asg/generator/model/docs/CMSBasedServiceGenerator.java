@@ -217,6 +217,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 	        String listDecl = "List<"+doc.getName()+">";
 
+			appendString("@Override");
 	        appendString("public "+listDecl+" get"+doc.getMultiple()+"(){");
 	        increaseIdent();
 	        appendStatement(listDecl+" "+doc.getMultiple().toLowerCase()+" = new ArrayList<>()");
@@ -225,6 +226,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 	        closeBlockNEW();
 	        emptyline();
 
+			appendString("@Override");
 			appendString("public "+listDecl+" get"+doc.getMultiple()+"(SortType sortType){");
 			increaseIdent();
 			appendStatement("return StaticQuickSorter.sort(get"+doc.getMultiple()+"(), sortType)");
