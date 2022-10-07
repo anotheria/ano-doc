@@ -289,7 +289,7 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	        appendStatement(doc.getName()+" update"+doc.getName()+"("+doc.getName()+" "+doc.getVariableName()+")"+throwsClause);
 	        emptyline();
 
-	        appendComment("Updates mutiple "+doc.getName()+" objects.\nReturns the updated versions.");
+	        appendComment("Updates multiple "+doc.getName()+" objects.\nReturns the updated versions.");
 	        appendStatement(listDecl+" update"+doc.getMultiple()+"("+listDecl+" list)"+throwsClause);
 	        emptyline();
 	        
@@ -298,16 +298,16 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	        appendComment("Returns all "+doc.getName()+" objects, where property with given name equals object.");
 	        appendStatement(listDecl+" get"+doc.getMultiple()+"ByProperty(String propertyName, Object value)"+throwsClause);
 	        emptyline();
-			appendComment("Returns all "+doc.getName()+" objects, where property with given name equals object, sorted");
+			appendComment("Returns all "+doc.getName()+" objects, where property with given name equals object, sorted.");
 			appendStatement(listDecl+" get"+doc.getMultiple()+"ByProperty(String propertyName, Object value, SortType sortType)"+throwsClause);
 			emptyline();
-			appendComment("Executes a query");
+			appendComment("Executes a query.");
 			appendStatement("QueryResult executeQueryOn"+doc.getMultiple()+"(DocumentQuery query)"+throwsClause);
 			emptyline();
 	        appendComment("Returns all "+doc.getName()+" objects, where property matches.");
 	        appendStatement(listDecl+" get"+doc.getMultiple()+"ByProperty(QueryProperty... property)"+throwsClause);
 	        emptyline();
-			appendComment("Returns all "+doc.getName()+" objects, where property matches, sorted");
+			appendComment("Returns all "+doc.getName()+" objects, where property matches, sorted.");
 			appendStatement(listDecl+" get"+doc.getMultiple()+"ByProperty(SortType sortType, QueryProperty... property)"+throwsClause);
 			emptyline();
 			
@@ -344,7 +344,7 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 				containsAnyMultilingualDocs = true;
 			}
 
-			appendComment("creates an xml element with selected contained data");
+			appendComment("Creates an xml element with selected contained data.");
 			appendStatement("XMLNode export"+doc.getMultiple()+"ToXML(List<"+doc.getName()+"> list"+doc.getMultiple()+") "+throwsClause);
 			if (containsAnyMultilingualDocs && GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()) {
 				appendComment("creates an xml element with selected contained data but only selected languages in multilingual attributes");
@@ -352,14 +352,14 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	    	}
 
 			emptyline();
-			appendComment("Create json object list dependencies for this " + doc.getName() + " document");
+			appendComment("Create json object list dependencies for this " + doc.getName() + " document.");
 			appendStatement("void fetch" + doc.getName() + "(final String id, Set<String> addedDocuments, JSONArray data)" + throwsClause);
 			emptyline();
 
 			//this method checks whether a document with the given document set exists or no.
 	    }
 
-		appendComment("Save transferred document by its own type");
+		appendComment("Save transferred document by its own type.");
 		appendStatement("void executeParsingForDocument (final DocumentName documentName, final JSONObject data)" + throwsClause);
 	    
 	    if (containsAnyMultilingualDocs){
@@ -368,7 +368,7 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 			emptyline();
 	    }
 	    
-	    appendComment("Executes a query on all data objects (documents, vo) which are part of this module and managed by this service");
+	    appendComment("Executes a query on all data objects (documents, vo) which are part of this module and managed by this service.");
 	    appendStatement("QueryResult executeQueryOnAllObjects(DocumentQuery query)" +throwsClause);
 	    
 	    
@@ -379,7 +379,7 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 		emptyline();
 	    
 	    if (containsAnyMultilingualDocs && GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()){
-	    	appendComment("creates an xml element with all contained data but only selected languages in multilingual attributes");
+	    	appendComment("creates an xml element with all contained data but only selected languages in multilingual attributes.");
 	    	appendStatement("XMLNode exportToXML(String[] languages)"+throwsClause);
 	    }
 
