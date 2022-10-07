@@ -707,7 +707,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			//end fetch document with dependencies
 
 			//start parse document with dependencies
-			appendString("private void saveTransferred" + doc.getName() + "(final JSONObject data)" + throwsClause + " {");
+			appendString("private void saveTransferred" + doc.getName() + "(final JSONObject data)" + throwsClause + "{");
 			increaseIdent();
 			openTry();
 			appendStatement("String objectData = data.getString(\"object\")");
@@ -719,9 +719,9 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			appendStatement("import" + doc.getName() + "(" + doc.getVariableName() + ")");
 			closeBlockNEW();
 			appendCatch("JSONException");
-			appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + " (\"Problem with getting data from json " + doc.getName() + " instance :\" + e.getMessage())");
+			appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + "(\"Problem with getting data from json " + doc.getName() + " instance :\" + e.getMessage())");
 			appendCatch("IOException");
-			appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + " (\"Problem with parsing data for this " + doc.getName() + " instance :\" + e.getMessage())");
+			appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + "(\"Problem with parsing data for this " + doc.getName() + " instance :\" + e.getMessage())");
 			closeBlockNEW();
 			closeBlockNEW();
 			emptyline();

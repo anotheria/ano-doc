@@ -186,7 +186,7 @@ public class AbstractGenerator{
 	 */
 	protected void appendCatch(String exceptionName){
 		decreaseIdent();
-		appendString("} catch (", exceptionName, " e) {");
+		appendString("}catch(", exceptionName, " e){");
 		increaseIdent();
 	}
 	
