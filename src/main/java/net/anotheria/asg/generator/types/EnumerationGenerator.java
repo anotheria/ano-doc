@@ -103,11 +103,13 @@ public class EnumerationGenerator extends AbstractGenerator implements IGenerato
 		List<String> values = type.getValues();
 		for (int i=0; i<values.size(); i++){
 			String v = values.get(i);
+			appendComment("Constant for value "+v+".");
 			appendStatement("int "+v+" = "+(i+1));
 		}
 		emptyline();
 		
 		for (String v : values){
+			appendComment("Constant for value name "+v+".");
 			appendStatement("String "+v+"_NAME = "+quote(v));
 		}
 
