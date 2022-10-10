@@ -91,7 +91,7 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 		emptyline();
 		
 		appendString("@Override");
-		appendString("protected String getActiveMainNavi() {");
+		appendString("protected String getActiveMainNavi(){");
 		increaseIdent();
 		appendStatement("return \""+StringUtils.capitalize(view.getTitle())+"\"");
 		append(closeBlock());
@@ -111,20 +111,20 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 			appendString("}");
 		}
 			
-		emptyline();		
-			appendStatement("protected List<NavigationItemBean> getSubNavigation(){");
-			appendStatement("List<NavigationItemBean> subNavi = new ArrayList<NavigationItemBean>()");
-			increaseIdent();		
-				for (int i=0; i<sections.size(); i++){
-						MetaSection section = (MetaSection)sections.get(i);
-						if (section instanceof MetaModuleSection)
-							appendStatement("subNavi.add(makeMenuItemBean("+quote(section.getTitle())+", "+quote(CMSMappingsConfiguratorGenerator.getPath(((MetaModuleSection)section).getDocument(), CMSMappingsConfiguratorGenerator.ACTION_SHOW))+"))");
-						if (section instanceof MetaCustomSection)
-							appendStatement("subNavi.add(makeMenuItemBean("+quote(section.getTitle())+", "+quote(((MetaCustomSection)section).getPath())+"))");
+		emptyline();
+		appendString("protected List<NavigationItemBean> getSubNavigation(){");
+		appendStatement("List<NavigationItemBean> subNavi = new ArrayList<NavigationItemBean>()");
+		increaseIdent();
+		for (int i=0; i<sections.size(); i++){
+			MetaSection section = sections.get(i);
+			if (section instanceof MetaModuleSection)
+				appendStatement("subNavi.add(makeMenuItemBean("+quote(section.getTitle())+", "+quote(CMSMappingsConfiguratorGenerator.getPath(((MetaModuleSection)section).getDocument(), CMSMappingsConfiguratorGenerator.ACTION_SHOW))+"))");
+			if (section instanceof MetaCustomSection)
+				appendStatement("subNavi.add(makeMenuItemBean("+quote(section.getTitle())+", "+quote(((MetaCustomSection)section).getPath())+"))");
 								
-					}
-					appendStatement("return subNavi");
-			append(closeBlock());
+		}
+		appendStatement("return subNavi");
+		append(closeBlock());
 			
 		emptyline();
 		
@@ -142,7 +142,7 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 		appendString("protected boolean isAuthorizationRequired(){");
 		increaseIdent();
 		appendStatement("return true");
-		append(closeBlock());
+		closeBlockNEW();
 		emptyline();
 
 		return clazz;
