@@ -339,7 +339,7 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 
 			if (GeneratorDataRegistry.hasLanguageCopyMethods(doc)){
 				appendComment("In all documents of type "+doc.getName()+" copies all multilingual fields from sourceLanguage to targetLanguage.");
-				appendStatement("public void copyMultilingualAttributesInAll"+doc.getMultiple()+"(String sourceLanguage, String targetLanguage)"+throwsClause);
+				appendStatement("void copyMultilingualAttributesInAll"+doc.getMultiple()+"(String sourceLanguage, String targetLanguage)"+throwsClause);
 				emptyline();
 				containsAnyMultilingualDocs = true;
 			}
@@ -348,12 +348,12 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 			appendStatement("XMLNode export"+doc.getMultiple()+"ToXML(List<"+doc.getName()+"> list"+doc.getMultiple()+") "+throwsClause);
 			if (containsAnyMultilingualDocs && GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()) {
 				appendComment("creates an xml element with selected contained data but only selected languages in multilingual attributes");
-				appendStatement("public XMLNode export"+doc.getMultiple()+"ToXML(String[] languages,List<"+doc.getName()+"> list"+doc.getMultiple()+")" + throwsClause);
+				appendStatement("XMLNode export"+doc.getMultiple()+"ToXML(String[] languages,List<"+doc.getName()+"> list"+doc.getMultiple()+")" + throwsClause);
 	    	}
 
 			emptyline();
 			appendComment("Create json object list dependencies for this " + doc.getName() + " document.");
-			appendStatement("void fetch" + doc.getName() + "(final String id, Set<String> addedDocuments, JSONArray data)" + throwsClause);
+			appendStatement("void fetch" + doc.getName() + "(String id, Set<String> addedDocuments, JSONArray data)" + throwsClause);
 			emptyline();
 
 			//this method checks whether a document with the given document set exists or no.
