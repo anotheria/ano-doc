@@ -338,7 +338,7 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 			// end get elements Segment with SORTING, FILTER
 
 			if (GeneratorDataRegistry.hasLanguageCopyMethods(doc)){
-				appendComment("In all documents of type "+doc.getName()+" copies all multilingual fields from sourceLanguage to targetLanguage");
+				appendComment("In all documents of type "+doc.getName()+" copies all multilingual fields from sourceLanguage to targetLanguage.");
 				appendStatement("public void copyMultilingualAttributesInAll"+doc.getMultiple()+"(String sourceLanguage, String targetLanguage)"+throwsClause);
 				emptyline();
 				containsAnyMultilingualDocs = true;
@@ -363,7 +363,7 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 		appendStatement("void executeParsingForDocument (final DocumentName documentName, final JSONObject data)" + throwsClause);
 	    
 	    if (containsAnyMultilingualDocs){
-			appendComment("Copies all multilingual fields from sourceLanguage to targetLanguage in all data objects (documents, vo) which are part of this module and managed by this service");
+			appendComment("Copies all multilingual fields from sourceLanguage to targetLanguage in all data objects (documents, vo) which are part of this module and managed by this service.");
 			appendStatement(" void copyMultilingualAttributesInAllObjects(String sourceLanguage, String targetLanguage)"+throwsClause);
 			emptyline();
 	    }
