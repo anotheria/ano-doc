@@ -94,9 +94,7 @@ public class ShowPageJspGenerator extends AbstractJSPGenerator {
 										increaseIdent();
 										appendString("<div class=\"in_w\">");
 											increaseIdent();
-											//actually  - currentPage  parameter ! - for export paging!!!
-											String pageNumberParam = "?pageNumber=<ano:write name="+quote("currentpage")+" scope="+quote("request")+"/>";
-											appendString("<span>Export to <a href="+quote(SectionAction.EXPORTtoXML.getMappingName(section)+pageNumberParam)+">XML</a> or <a href="+quote(SectionAction.EXPORTtoCSV.getMappingName(section)+pageNumberParam)+">CSV</a></span>");
+											appendString("<span>Export to <a href="+quote(SectionAction.EXPORTtoXML.getMappingName(section))+">XML</a> or <a href="+quote(SectionAction.EXPORTtoCSV.getMappingName(section))+">CSV</a></span>");
 										decreaseIdent();
 										appendString("</div>");
 									decreaseIdent();
