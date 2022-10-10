@@ -112,7 +112,7 @@ public class XMLExporterGenerator extends AbstractGenerator {
 		appendComment("Write XML data from all modules into given stream.");
 		appendString("public static void writeCompleteXMLExportToStream(OutputStream target) throws IOException, ASGRuntimeException{");
 		increaseIdent();
-		appendStatement("new XMLWriter().write(createCompleteXMLExport(), target)");
+		appendStatement("new XMLWriter().write(createCompleteXMLExport(), target).close()");
 		append(closeBlock());
 		emptyline();
 		
