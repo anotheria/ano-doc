@@ -56,7 +56,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * This generator generate module-based actions like delete, create, edit, new, update, show and so on.
+ * This generator generates module-based actions like delete, create, edit, new, update, show and so on.
  *
  * @author another
  * @version $Id: $Id
@@ -67,12 +67,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
      */
     private MetaView view;
 
-    /**
-     * If true multiop actions are generated instead of one-action for each link.
-     */
-    static final boolean USE_MULTIOP_ACTIONS = true;
 	/**
-	 *  Sufix for export XML - bean.
+	 *  Suffix for export XML - bean.
 	 */
 	public static final String exportXMLSufix = "XML";
 	/**
@@ -108,9 +104,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		files.add(new FileEntry(generateShowAction(section)));
 		files.add(new FileEntry(generateMultiOpAction(section)));
 		files.add(new FileEntry(generateSearchAction(section)));
-		files.add(new FileEntry(generateDeleteAction(section)));
-		files.add(new FileEntry(generateDuplicateAction(section)));
-		files.add(new FileEntry(generateVersionInfoAction(section)));
 		files.add(new FileEntry(generateExportAction(section)));
 		files.add(new FileEntry(generateTransferAction(section)));
 
@@ -125,19 +118,11 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 				//works only if the section has a dialog.
 				timer.startExecution(section.getModule().getName()+"-dialog-base");
 				files.add(new FileEntry(generateMultiOpDialogAction(section)));
-				files.add(new FileEntry(generateUpdateAction(section)));
 				files.add(new FileEntry(generateEditAction(section)));
 				files.add(new FileEntry(generateNewAction(section)));
 				timer.stopExecution(section.getModule().getName()+"-dialog-base");
 
 				MetaDocument doc = section.getDocument();
-
-				timer.startExecution(section.getModule().getName()+"-dialog-copylang");
-				if (GeneratorDataRegistry.hasLanguageCopyMethods(doc)){
-					files.add(new FileEntry(generateLanguageCopyAction(section)));
-					files.add(new FileEntry(generateSwitchMultilingualityAction(section)));
-				}
-				timer.stopExecution(section.getModule().getName()+"-dialog-copylang");
 
 				timer.startExecution(section.getModule().getName()+"-dialog-container");
 				for (int p=0; p<doc.getProperties().size(); p++){
@@ -150,9 +135,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 						files.add(new FileEntry(generateContainerShowAction(section, mcp)));
 						files.add(new FileEntry(generateContainerAddRowAction(section, mcp)));
-						files.add(new FileEntry(generateContainerQuickAddAction(section, mcp)));
-						files.add(new FileEntry(generateContainerDeleteEntryAction(section, mcp)));
-						files.add(new FileEntry(generateContainerMoveEntryAction(section, mcp)));
 					}
 				}
 				timer.stopExecution(section.getModule().getName()+"-dialog-container");
@@ -1529,29 +1511,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		return "make"+StringUtils.capitalize(beanName);
 	}
 
-	private GeneratedClass generateVersionInfoAction(MetaModuleSection section){
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-
-		MetaDocument doc = section.getDocument();
-
-		clazz.setPackageName(getPackage(section.getModule()));
-		addStandardActionImports(clazz);
-
-	    clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-	    clazz.addImport("net.anotheria.util.NumberUtils");
-
-
-		clazz.setName(getVersionInfoActionName(section));
-		clazz.setParent(getBaseActionName(section));
-		startClassBody();
-
-		generateVersionInfoActionMethod(section, null);
-
-		return clazz;
-}
 
 	private void generateVersionInfoActionMethod(MetaModuleSection section, String methodName){
 
@@ -1582,47 +1541,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlockNEW();
 	}
 
-	/**
-	 * Generates update action, which is called by the dialog to update.
-	 * @param section
-	 * @return
-	 */
-	private GeneratedClass generateUpdateAction(MetaModuleSection section){
-        //TODO: Locking not supported Here! only in MultiOP!!!
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-		MetaDocument doc = section.getDocument();
-		MetaDialog dialog = section.getDialogs().get(0);
-		clazz.setPackageName(getPackage(section.getModule()));
-		addStandardActionImports(clazz);
-		Context context = GeneratorDataRegistry.getInstance().getContext();
-		clazz.addImport(ModuleBeanGenerator.getDialogBeanImport(dialog, doc));
-		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-		clazz.addImport(DataFacadeGenerator.getDocumentFactoryImport(context, doc));
-
-		List<MetaViewElement> elements = createMultilingualList(dialog.getElements(), doc);
-		for (int i=0; i<elements.size(); i++){
-			MetaViewElement elem = elements.get(i);
-			if (elem instanceof MetaFieldElement){
-				MetaFieldElement field = (MetaFieldElement)elem;
-				MetaProperty p = doc.getField(field.getName());
-				if (p.getType() == MetaProperty.Type.IMAGE){
-					clazz.addImport("net.anotheria.webutils.filehandling.actions.FileStorage");
-					clazz.addImport("net.anotheria.webutils.filehandling.beans.TemporaryFileHolder");
-					break;
-				}
-			}
-		}
-
-		clazz.setName(getUpdateActionName(section));
-		clazz.setParent(getBaseActionName(section));
-		startClassBody();
-		generateUpdateActionMethod(section, null);
-
-		return clazz;
-	}
 	/**
 	 * Generates the working part of the update action which is used in both multiop and standalone update action. 
 	 * @param section
@@ -1791,32 +1709,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		}
 	}
 
-	/**
-	 * Generates the switch multilinguality action which switches the multi language support for a single document on and off.
-	 * @param section
-	 * @return
-	 */
-	private GeneratedClass generateSwitchMultilingualityAction(MetaModuleSection section){
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-		MetaDocument doc = section.getDocument();
-		clazz.setPackageName(getPackage(section.getModule()));
-
-		//write imports...
-		addStandardActionImports(clazz);
-	    clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-	    clazz.addImport("net.anotheria.asg.data.MultilingualObject");
-
-	    clazz.setTypeComment("This class enables or disables support for multiple languages for a particular document.");
-		clazz.setName(getSwitchMultilingualityActionName(section));
-		clazz.setParent(getBaseActionName(section));
-
-		startClassBody();
-		generateSwitchMultilingualityActionMethod(section, null);
-		return clazz;
-	}
 
 	/**
 	 * Generates the working part of the switch multilinguality action.
@@ -1849,33 +1741,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 	    appendStatement("return null");
 		closeBlockNEW(); //end doExecute
-	}
-
-	/**
-	 * Generates the language copy action which allows copying content from one language to another on per-document base.
-	 * @param section
-	 * @return
-	 */
-	private GeneratedClass generateLanguageCopyAction(MetaModuleSection section){
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-		MetaDocument doc = section.getDocument();
-		clazz.setPackageName(getPackage(section.getModule()));
-
-		//write imports...
-		addStandardActionImports(clazz);
-	    clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-
-	    clazz.setTypeComment("This class copies multilingual contents from one language to another in a given document");
-		clazz.setName(getLanguageCopyActionName(section));
-		clazz.setParent(getBaseActionName(section));
-
-		startClassBody();
-		generateLanguageCopyActionMethod(section, null);
-
-		return clazz;
 	}
 
 	/**
@@ -2514,25 +2379,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		return linkDecorationStr;
 	}
 
-	private GeneratedClass generateDeleteAction(MetaModuleSection section){
-        //TODO: Locking not supported Here! only in MultiOP!!!
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-		clazz.setPackageName(getPackage(section.getModule()));
-
-	    //write imports...
-	    addStandardActionImports(clazz);
-	    clazz.setName(getDeleteActionName(section));
-	    clazz.setParent(getBaseActionName(section));
-
-	    startClassBody();
-	    generateDeleteActionMethod(section, null);
-
-	    return clazz;
-	}
-
 	private void generateDeleteActionMethod(MetaModuleSection section, String methodName){
 
 		MetaDocument doc = section.getDocument();
@@ -2573,27 +2419,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("res.sendRedirect("+getShowActionRedirect(doc)+")");
 	    appendStatement("return null");
 	    closeBlockNEW();
-
-	}
-
-	private GeneratedClass generateDuplicateAction(MetaModuleSection section){
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-		MetaDocument doc = section.getDocument();
-		clazz.setPackageName(getPackage(section.getModule()));
-
-		//write imports...
-		addStandardActionImports(clazz);
-		clazz.addImport(DataFacadeGenerator.getDocumentFactoryImport(GeneratorDataRegistry.getInstance().getContext(), doc));
-		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-		clazz.setName(getDuplicateActionName(section));
-		clazz.setParent(getBaseActionName(section));
-
-		startClassBody();
-		generateDuplicateActionMethod(section, null);
-		return clazz;
 
 	}
 
@@ -3091,14 +2916,10 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	 * @return
 	 */
 	private String getExecuteDeclaration(String methodName){
-		return getExecuteDeclaration(methodName, "FormBean");
-	}
-
-	private String getExecuteDeclaration(String methodName, String formBeanName){
 	    String ret = "";
 	    ret += "public ActionCommand "+(methodName == null ? "anoDocExecute" : methodName ) + "(";
 		ret += "ActionMapping mapping, ";
-		ret += formBeanName + " af, ";
+		ret += "FormBean af, ";
 		ret += "HttpServletRequest req, ";
 		ret += "HttpServletResponse res) ";
 		ret += "throws Exception{";
@@ -3308,39 +3129,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (container instanceof MetaTableProperty)
 			return generateTableAddRowAction(section, (MetaTableProperty)container);
 
-		if (container instanceof MetaListProperty)
-			return generateListAddRowAction(section, (MetaListProperty)container);
 
 		throw new RuntimeException("Unsupported container type: "+container.getClass().getName());
-	}
-
-	private GeneratedClass generateContainerQuickAddAction(MetaModuleSection section, MetaContainerProperty container){
-		if (container instanceof MetaListProperty && ((MetaListProperty)container).getContainedProperty().isLinked())
-			return generateListQuickAddAction(section, (MetaListProperty)container);
-		return null;
-		//throw new RuntimeException("Unsupported container type: "+container.getClass().getName());
-	}
-
-	private GeneratedClass generateListAddRowAction(MetaModuleSection section, MetaListProperty list){
-        //TODO: locking && unlocking currently supported via MultiOP  for container!!! ONLY
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-
-		MetaDocument doc = section.getDocument();
-
-		clazz.setPackageName(getPackage(section.getModule()));
-		addStandardActionImports(clazz);
-		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-		clazz.addImport(ModuleBeanGenerator.getContainerEntryFormImport(doc, list));
-
-		clazz.setName(getContainerAddEntryActionName(doc, list));
-		clazz.setParent(getContainerShowActionName(doc, list));
-
-		generateListAddRowActionMethod(section, list, null);
-
-		return clazz;
 	}
 
 	private void generateListAddRowActionMethod(MetaModuleSection section, MetaListProperty list, String methodName){
@@ -3393,31 +3183,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, list, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, af, req, res)");
 		closeBlockNEW();
 
-	}
-
-	private GeneratedClass generateListQuickAddAction(MetaModuleSection section, MetaListProperty list){
-           //TODO: locking && unlocking currently supported via MultiOP  for container!!! ONLY
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-
-		MetaDocument doc = section.getDocument();
-
-		clazz.setPackageName(getPackage(section.getModule()));
-		addStandardActionImports(clazz);
-		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-		clazz.addImport(ModuleBeanGenerator.getContainerQuickAddFormImport(doc, list));
-		clazz.addImport("net.anotheria.util.StringUtils");
-
-		clazz.setName(getContainerQuickAddActionName(doc, list));
-		clazz.setParent(getContainerShowActionName(doc, list));
-
-		startClassBody();
-		generateListQuickAddActionMethod(section, list, null);
-
-		return clazz;
 	}
 
 	private void generateListQuickAddActionMethod(MetaModuleSection section, MetaListProperty list, String methodName){
@@ -3524,28 +3289,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		return clazz;
 	}
 
-	private GeneratedClass generateContainerDeleteEntryAction(MetaModuleSection section, MetaContainerProperty container){
-        //TODO: Locking && Unlocking support only included in MultiOPContainer generator!!!
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-
-		MetaDocument doc = section.getDocument();
-
-		clazz.setPackageName(getPackage(section.getModule()));
-		addStandardActionImports(clazz);
-		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-
-		clazz.setName(getContainerDeleteEntryActionName(doc, container));
-		clazz.setParent(getContainerShowActionName(doc, container));
-
-		startClassBody();
-		generateContainerDeleteEntryActionMethod(section, container, null);
-		return clazz;
-	}
-
 	private void generateContainerDeleteEntryActionMethod(MetaModuleSection section, MetaContainerProperty container, String methodName){
 		MetaDocument doc = section.getDocument();
 		appendString(getExecuteDeclaration(methodName));
@@ -3583,39 +3326,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		closeBlockNEW();
 	}
 
-	private GeneratedClass generateContainerMoveEntryAction(MetaModuleSection section, MetaContainerProperty container){
-         //TODO: Locking && Unlocking support only included in MultiOPContainer generator!!!
-		if (!(container instanceof MetaListProperty)){
-			return null;
-		}
-
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-
-		MetaListProperty sourceProperty = (MetaListProperty)container;
-		MetaDocument doc = section.getDocument();
-
-		clazz.setPackageName(getPackage(section.getModule()));
-
-		//write imports...
-		addStandardActionImports(clazz);
-		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-		clazz.addImport("net.anotheria.asg.exception.ASGRuntimeException");
-		clazz.addImport("java.util.List");
-
-		clazz.setName(getContainerMoveEntryActionName(doc, container));
-		clazz.setParent(getContainerShowActionName(doc, container));
-
-		startClassBody();
-		generateContainerMoveEntryActionMethod(section, container, null);
-
-		return clazz;
-
-
-	}
 	/**
 	 * Generates the action which moves an entry in a container up, down, top or bottom.
 	 * @param section
@@ -3714,51 +3424,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (container instanceof MetaTableProperty)
 			return generateTableShowAction(section, (MetaTableProperty)container);
 
-		if (container instanceof MetaListProperty)
-			return generateListShowAction(section, (MetaListProperty)container);
-
 		throw new RuntimeException("Unsupported container type: "+container.getClass().getName());
-	}
-
-	private GeneratedClass generateListShowAction(MetaModuleSection section, MetaListProperty list){
-		if (USE_MULTIOP_ACTIONS)
-			return null;
-
-		GeneratedClass clazz = new GeneratedClass();
-		startNewJob(clazz);
-
-		MetaDocument doc = section.getDocument();
-
-		clazz.setPackageName(getPackage(section.getModule()));
-
-		clazz.addImport("java.util.List");
-		clazz.addImport("java.util.ArrayList");
-		addStandardActionImports(clazz);
-		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-		clazz.addImport(ModuleBeanGenerator.getContainerEntryFormImport(doc, list));
-		if (list.getContainedProperty().isLinked()){
-			clazz.addImport(ModuleBeanGenerator.getContainerQuickAddFormImport(doc, list));
-			MetaLink link = (MetaLink)list.getContainedProperty();
-
-			String tDocName = link.getTargetDocumentName();
-			MetaModule targetModule = link.getLinkTarget().indexOf('.')== -1 ?
-					doc.getParentModule() : GeneratorDataRegistry.getInstance().getModule(link.getTargetModuleName());
-			MetaDocument targetDocument = targetModule.getDocumentByName(tDocName);
-			clazz.addImport(DataFacadeGenerator.getDocumentImport(targetDocument));
-			clazz.addImport(DataFacadeGenerator.getSortTypeImport(targetDocument));
-			clazz.addImport("net.anotheria.anodoc.data.NoSuchDocumentException");
-
-
-		}
-
-		clazz.setName(getContainerShowActionName(doc, list));
-		clazz.setParent(getBaseActionName(section));
-
-		startClassBody();
-
-		generateListShowActionMethod(section, list, null);
-
-		return clazz;
 	}
 
 	private void generateListShowActionMethod(MetaModuleSection section, MetaListProperty list, String methodName){
