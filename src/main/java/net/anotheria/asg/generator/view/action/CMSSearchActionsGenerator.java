@@ -89,25 +89,31 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		clazz.addImport("net.anotheria.util.StringUtils");
 		clazz.addImport("net.anotheria.asg.data.DataObject");
 
-		clazz.setParent(BaseActionGenerator.getBaseActionName(), "SearchFB");
+		clazz.setParent(BaseActionGenerator.getBaseActionName());
 		clazz.setName(getCmsSearchActionName());
 
 		startClassBody();
-
+/*
 		appendString("@Override");
-		appendString("public ActionCommand execute(ActionMapping mapping, @Form(SearchFB.class) FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
+		appendString("public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
 		increaseIdent();
 		appendString("return super.execute(mapping, formBean, req, res);");
 		closeBlock("");
 		emptyline();
-
-		appendString("public ActionCommand anoDocExecute(ActionMapping mapping, SearchFB formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
+*/
+		appendString("public ActionCommand anoDocExecute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
 		increaseIdent();
-		appendString("DocumentQuery query = new ContainsStringQuery(\"*\" + formBean.getCriteria() + \"*(\\r\\n)?\");");
-		appendString("QueryResult result = executeQuery(formBean.getModule(), formBean.getDocument(), query, formBean.getSearchArea());");
-		appendStatement("addBeanToRequest(req, BEAN_DOCUMENT_DEF_NAME, formBean.getDocument())");
-		appendStatement("addBeanToRequest(req, BEAN_MODULE_DEF_NAME, formBean.getModule())");
-		appendStatement("req.getSession().setAttribute(BEAN_SEARCH_SCOPE, formBean.getSearchArea())");
+		appendStatement("String pCriteria = getStringParameter(req, "+quote("criteria")+")");
+		appendStatement("String pModule = getStringParameter(req, "+quote("module")+")");
+		appendStatement("String pDocument = getStringParameter(req, "+quote("document")+")");
+		appendStatement("String pSearchArea = getStringParameter(req, "+quote("searchArea")+")");
+
+
+		appendString("DocumentQuery query = new ContainsStringQuery(\"*\" + pCriteria + \"*(\\r\\n)?\");");
+		appendString("QueryResult result = executeQuery(pModule, pDocument, query, pSearchArea);");
+		appendStatement("addBeanToRequest(req, BEAN_DOCUMENT_DEF_NAME, pDocument)");
+		appendStatement("addBeanToRequest(req, BEAN_MODULE_DEF_NAME, pModule)");
+		appendStatement("req.getSession().setAttribute(BEAN_SEARCH_SCOPE, pSearchArea)");
 		appendString("if (result.getEntries().size()==0){");
 		increaseIdent();
 		appendString("req.setAttribute(\"srMessage\", \"Nothing found.\");");
@@ -130,7 +136,7 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		closeBlock("");
 		appendString("req.setAttribute(\"result\", beans);");
 		closeBlock("");
-		appendString("req.setAttribute(\"criteria\", formBean.getCriteria());");
+		appendString("req.setAttribute(\"criteria\", pCriteria);");
 		appendString("return mapping.success();");
 		closeBlock("");
 		emptyline();
@@ -226,50 +232,58 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 
 		startClassBody();
 
-		appendString("private String criteria;");
-		appendString("private String module;");
-		appendString("private String document;");
-		appendString("private String searchArea;");
+		appendStatement("private String criteria");
+		appendStatement("private String module");
+		appendStatement("private String document");
+		appendStatement("private String searchArea");
 		emptyline();
-		increaseIdent();
+
 		appendString("public String getCriteria() {");
-		appendIncreasedString("return criteria;");
-		closeBlock("");
-		emptyline();
 		increaseIdent();
+		appendStatement("return criteria");
+		closeBlockNEW();
+		emptyline();
+
 		appendString("public void setCriteria(String criteria) {");
-		appendIncreasedString("this.criteria = criteria;");
-		closeBlock("");
-		emptyline();
 		increaseIdent();
+		appendStatement("this.criteria = criteria");
+		closeBlockNEW();
+		emptyline();
+
 		appendString("public String getModule() {");
-		appendIncreasedString("return module;");
+		increaseIdent();
+		appendStatement("return module");
 		closeBlock("");
 		emptyline();
-		increaseIdent();
+
 		appendString("public void setModule(String module) {");
-		appendIncreasedString("this.module = module;");
+		increaseIdent();
+		appendStatement("this.module = module");
 		closeBlock("");
 		emptyline();
-		increaseIdent();
+
 		appendString("public String getDocument() {");
-		appendIncreasedString("return document;");
+		increaseIdent();
+		appendStatement("return document");
 		closeBlock("");
 		emptyline();
-		increaseIdent();
+
 		appendString("public void setDocument(String document) {");
-		appendIncreasedString("this.document = document;");
-		closeBlock("");
-		emptyline();
 		increaseIdent();
+		appendStatement("this.document = document");
+		closeBlockNEW();
+		emptyline();
+
 		appendString("public String getSearchArea() {");
-		appendIncreasedString("return searchArea;");
-		closeBlock("");
-		emptyline();
 		increaseIdent();
+		appendStatement("return searchArea");
+		closeBlockNEW();
+		emptyline();
+
 		appendString("public void setSearchArea(String searchArea) {");
-		appendIncreasedString("this.searchArea = searchArea;");
-		closeBlock("");
+		increaseIdent();
+		appendStatement("this.searchArea = searchArea");
+		closeBlockNEW();
 		emptyline();
 
 

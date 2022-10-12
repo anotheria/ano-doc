@@ -61,7 +61,7 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
 		clazz.setPackageName(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".action");
-		
+
 		List<MetaSection> sections = view.getSections();
 		List<MetaModule> modules = new ArrayList<MetaModule>();
 		
@@ -83,7 +83,7 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 		clazz.setParent(BaseActionGenerator.getBaseActionName());
 		//clazz.setGeneric("T extends FormBean");
 		clazz.setName(getViewActionName(view));
-		
+
 		startClassBody();
 
 		

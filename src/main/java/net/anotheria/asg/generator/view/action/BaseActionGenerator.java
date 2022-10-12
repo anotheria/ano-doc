@@ -72,7 +72,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 
 		clazz.setAbstractClass(true);
 		clazz.setParent("BaseAction");
-		clazz.setGeneric("T extends FormBean");
+		//clazz.setGeneric("T extends FormBean");
 		clazz.setName(getBaseActionName());
 
 		startClassBody();
@@ -166,7 +166,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		closeBlock("preProcess");
 		emptyline();
 		
-		appendString("public abstract ActionCommand anoDocExecute(ActionMapping mapping, T formBean, HttpServletRequest req, HttpServletResponse res) throws Exception;");
+		appendString("public abstract ActionCommand anoDocExecute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception;");
 		emptyline();
 		appendGenerationPoint("generateBaseAction");
 		appendString("@Override");
@@ -194,7 +194,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		appendStatement("addBeanToRequest(req, BEAN_DOCUMENT_DEF_NAME, getCurrentDocumentDefName())");
 		appendStatement("addBeanToRequest(req, BEAN_MODULE_DEF_NAME, getActiveMainNavi())");
 		emptyline();
-		appendString("return anoDocExecute(mapping, (T) formBean, req, res);");
+		appendString("return anoDocExecute(mapping, formBean, req, res);");
 		closeBlock("execute");
 		emptyline();
 		//generate service getter
