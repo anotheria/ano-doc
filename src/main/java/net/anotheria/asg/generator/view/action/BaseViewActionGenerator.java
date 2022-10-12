@@ -76,12 +76,12 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
-		clazz.addImport("net.anotheria.maf.bean.FormBean");
+		//clazz.addImport("net.anotheria.maf.bean.FormBean");
 		clazz.addImport("net.anotheria.webutils.bean.NavigationItemBean");
 
 		clazz.setAbstractClass(true);
 		clazz.setParent(BaseActionGenerator.getBaseActionName());
-		clazz.setGeneric("T extends FormBean");
+		//clazz.setGeneric("T extends FormBean");
 		clazz.setName(getViewActionName(view));
 		
 		startClassBody();

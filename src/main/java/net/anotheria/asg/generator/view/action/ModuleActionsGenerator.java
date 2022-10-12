@@ -646,7 +646,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
         final boolean cMSStorageType = StorageType.CMS.equals(doc.getParentModule().getStorageType());
 
 		clazz.setName(getMultiOpDialogActionName(section));
-		clazz.setParent(getBaseActionName(section), ModuleBeanGenerator.getDialogBeanName(dialog, doc));
+		clazz.setParent(getBaseActionName(section));
 		clazz.setPackageName(getPackage(section.getModule()));
 		Context context = GeneratorDataRegistry.getInstance().getContext();
 
@@ -2694,9 +2694,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 			clazz.addImport(CMSViewHelperUtil.class);
 		}
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
-		clazz.setGeneric("T extends FormBean");
+		//clazz.setGeneric("T extends FormBean");
 		clazz.setName(getBaseActionName(section));
-	    clazz.setParent(BaseViewActionGenerator.getViewActionName(view), "T");
+	    clazz.setParent(BaseViewActionGenerator.getViewActionName(view));
 
 	    startClassBody();
 
