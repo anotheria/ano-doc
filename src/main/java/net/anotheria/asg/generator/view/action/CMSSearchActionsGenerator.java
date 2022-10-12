@@ -80,11 +80,9 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		clazz.addImport("net.anotheria.anodoc.query2.ResultEntryBean");
 		clazz.addImport("net.anotheria.anodoc.query2.string.ContainsStringQuery");
 		clazz.addImport("net.anotheria.asg.exception.ASGRuntimeException");
-		clazz.addImport(getSearchFBFullName());
 		clazz.addImport("net.anotheria.maf.action.ActionCommand");
 		clazz.addImport("net.anotheria.maf.action.ActionMapping");
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
-		clazz.addImport("net.anotheria.maf.bean.annotations.Form");
 		clazz.addImport("net.anotheria.webutils.bean.NavigationItemBean");
 		clazz.addImport("net.anotheria.util.StringUtils");
 		clazz.addImport("net.anotheria.asg.data.DataObject");
