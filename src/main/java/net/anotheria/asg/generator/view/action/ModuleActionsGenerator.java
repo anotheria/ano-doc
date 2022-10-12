@@ -867,10 +867,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 	private void generateExecuteMethod(GeneratedClass clazz, MetaDialog dialog, MetaDocument document){
 		String formBeanName = ModuleBeanGenerator.getDialogBeanName(dialog, document);
-		clazz.addImport("net.anotheria.maf.bean.annotations.Form");
-//		clazz.addImport(clazz);
 		appendString("@Override");
-		appendString("public ActionCommand execute(ActionMapping mapping, @Form("+formBeanName+".class) FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
+		appendString("public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
 		increaseIdent();
 		appendStatement("return super.execute(mapping, formBean, req, res)");
 		closeBlock("execute");
@@ -1036,7 +1034,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 		if (containsDecorators){
 			for (int i=0; i<elements.size();i++){
-				MetaViewElement element = (MetaViewElement)elements.get(i);
+				MetaViewElement element = elements.get(i);
 				if (element.getDecorator()!=null){
 					appendStatement("private IAttributeDecorator "+getDecoratorVariableName(element));
 				}
@@ -1442,10 +1440,10 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 				MetaDocument targetDocument = mod.getDocumentByName(targetDocumentName);
 
 				appendStatement("List<"+targetDocument.getName()+"> "+targetDocument.getMultiple().toLowerCase()+" = "+getServiceGetterCall(mod)+".get"+targetDocument.getMultiple()+"()");
-				appendStatement("List<LabelValueBean> "+targetDocument.getMultiple().toLowerCase()+"Beans = new ArrayList<LabelValueBean>("+targetDocument.getMultiple().toLowerCase()+".size())");
+				appendStatement("List<LabelValueBean> "+targetDocument.getMultiple().toLowerCase()+"Beans = new ArrayList<>("+targetDocument.getMultiple().toLowerCase()+".size())");
 				appendString("for(Iterator<"+targetDocument.getName()+"> it="+targetDocument.getMultiple().toLowerCase()+".iterator(); it.hasNext(); ){");
 				increaseIdent();
-				appendStatement(targetDocument.getName()+" "+targetDocument.getVariableName()+" = ("+targetDocument.getName()+") it.next()");
+				appendStatement(targetDocument.getName()+" "+targetDocument.getVariableName()+" =  it.next()");
 				String beanCreationCall = targetDocument.getMultiple().toLowerCase()+"Beans";
 				beanCreationCall+=".add(";
 				beanCreationCall+="new LabelValueBean(";
