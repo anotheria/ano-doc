@@ -868,9 +868,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	private void generateExecuteMethod(GeneratedClass clazz, MetaDialog dialog, MetaDocument document){
 		String formBeanName = ModuleBeanGenerator.getDialogBeanName(dialog, document);
 		appendString("@Override");
-		appendString("public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
+		appendString("public ActionCommand execute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception{");
 		increaseIdent();
-		appendStatement("return super.execute(mapping, formBean, req, res)");
+		appendStatement("return super.execute(mapping, req, res)");
 		closeBlock("execute");
 		emptyline();
 	}
@@ -941,16 +941,16 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    closeBlockNEW();
     }
 
-    private void writePathResolveForMultiOpAction(MetaDocument doc,String action){
+    private void writePathResolveForMultiOpAction(MetaDocument doc, String action){
 		String path = CMSMappingsConfiguratorGenerator.getPath(doc, action);
 		appendString("if (path.equals("+quote(path)+"))");
-		appendIncreasedStatement("return "+path+"(mapping, af, req, res)");
+		appendIncreasedStatement("return "+path+"(mapping, req, res)");
 	}
 
 	private void writePathResolveForContainerMultiOpAction(MetaDocument doc, MetaContainerProperty container, String action){
 		String path = CMSMappingsConfiguratorGenerator.getContainerPath(doc, container, action);
 		appendString("if (path.equals("+quote(path)+"))");
-		appendIncreasedStatement("return "+path+"(mapping, af, req, res)");
+		appendIncreasedStatement("return "+path+"(mapping, req, res)");
 	}
 
 	/**
@@ -2542,17 +2542,19 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		//todo formating of generated code is wrong
 	    appendStatement("String[] iDs = req.getParameterValues(PARAM_ID)");
 		appendString("if (iDs == null){");
+		increaseIdent();
 		appendStatement("throw new RuntimeException(\"Parameter \" + PARAM_ID + \" is not set.\")");
 		closeBlockNEW();
 		appendString("for (String id : iDs){");
 		increaseIdent();
-			appendStatement(doc.getName()+" "+doc.getVariableName()+"Curr = "+getServiceGetterCall(section.getModule())+".get"+doc.getName()+"(id)");
+		appendStatement(doc.getName()+" "+doc.getVariableName()+"Curr = "+getServiceGetterCall(section.getModule())+".get"+doc.getName()+"(id)");
          if(StorageType.CMS.equals(section.getDocument().getParentModule().getStorageType())){
 			appendString("if ("+doc.getVariableName()+"Curr instanceof LockableObject){ ");
+			increaseIdent();
 			appendStatement("LockableObject lockable = (LockableObject)" + doc.getVariableName() + "Curr");
 			//Actually We does not Care - about admin role in Delete action!  So checkExecutionPermission  2-nd parameter  can be anything!
 			appendStatement("DocumentLockingHelper.delete.checkExecutionPermission(lockable, false, getUserId(req))");
-			appendString("}");
+			closeBlockNEW();
         }
 	    appendStatement(getServiceGetterCall(section.getModule())+".delete"+doc.getName()+"(id)");
 		//delete images from file system
@@ -2868,8 +2870,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 			clazz.addImport(CMSViewHelperRegistry.class);
 			clazz.addImport(CMSViewHelperUtil.class);
 		}
-		clazz.addImport("net.anotheria.maf.bean.FormBean");
-		clazz.setGeneric("T extends FormBean");
 		clazz.setName(getBaseActionName(section));
 	    clazz.setParent(BaseViewActionGenerator.getViewActionName(view));
 
@@ -3091,14 +3091,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	 * @return
 	 */
 	private String getExecuteDeclaration(String methodName){
-		return getExecuteDeclaration(methodName, "FormBean");
-	}
-
-	private String getExecuteDeclaration(String methodName, String formBeanName){
 	    String ret = "";
 	    ret += "public ActionCommand "+(methodName == null ? "anoDocExecute" : methodName ) + "(";
 		ret += "ActionMapping mapping, ";
-		ret += formBeanName + " af, ";
 		ret += "HttpServletRequest req, ";
 		ret += "HttpServletResponse res) ";
 		ret += "throws Exception{";
@@ -3109,7 +3104,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    String ret = "";
 	    ret += "super.anoDocExecute(";
 		ret += "mapping, ";
-		ret += "af, ";
 		ret += "req, ";
 		ret += "res) ";
 		return ret;
@@ -3124,7 +3118,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    clazz.addImport("javax.servlet.http.HttpServletResponse");
 	    clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 	    clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
-	    clazz.addImport(net.anotheria.maf.bean.FormBean.class);
 
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
@@ -3390,7 +3383,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (methodName==null)
 			appendStatement("return "+getSuperCall());
 		else
-			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, list, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, af, req, res)");
+			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, list, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, req, res)");
 		closeBlockNEW();
 
 	}
@@ -3464,7 +3457,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (methodName==null)
 			appendStatement("return "+getSuperCall());
 		else
-			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, list, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, af, req, res)");
+			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, list, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, req, res)");
 		closeBlockNEW();
 
 	}
@@ -3579,7 +3572,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (methodName==null)
 			appendStatement("return "+getSuperCall());
 		else
-			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, container, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, af, req, res)");
+			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, container, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, req, res)");
 		closeBlockNEW();
 	}
 
@@ -3658,7 +3651,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (methodName==null)
 			appendStatement("return "+getSuperCall());
 		else
-			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, container, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, af, req, res)");
+			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, container, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, req, res)");
 		closeBlockNEW();
 		emptyline();
 

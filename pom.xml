@@ -12,7 +12,7 @@
 
 	<properties>
 		<ano-util.version>2.1.9</ano-util.version>
-		<ano-maf.version>2.3.0</ano-maf.version>
+		<ano-maf.version>3.0.0-SNAPSHOT</ano-maf.version>
 		<ano-web.version>2.1.0</ano-web.version>
 		<ano-plass.version>2.1.4</ano-plass.version>
 		<ano-prise.version>2.2.1</ano-prise.version>
