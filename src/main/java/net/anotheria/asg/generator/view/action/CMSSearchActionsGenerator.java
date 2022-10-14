@@ -99,7 +99,7 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		closeBlock("");
 		emptyline();
 */
-		appendString("public ActionCommand anoDocExecute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
+		appendString("public ActionCommand anoDocExecute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception{");
 		increaseIdent();
 		appendStatement("String pCriteria = getStringParameter(req, "+quote("criteria")+")");
 		appendStatement("String pModule = getStringParameter(req, "+quote("module")+")");
@@ -223,9 +223,6 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		appendGenerationPoint("generateSearchFB");
 		clazz.setPackageName(getSearchFBPackageName());
 
-		clazz.addImport("net.anotheria.maf.bean.FormBean");
-
-		clazz.addInterface("FormBean");
 		clazz.setName(getSearchFBName());
 
 		startClassBody();

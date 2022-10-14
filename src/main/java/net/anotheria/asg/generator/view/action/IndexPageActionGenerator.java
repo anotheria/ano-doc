@@ -132,7 +132,7 @@ public class IndexPageActionGenerator extends AbstractGenerator {
 		append(closeBlock());
 		emptyline();
 
-		appendString("public ActionCommand anoDocExecute(ActionMapping aMapping, FormBean aAf, HttpServletRequest aReq, HttpServletResponse aRes) throws Exception {");
+		appendString("public ActionCommand anoDocExecute(ActionMapping aMapping, HttpServletRequest aReq, HttpServletResponse aRes) throws Exception {");
 		increaseIdent();
 		appendStatement("addBeanToRequest(aReq, FLAG_DISABLED_SEARCH, true)");
 		

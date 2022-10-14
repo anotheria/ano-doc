@@ -108,7 +108,7 @@ public class LocalizationBundleExportToTxtActionGenerator extends AbstractGenera
         appendStatement("return true");
         append(closeBlock());
         emptyline();
-        appendString("public ActionCommand anoDocExecute(ActionMapping aMapping, FormBean aAf, HttpServletRequest aReq, HttpServletResponse aRes) throws Exception {");
+        appendString("public ActionCommand anoDocExecute(ActionMapping aMapping,  HttpServletRequest aReq, HttpServletResponse aRes) throws Exception {");
         appendString("String locale = aReq.getParameter(\"locale\");");
         appendString("try {");
         increaseIdent();

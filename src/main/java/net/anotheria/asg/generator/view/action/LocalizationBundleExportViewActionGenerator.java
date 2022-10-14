@@ -104,7 +104,7 @@ public class LocalizationBundleExportViewActionGenerator extends AbstractGenerat
         appendStatement("return true");
         append(closeBlock());
         emptyline();
-        appendString("public ActionCommand anoDocExecute(ActionMapping aMapping, FormBean aAf, HttpServletRequest aReq, HttpServletResponse aRes) throws Exception {");
+        appendString("public ActionCommand anoDocExecute(ActionMapping aMapping, HttpServletRequest aReq, HttpServletResponse aRes) throws Exception {");
         increaseIdent();
         String langUtil = StringUtils.capitalize(context.getApplicationName()) + "LanguageUtils";
         appendString("List<String> languages = " + langUtil + ".getSupportedLanguages();");
