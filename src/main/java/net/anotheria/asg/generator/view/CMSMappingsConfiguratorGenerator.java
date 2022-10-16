@@ -14,14 +14,9 @@ import net.anotheria.asg.generator.meta.MetaProperty;
 import net.anotheria.asg.generator.meta.MetaTableProperty;
 import net.anotheria.asg.generator.meta.StorageType;
 import net.anotheria.asg.generator.view.action.IndexPageActionGenerator;
-import net.anotheria.asg.generator.view.action.LocalizationBundleExportToTxtActionGenerator;
-import net.anotheria.asg.generator.view.action.LocalizationBundleExportViewActionGenerator;
-import net.anotheria.asg.generator.view.action.LocalizationBundleImportViewActionGenerator;
 import net.anotheria.asg.generator.view.action.ModuleActionsGenerator;
 import net.anotheria.asg.generator.view.jsp.IndexPageJspGenerator;
 import net.anotheria.asg.generator.view.jsp.JspGenerator;
-import net.anotheria.asg.generator.view.jsp.LocalizationBundleExportJspGenerator;
-import net.anotheria.asg.generator.view.jsp.LocalizationBundleImportJspGenerator;
 import net.anotheria.asg.generator.view.meta.MetaDialog;
 import net.anotheria.asg.generator.view.meta.MetaModuleSection;
 import net.anotheria.asg.generator.view.meta.MetaSection;
@@ -293,9 +288,9 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		clazz.addImport(net.anotheria.maf.action.ActionMappings.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMappingsConfigurator.class);
 		clazz.addImport(IndexPageActionGenerator.getIndexPageFullName());
-		clazz.addImport(LocalizationBundleExportViewActionGenerator.getLocalizationBundleExportPageFullName());
-		clazz.addImport(LocalizationBundleImportViewActionGenerator.getLocalizationBundleImportPageFullName());
-		clazz.addImport(LocalizationBundleExportToTxtActionGenerator.getLocalizationBundleExportPageFullName());
+		clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleExportMafAction");
+		clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleImportMafAction");
+		clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleExportToTxtAction");
 		clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleMakeParentsMafAction");
 
 
@@ -331,12 +326,12 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		openFun("public void configureActionMappings(ActionMappings mappings)");
 
 		appendStatement("mappings.addMapping(\"index\", " + IndexPageActionGenerator.getIndexPageActionName() + ".class, new CommandForward(\"success\", "+quote(IndexPageJspGenerator.getIndexJspFullName())+"))");
-		appendStatement("mappings.addMapping(\"asgLocalizationBundleExportView\", " + LocalizationBundleExportViewActionGenerator.getLocalizationBundleExportPageActionName() + ".class, new CommandForward(\"success\", "+quote(LocalizationBundleExportJspGenerator.getLocalizationBundleExportJspFullName())+"))");
-		appendStatement("mappings.addMapping(\"asgLocalizationBundleImportView\", " + LocalizationBundleImportViewActionGenerator.getLocalizationBundleImportPageActionName() + ".class, new CommandForward(\"success\", "+quote(LocalizationBundleImportJspGenerator.getLocalizationBundleImportJspFullName())+"))");
+		appendStatement("mappings.addMapping(\"asgLocalizationBundleExportView\", net.anotheria.anosite.cms.action.LocalizationBundleExportMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleExport.jsp\"))");
+		appendStatement("mappings.addMapping(\"asgLocalizationBundleImportView\", net.anotheria.anosite.cms.action.LocalizationBundleImportMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleImport.jsp\"))");
 		appendStatement("mappings.addMapping(\"asgLocalizationBundleMakeParentsView\", net.anotheria.anosite.cms.action.LocalizationBundleMakeParentsMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleMakeParents.jsp\"))");
 		appendStatement("mappings.addMapping(\"fileShow\", "+quote(ShowFile.class.getName())+", new CommandForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
 		appendStatement("mappings.addMapping(\"fileUpload\", "+quote(FileAjaxUpload.class.getName())+")");
-        appendStatement("mappings.addMapping(\"exportLocalizationBundlesToTxt\", " + LocalizationBundleExportToTxtActionGenerator.getLocalizationBundleExportPageActionName() + ".class)");
+        appendStatement("mappings.addMapping(\"exportLocalizationBundlesToTxt\", net.anotheria.anosite.cms.action.LocalizationBundleExportToTxtAction.class)");
 
 		appendStatement("mappings.addMapping(\"showTmpFile\", "+quote(ShowTmpFile.class.getName())+")");
 		appendStatement("mappings.addMapping(\"getFile\", "+quote(GetFile.class.getName())+")");
