@@ -45,6 +45,7 @@ import net.anotheria.asg.generator.view.meta.MetaView;
 import net.anotheria.asg.generator.view.meta.MetaViewElement;
 import net.anotheria.asg.generator.view.meta.MultilingualFieldElement;
 import net.anotheria.asg.util.action.ActionUtils;
+import net.anotheria.asg.util.bean.PopulateUtility;
 import net.anotheria.asg.util.helper.cmsview.CMSViewHelperRegistry;
 import net.anotheria.asg.util.helper.cmsview.CMSViewHelperUtil;
 import net.anotheria.util.ExecutionTimer;
@@ -675,6 +676,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    clazz.addImport(DataFacadeGenerator.getDocumentFactoryImport(context, doc));
 	    clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 	    clazz.addImport(ModuleBeanGenerator.getDialogBeanImport(dialog, doc));
+		clazz.addImport(PopulateUtility.class);
         if (cMSStorageType){
             clazz.addImport("net.anotheria.asg.data.LockableObject");
             clazz.addImport("net.anotheria.asg.util.locking.helper.DocumentLockingHelper");
@@ -1637,7 +1639,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendString( getExecuteDeclaration(methodName));
 		increaseIdent();
 
-		appendStatement(ModuleBeanGenerator.getDialogBeanName(dialog, doc)+" form = ("+ModuleBeanGenerator.getDialogBeanName(dialog, doc)+") af");
+		appendStatement(ModuleBeanGenerator.getDialogBeanName(dialog, doc)+" form = new "+ModuleBeanGenerator.getDialogBeanName(dialog, doc)+"()");
+		appendStatement("PopulateUtility.populate(form, req)");
 		//check if we have a form submission at all.
 //		appendString( "if (!form.isFormSubmittedFlag())");
 //		appendIncreasedStatement("throw new RuntimeException(\"Request broken!\")");
