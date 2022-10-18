@@ -204,7 +204,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 		clazz.addImport(DataFacadeGenerator.getSortTypeImport(doc));
 
-		clazz.addImport("net.anotheria.asg.util.bean.PagingLink");
 		clazz.addImport("org.slf4j.Logger");
 		clazz.addImport("org.slf4j.LoggerFactory");
 		clazz.addImport("org.slf4j.MarkerFactory");
