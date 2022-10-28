@@ -3219,6 +3219,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport(DataFacadeGenerator.getDocumentFactoryImport(GeneratorDataRegistry.getInstance().getContext(), doc));
 		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 		clazz.addImport(ModuleBeanGenerator.getContainerEntryFormImport(doc, containerProperty));
+		clazz.addImport(PopulateUtility.class);
 //        if(StorageType.CMS.equals(section.getModule().getStorageType())){
 //            clazz.addImport("net.anotheria.asg.data.LockableObject");
 //            clazz.addImport("net.anotheria.asg.util.locking.helper.DocumentLockingHelper");
@@ -3344,7 +3345,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendString( getExecuteDeclaration(methodName));
 		increaseIdent();
 		appendStatement(ModuleBeanGenerator.getContainerEntryFormName(list)+" form = new "+ModuleBeanGenerator.getContainerEntryFormName(list)+"()");
-		appendStatement("populateFormBean(req, form)");
+		appendStatement("PopulateUtility.populate(form, req)");
+		//appendStatement("populateFormBean(req, form)"); <- replaced with call to populate utility.
 		appendStatement("String id = form.getOwnerId()");
 
 
@@ -3422,7 +3424,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendString(getExecuteDeclaration(methodName));
 		increaseIdent();
 		appendStatement(ModuleBeanGenerator.getContainerQuickAddFormName(list)+" form = new "+ModuleBeanGenerator.getContainerQuickAddFormName(list)+"()");
-		appendStatement("populateFormBean(req, form)");
+		appendStatement("PopulateUtility.populate(form, req)");
+		//appendStatement("populateFormBean(req, form)");
 		appendStatement("String id = form.getOwnerId()");
 		appendStatement(doc.getName()+" "+doc.getVariableName());
 		appendStatement(doc.getVariableName()+" = "+getServiceGetterCall(section.getModule())+".get"+doc.getName()+"(id)");
@@ -3488,7 +3491,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendString(getExecuteDeclaration());
 		increaseIdent();
 		appendStatement(ModuleBeanGenerator.getContainerEntryFormName(table)+" form = new "+ModuleBeanGenerator.getContainerEntryFormName(table)+"()");
-		appendStatement("populateFormBean(req, form)");
+		appendStatement("PopulateUtility.populate(form, req)");
+		//appendStatement("populateFormBean(req, form)");
 		appendStatement("String id = form.getOwnerId()");
 		appendStatement(doc.getName()+" "+doc.getVariableName());
 		appendStatement(doc.getVariableName()+" = "+getServiceGetterCall(section.getModule())+".get"+doc.getName()+"(id)");

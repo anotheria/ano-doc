@@ -18,21 +18,29 @@ public class PopulateUtility {
 
     public static void populate(Object bean, HttpServletRequest from) {
         Class c = bean.getClass();
-        System.out.println(c);
         Field[] fields = c.getDeclaredFields();
         for (Field f:fields){
-            System.out.println(f);
-            System.out.println(f.getName());
+            log.debug("populating field "+f);
             String value = from.getParameter(f.getName());
-            System.out.println("value for "+f.getName()+" is "+value);
+            log.debug("  with value "+value);
+            if (value == null)
+                continue;
 
             try {
                 f.setAccessible(true);
+                if (f.getType().equals(java.util.List.class)) {
+                    log.debug("list "+f.getName()+", skipped");
+                    continue;
+                }
                 if (f.getType().equals(String.class)) {
                     f.set(bean, value);
                 } else if (f.getType().equals(boolean.class)) {
-                    f.setBoolean(bean, Boolean.parseBoolean(value));
-                } else if (f.getType().equals(int.class)) {
+                    if (value !=null && value.equals("on")){ //special handling for checkboxing, on = true, null = false.
+                        f.setBoolean(bean, true);
+                    } else {
+                        f.setBoolean(bean, Boolean.parseBoolean(value));
+                    }
+                } else if (f.getType().equals(int.class) ) {
                     f.setInt(bean, Integer.parseInt(value));
                 } else if (f.getType().equals(long.class)) {
                     f.setLong(bean, Long.parseLong(value));
