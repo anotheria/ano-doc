@@ -194,7 +194,9 @@ public class Document extends DataHolder
 			Property aProperty = getProperty(name);
 			if (aProperty instanceof LongProperty)
 				return (LongProperty) aProperty;
-		}catch(NoSuchDataHolderException e){}
+		}catch(NoSuchDataHolderException e){
+			throw new NoSuchPropertyException(name,"LongProperty");
+		}
 		throw new NoSuchPropertyException(name,"LongProperty");
 	}
 	
