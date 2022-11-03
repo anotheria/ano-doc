@@ -42,6 +42,10 @@ public class PopulateUtility {
                     }
                 } else if (f.getType().equals(int.class) ) {
                     f.setInt(bean, Integer.parseInt(value));
+                } else if (f.getType().equals(float.class) ) {
+                    f.setFloat(bean, Float.parseFloat(value));
+                } else if (f.getType().equals(double.class) ) {
+                    f.setDouble(bean, Double.parseDouble(value));
                 } else if (f.getType().equals(long.class)) {
                     f.setLong(bean, Long.parseLong(value));
                 } else {
