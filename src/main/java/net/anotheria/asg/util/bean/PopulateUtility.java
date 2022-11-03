@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
+import java.util.Date;
 
 /**
  * Utility class for populating beans.
@@ -48,6 +49,8 @@ public class PopulateUtility {
                     f.setDouble(bean, Double.parseDouble(value));
                 } else if (f.getType().equals(long.class)) {
                     f.setLong(bean, Long.parseLong(value));
+                } else if (f.getType().equals(Date.class)) {
+                    f.set(bean, value);
                 } else {
                     throw new RuntimeException("Unsupported type " + f.getType());
                 }
