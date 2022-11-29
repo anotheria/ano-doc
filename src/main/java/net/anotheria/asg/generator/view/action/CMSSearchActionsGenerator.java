@@ -104,7 +104,8 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		appendStatement("String pCriteria = getStringParameter(req, "+quote("criteria")+")");
 		appendStatement("String pModule = getStringParameter(req, "+quote("module")+")");
 		appendStatement("String pDocument = getStringParameter(req, "+quote("document")+")");
-		appendStatement("String pSearchArea = getStringParameter(req, "+quote("searchArea")+")");
+		appendStatement("String pSearchArea = req.getParameter("+quote("searchArea")+")");
+		appendStatement("if (StringUtils.isEmpty(pSearchArea)) { pSearchArea = "+quote("cms")+";}");
 
 
 		appendString("DocumentQuery query = new ContainsStringQuery(\"*\" + pCriteria + \"*(\\r\\n)?\");");
