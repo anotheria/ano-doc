@@ -39,7 +39,7 @@ import java.util.Map;
  * @version $Id: $Id
  */
 public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
-	
+
 	/**
 	 * Type op operation for dialogs.
 	 * @author lrosenberg
@@ -49,7 +49,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		SINGLE,
 		MULTIPLE_DIALOG,
 	}
-	
+
 	public enum SectionAction{
 		SHOW("Show", "Show", OperationType.SINGLE, true),
 		EDIT("Edit", "Edit", OperationType.SINGLE),
@@ -98,25 +98,25 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 				return "Show"+doc.getName(true) + "AsXML";
 			}
 		},
-		
+
 		;
-		
+
 		private String action;
 		private String view;
 		private OperationType type;
 		private boolean multiDocument;
-		
+
 		private SectionAction(String anAction, String aView, OperationType aType) {
 			this(anAction, aView, aType, false);
 		}
-		
+
 		private SectionAction(String anAction, String aView, OperationType aType, boolean aListDocument) {
 			action = anAction;
 			view = aView;
 			type = aType;
 			multiDocument = aListDocument;
 		}
-		
+
 		public String getClassName(MetaModuleSection section) {
 			switch (type) {
 			case SINGLE:
@@ -127,25 +127,25 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 			throw new AssertionError("Unsuported OperationType!");
 
 		}
-		
+
 		public String getMappingName(MetaModuleSection section){
 			return getMappingName(section.getDocument());
 		}
-		
+
 		public String getMappingName(MetaDocument doc){
 			return doc.getParentModule().getName().toLowerCase()+StringUtils.capitalize(doc.getName()) + action;
 		}
-		
-		
+
+
 		public String getViewName(MetaModuleSection section){
 			MetaDocument doc = section.getDocument();
 			return view+doc.getName(multiDocument);
 		}
-		
+
 		public String getViewPath(MetaModuleSection section){
 			return "/" + FileEntry.package2path(JspGenerator.getPackage(section.getModule())) + "/";
 		}
-		
+
 		public String getViewFullName(MetaModuleSection section){
 			return getViewPath(section) + getViewName(section);
 		}
@@ -153,12 +153,12 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		public boolean isIgnoreForSection(MetaModuleSection section){
 			return !multiDocument && (section.getDialogs().size() == 0 || StorageType.FEDERATION == section.getModule().getStorageType());
 		}
-		
+
 	}
-	
+
 	public static enum SharedAction{
 		//SHOW("Show", "Show", OperationType.SINGLE, true, false),
-		
+
 		SEARCH("CmsSearch", "SearchResult"){
 //			@Override
 //			public String getViewName(MetaModuleSection section){
@@ -174,42 +174,42 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 //			}
 		},
 		;
-		
+
 		private String action;
 		private String view;
-		
+
 		private SharedAction(String anAction, String aView) {
 			action = anAction;
 			view = aView;
 		}
-		
+
 		public String getClassName() {
 				return action + "Action";
 		}
-		
+
 		public String getMappingName(){
 			return action.toLowerCase();
 		}
-		
-		
+
+
 		public String getViewName(){
 			return view;
 		}
-		
+
 		public String getViewPath(){
 			return "/" + FileEntry.package2path(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".jsp") + "/";
 		}
-		
+
 		public String getViewFullName(){
 			return getViewPath() + getViewName();
 		}
-		
+
 		public static final String getPackageName(){
 			return GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".action";
 		}
 
 	}
-	
+
 	public static enum ContainerAction{
 		SHOW("Show"),
 		DELETE("Delete"),
@@ -217,29 +217,29 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		ADD("Add"),
 		QUICKADD("QuickAdd"),
 		;
-		
+
 		private String action;
-		
+
 		private ContainerAction(String anAction) {
 			action = anAction;
 		}
-		
+
 		public String getClassName(MetaDocument doc, MetaContainerProperty container) {
 			return ModuleActionsGenerator.getContainerMultiOpActionName(doc, container);
 		}
-		
-		
+
+
 		public String getMappingName(MetaDocument doc, MetaContainerProperty container){
 			return doc.getParentModule().getName().toLowerCase()+StringUtils.capitalize(doc.getName())+StringUtils.capitalize(container.getName())+ action;
 		}
-		
+
 		public String getViewName(MetaDocument doc, MetaContainerProperty container){
 			return JspGenerator.getContainerPageName(doc, container);
 		}
-		
+
 	}
 
-	
+
 	/**
 	 * <p>generate.</p>
 	 *
@@ -247,17 +247,17 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	 * @return a {@link java.util.List} object.
 	 */
 	public List<FileEntry> generate(List<MetaView> views) {
-		List<FileEntry> ret = new ArrayList<FileEntry>(); 
+		List<FileEntry> ret = new ArrayList<FileEntry>();
 		try{
 			ret.add(new FileEntry(generateCMSMapping(views)));
 		}catch(Exception e){
 			System.out.println("CMSMappingsConfiguratorGenerator error: " + e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return ret;
 	}
-	
+
 	/**
 	 * <p>getClassSimpleName.</p>
 	 *
@@ -266,7 +266,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	public static String getClassSimpleName(){
 		return "CMSMappingsConfigurator";
 	}
-	
+
 	/**
 	 * <p>getClassName.</p>
 	 *
@@ -275,33 +275,37 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	public static String getClassName(){
 		return getPackageName() + "." + getClassSimpleName();
 	}
-	
+
 	private GeneratedClass generateCMSMapping(List<MetaView> views){
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
-		
+
 		clazz.setPackageName(getPackageName());
-		
+
 		clazz.addImport(Map.class);
 		clazz.addImport(HashMap.class);
 		clazz.addImport(net.anotheria.maf.action.CommandForward.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMappings.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMappingsConfigurator.class);
 		clazz.addImport(IndexPageActionGenerator.getIndexPageFullName());
+        clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleExportMafAction");
+        clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleImportMafAction");
+        clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleExportToTxtAction");
+        clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleMakeParentsMafAction");
 
 
 		clazz.addInterface("ActionMappingsConfigurator");
 		clazz.setName(getClassSimpleName());
 
 		startClassBody();
-		
+
 		emptyline();
-		
+
 		appendString("private static final Map<String, String> showActionsRegistry;");
 		appendString("static{");
 		increaseIdent();
 		appendStatement("showActionsRegistry = new HashMap<String,String>()");
-		
+
 		for(MetaView view: views){
 			for (MetaSection section: view.getSections()){
 				if (!(section instanceof MetaModuleSection))
@@ -312,22 +316,26 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		}
 		closeBlock("close static block");
 		emptyline();
-		
+
 		openFun("public static String getActionPath(String parentName, String documentName)");
 		appendStatement("return showActionsRegistry.get(parentName + \".\" + documentName)");
 		closeBlock("getActionPath");
 		emptyline();
-		
+
 		appendString("@Override");
 		openFun("public void configureActionMappings(ActionMappings mappings)");
 
 		appendStatement("mappings.addMapping(\"index\", " + IndexPageActionGenerator.getIndexPageActionName() + ".class, new CommandForward(\"success\", "+quote(IndexPageJspGenerator.getIndexJspFullName())+"))");
-		appendStatement("mappings.addMapping(\"fileShow\", "+quote(ShowFile.class.getName())+", new CommandForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
-		appendStatement("mappings.addMapping(\"fileUpload\", "+quote(FileAjaxUpload.class.getName())+")");
+        appendStatement("mappings.addMapping(\"asgLocalizationBundleExportView\", net.anotheria.anosite.cms.action.LocalizationBundleExportMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleExport.jsp\"))");
+        appendStatement("mappings.addMapping(\"asgLocalizationBundleImportView\", net.anotheria.anosite.cms.action.LocalizationBundleImportMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleImport.jsp\"))");
+        appendStatement("mappings.addMapping(\"asgLocalizationBundleMakeParentsView\", net.anotheria.anosite.cms.action.LocalizationBundleMakeParentsMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleMakeParents.jsp\"))");
+        appendStatement("mappings.addMapping(\"fileShow\", "+quote(ShowFile.class.getName())+", new CommandForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
+        appendStatement("mappings.addMapping(\"fileUpload\", "+quote(FileAjaxUpload.class.getName())+")");
+        appendStatement("mappings.addMapping(\"exportLocalizationBundlesToTxt\", net.anotheria.anosite.cms.action.LocalizationBundleExportToTxtAction.class)");
 
 		appendStatement("mappings.addMapping(\"showTmpFile\", "+quote(ShowTmpFile.class.getName())+")");
 		appendStatement("mappings.addMapping(\"getFile\", "+quote(GetFile.class.getName())+")");
-		
+
 		appendStatement("mappings.addMapping(\"login\", net.anotheria.anosite.cms.action.LoginAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/Login.jsp\"))");
 		appendStatement("mappings.addMapping(\"logout\", net.anotheria.anosite.cms.action.LogoutAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/Login.jsp\"))");
         appendStatement("mappings.addMapping(\"changePass\", net.anotheria.anosite.cms.action.ChangePassAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/ChangePass.jsp\"))");
@@ -374,16 +382,16 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 				emptyline();
 			}
 		}
-		
+
 		return clazz;
 	}
 
-	
-	
+
+
 	private static String getPackageName(){
 		return GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED) + ".filter";
 	}
-	
+
 	private void generateSectionMappings(GeneratedClass clazz, MetaModuleSection section){
 		MetaModule module = section.getModule();
 		String actionsPackage = ModuleActionsGenerator.getPackage(module);
@@ -401,14 +409,14 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		}
 
 	}
-	
+
 	private void generateActionsRegistry(MetaModuleSection section){
 			if(SectionAction.SHOW.isIgnoreForSection(section))
 				return;
 			appendStatement("showActionsRegistry.put(" + quote(section.getModule().getName() + "." + section.getDocument().getName()) + ", " + quote(SectionAction.SHOW.getMappingName(section)) + ")");
 	}
-	
-	
+
+
 	private void generateSharedMappings(GeneratedClass clazz){
 		String actionsPackage = GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".action";
 		for(SharedAction action: SharedAction.values()){
@@ -419,15 +427,15 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		}
 
 	}
-	
+
 	private void generateContainerMappings(GeneratedClass clazz, MetaModuleSection section, MetaContainerProperty container){
 		if(section.getDialogs().size() == 0)
 			return;
 		MetaDocument doc = section.getDocument();
 		String actionsPackage = ModuleActionsGenerator.getPackage(doc);
 		String jspPath = FileEntry.package2fullPath(JspGenerator.getPackage(doc)).substring(FileEntry.package2fullPath(JspGenerator.getPackage(doc)).indexOf('/'))+"/";
-		
-		
+
+
 		for(ContainerAction action: ContainerAction.values()){
 //			String actionName = action.getClassName(doc, container);
 //			clazz.addImport(actionsPackage + "." + actionName);
@@ -436,8 +444,8 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		}
 
 	}
-	
-	
+
+
 	//TODO: Investigate this methods copied from StrutsCOnfigGenerator
 	/**
 	 * Show action for data.
@@ -507,7 +515,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	 * Transfers current document to prod.
 	 */
 	public static final String ACTION_TRANSFER = "transfer";
-	
+
 	/**
 	 * <p>getPath.</p>
 	 *
