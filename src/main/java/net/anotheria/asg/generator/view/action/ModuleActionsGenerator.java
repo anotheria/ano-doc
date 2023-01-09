@@ -2065,9 +2065,10 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("net.anotheria.maf.json.JSONResponse");
 
 		clazz.addImport("org.codehaus.jettison.json.JSONArray");
-		clazz.addImport("com.sun.jersey.api.client.Client");
-		clazz.addImport("com.sun.jersey.api.client.WebResource");
-		clazz.addImport("com.sun.jersey.api.client.ClientResponse");
+		clazz.addImport("javax.ws.rs.client.Client");
+		clazz.addImport("javax.ws.rs.client.Entity");
+		clazz.addImport("javax.ws.rs.core.MediaType");
+		clazz.addImport("javax.ws.rs.core.Response");
 		clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
 		clazz.setName(getTransferActionName(section));
 		clazz.setParent(getBaseActionName(section));
@@ -2120,9 +2121,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
 		appendString("for (String domain :config.getDomains()) {");
 		increaseIdent();
-		appendStatement("WebResource webResource = client.resource(domain + \"/api/" + doc.getName().toLowerCase() + "\")");
-		appendString("ClientResponse clientResponse = webResource.header(\"Content-Type\", \"application/json;charset=utf-8\")");
-		appendString(" 		.post(ClientResponse.class, data);");
+		appendString("Response clientResponse = client.target(domain + \"/api/" + doc.getName().toLowerCase() + "\")");
+		appendString(" 		.request(MediaType.APPLICATION_JSON)");
+		appendString(" 		.post(Entity.entity(data, MediaType.APPLICATION_JSON));");
 		emptyline();
 		appendString("if (clientResponse.getStatus() != STATUS_OK) {");
 		increaseIdent();

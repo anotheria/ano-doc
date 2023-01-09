@@ -659,26 +659,32 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 					clazz.addImport("net.anotheria.webutils.filehandling.actions.FileStorage");
 					clazz.addImport("java.io.File");
 					clazz.addImport("java.io.FileNotFoundException");
-					clazz.addImport("com.sun.jersey.api.client.Client");
-					clazz.addImport("com.sun.jersey.api.client.WebResource");
-					clazz.addImport("com.sun.jersey.api.client.ClientResponse");
+					clazz.addImport("java.io.IOException");
+					clazz.addImport("javax.ws.rs.client.Client");
+					clazz.addImport("javax.ws.rs.client.Entity");
+					clazz.addImport("javax.ws.rs.client.WebTarget");
+					clazz.addImport("javax.ws.rs.core.MediaType");
+					clazz.addImport("javax.ws.rs.core.Response");
 					clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
 					clazz.addImport("net.anotheria.anosite.config.DocumentTransferConfig");
-					clazz.addImport("com.sun.jersey.multipart.FormDataMultiPart");
-					clazz.addImport("com.sun.jersey.multipart.file.FileDataBodyPart");
-					clazz.addImport("javax.ws.rs.core.MediaType");
+					clazz.addImport("org.glassfish.jersey.media.multipart.FormDataMultiPart");
+					clazz.addImport("org.glassfish.jersey.media.multipart.file.FileDataBodyPart");
 
 
 					appendStatement("File imageFile = FileStorage.getFile(" + doc.getVariableName()  + "." + p.toBeanGetter() + "())");
 					appendStatement("Client client = JerseyClientUtil.getClientInstance()");
 					appendString("for (String domain :DocumentTransferConfig.getInstance().getDomains()) {");
 					increaseIdent();
-					appendStatement("WebResource webResource = client.resource(domain + \"/api/asgimage/upload\")");
+
+					appendStatement("final FileDataBodyPart filePart = new FileDataBodyPart(\"file\", imageFile)");
 					appendStatement("FormDataMultiPart formDataMultiPart = new FormDataMultiPart()");
-					appendStatement("formDataMultiPart.bodyPart(new FileDataBodyPart(\"file\", imageFile, MediaType.APPLICATION_OCTET_STREAM_TYPE))");
-					appendStatement("ClientResponse response = webResource.type(MediaType.MULTIPART_FORM_DATA_TYPE).post(ClientResponse.class, formDataMultiPart)");
-					appendStatement("String responseResult = response.getEntity(String.class)");
-					appendStatement("log.info(responseResult)");
+					appendStatement("final FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart.bodyPart(filePart)");
+					appendStatement("final WebTarget target = client.target(domain + \"/api/asgimage/upload\")");
+					appendStatement("final Response response = target.request().post(Entity.entity(multipart, multipart.getMediaType()))");
+					appendStatement("Object responseResult = response.getEntity()");
+					appendStatement("log.info(responseResult.toString())");
+					appendStatement("formDataMultiPart.close()");
+					appendStatement("multipart.close()");
 					closeBlockNEW();
 
 					appendCatch("FileNotFoundException");
@@ -696,10 +702,11 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 					appendStatement("throw new " + ServiceGenerator.getExceptionName(module) + "(\"Problem with getting document from " + metaModule.getName() + "\" + e.getMessage())");
 				}
 			}
-			appendCatch("JsonProcessingException");
+			appendCatch("IOException");
 			appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + " (\"Problem with fetching data for this " + doc.getName() + " instance object:\" + e.getMessage())");
 			appendCatch("JSONException");
 			appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + " (\"Problem with fetching data for this " + doc.getName() + " instance in json :\" + e.getMessage())");
+
 
 			closeBlockNEW();
 			closeBlockNEW();
