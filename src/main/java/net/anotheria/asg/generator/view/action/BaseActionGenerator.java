@@ -66,13 +66,11 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.addImport("javax.servlet.http.HttpServletResponse");//those imports must be strings dependencywise.
 		clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
-		clazz.addImport(net.anotheria.maf.bean.FormBean.class);
 		clazz.addImport(net.anotheria.webutils.bean.NavigationItemBean.class);
 		clazz.addImport(SortType.class);
 
 		clazz.setAbstractClass(true);
 		clazz.setParent("BaseAction");
-		//clazz.setGeneric("T extends FormBean");
 		clazz.setName(getBaseActionName());
 
 		startClassBody();
@@ -166,11 +164,11 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		closeBlock("preProcess");
 		emptyline();
 		
-		appendString("public abstract ActionCommand anoDocExecute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception;");
+		appendString("public abstract ActionCommand anoDocExecute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception;");
 		emptyline();
 		appendGenerationPoint("generateBaseAction");
 		appendString("@Override");
-		appendString("public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {");
+		appendString("public ActionCommand execute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception {");
 		increaseIdent();
 		appendString("if (isAuthorizationRequired()){");
 			increaseIdent();
@@ -194,7 +192,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		appendStatement("addBeanToRequest(req, BEAN_DOCUMENT_DEF_NAME, getCurrentDocumentDefName())");
 		appendStatement("addBeanToRequest(req, BEAN_MODULE_DEF_NAME, getActiveMainNavi())");
 		emptyline();
-		appendString("return anoDocExecute(mapping, formBean, req, res);");
+		appendString("return anoDocExecute(mapping, req, res);");
 		closeBlock("execute");
 		emptyline();
 		//generate service getter

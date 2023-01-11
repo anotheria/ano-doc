@@ -184,8 +184,8 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
 
         clazz.setPackageName(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".rest");
 
-        clazz.addImport("com.sun.jersey.core.header.FormDataContentDisposition");
-        clazz.addImport("com.sun.jersey.multipart.FormDataParam");
+        clazz.addImport("org.glassfish.jersey.media.multipart.FormDataContentDisposition");
+        clazz.addImport("org.glassfish.jersey.media.multipart.FormDataParam");
         clazz.addImport("javax.ws.rs.Consumes");
         clazz.addImport("javax.ws.rs.Produces");
         clazz.addImport("javax.ws.rs.POST");

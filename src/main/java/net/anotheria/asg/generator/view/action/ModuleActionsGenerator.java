@@ -45,6 +45,7 @@ import net.anotheria.asg.generator.view.meta.MetaView;
 import net.anotheria.asg.generator.view.meta.MetaViewElement;
 import net.anotheria.asg.generator.view.meta.MultilingualFieldElement;
 import net.anotheria.asg.util.action.ActionUtils;
+import net.anotheria.asg.util.bean.PopulateUtility;
 import net.anotheria.asg.util.helper.cmsview.CMSViewHelperRegistry;
 import net.anotheria.asg.util.helper.cmsview.CMSViewHelperUtil;
 import net.anotheria.util.ExecutionTimer;
@@ -203,7 +204,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 		clazz.addImport(DataFacadeGenerator.getSortTypeImport(doc));
 
-		clazz.addImport("net.anotheria.asg.util.bean.PagingLink");
 		clazz.addImport("org.slf4j.Logger");
 		clazz.addImport("org.slf4j.LoggerFactory");
 		clazz.addImport("org.slf4j.MarkerFactory");
@@ -675,6 +675,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    clazz.addImport(DataFacadeGenerator.getDocumentFactoryImport(context, doc));
 	    clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 	    clazz.addImport(ModuleBeanGenerator.getDialogBeanImport(dialog, doc));
+		clazz.addImport(PopulateUtility.class);
         if (cMSStorageType){
             clazz.addImport("net.anotheria.asg.data.LockableObject");
             clazz.addImport("net.anotheria.asg.util.locking.helper.DocumentLockingHelper");
@@ -868,9 +869,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	private void generateExecuteMethod(GeneratedClass clazz, MetaDialog dialog, MetaDocument document){
 		String formBeanName = ModuleBeanGenerator.getDialogBeanName(dialog, document);
 		appendString("@Override");
-		appendString("public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception{");
+		appendString("public ActionCommand execute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception{");
 		increaseIdent();
-		appendStatement("return super.execute(mapping, formBean, req, res)");
+		appendStatement("return super.execute(mapping, req, res)");
 		closeBlock("execute");
 		emptyline();
 	}
@@ -941,16 +942,16 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    closeBlockNEW();
     }
 
-    private void writePathResolveForMultiOpAction(MetaDocument doc,String action){
+    private void writePathResolveForMultiOpAction(MetaDocument doc, String action){
 		String path = CMSMappingsConfiguratorGenerator.getPath(doc, action);
 		appendString("if (path.equals("+quote(path)+"))");
-		appendIncreasedStatement("return "+path+"(mapping, af, req, res)");
+		appendIncreasedStatement("return "+path+"(mapping, req, res)");
 	}
 
 	private void writePathResolveForContainerMultiOpAction(MetaDocument doc, MetaContainerProperty container, String action){
 		String path = CMSMappingsConfiguratorGenerator.getContainerPath(doc, container, action);
 		appendString("if (path.equals("+quote(path)+"))");
-		appendIncreasedStatement("return "+path+"(mapping, af, req, res)");
+		appendIncreasedStatement("return "+path+"(mapping, req, res)");
 	}
 
 	/**
@@ -1637,7 +1638,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendString( getExecuteDeclaration(methodName));
 		increaseIdent();
 
-		appendStatement(ModuleBeanGenerator.getDialogBeanName(dialog, doc)+" form = ("+ModuleBeanGenerator.getDialogBeanName(dialog, doc)+") af");
+		appendStatement(ModuleBeanGenerator.getDialogBeanName(dialog, doc)+" form = new "+ModuleBeanGenerator.getDialogBeanName(dialog, doc)+"()");
+		appendStatement("PopulateUtility.populate(form, req)");
 		//check if we have a form submission at all.
 //		appendString( "if (!form.isFormSubmittedFlag())");
 //		appendIncreasedStatement("throw new RuntimeException(\"Request broken!\")");
@@ -2025,11 +2027,12 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		emptyline();
 		appendString("@POST");
 		appendString("@Consumes(\"application/json;charset=utf-8\")");
-		appendString("public Response createTransferredObject(JSONArray input) {");
+		appendString("public Response createTransferredObject(String input) {");
 		emptyline();
 		increaseIdent();
 		openTry();
-		appendStatement("ParserUtilService.getInstance().executeParsingDocuments(input)");
+		appendStatement("JSONArray array = new JSONArray(input)");
+		appendStatement("ParserUtilService.getInstance().executeParsingDocuments(array)");
 		appendCatch("Exception");
 		appendStatement("LOGGER.error(\"Unable to parsing transferred objects\", e)");
 		appendStatement("return Response.status(500).build()");
@@ -2063,9 +2066,10 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("net.anotheria.maf.json.JSONResponse");
 
 		clazz.addImport("org.codehaus.jettison.json.JSONArray");
-		clazz.addImport("com.sun.jersey.api.client.Client");
-		clazz.addImport("com.sun.jersey.api.client.WebResource");
-		clazz.addImport("com.sun.jersey.api.client.ClientResponse");
+		clazz.addImport("javax.ws.rs.client.Client");
+		clazz.addImport("javax.ws.rs.client.Entity");
+		clazz.addImport("javax.ws.rs.core.MediaType");
+		clazz.addImport("javax.ws.rs.core.Response");
 		clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
 		clazz.setName(getTransferActionName(section));
 		clazz.setParent(getBaseActionName(section));
@@ -2118,9 +2122,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
 		appendString("for (String domain :config.getDomains()) {");
 		increaseIdent();
-		appendStatement("WebResource webResource = client.resource(domain + \"/api/" + doc.getName().toLowerCase() + "\")");
-		appendString("ClientResponse clientResponse = webResource.header(\"Content-Type\", \"application/json;charset=utf-8\")");
-		appendString(" 		.post(ClientResponse.class, data);");
+		appendString("Response clientResponse = client.target(domain + \"/api/" + doc.getName().toLowerCase() + "\")");
+		appendString(" 		.request(MediaType.APPLICATION_JSON)");
+		appendString(" 		.post(Entity.entity(data.toString(), MediaType.APPLICATION_JSON));");
 		emptyline();
 		appendString("if (clientResponse.getStatus() != STATUS_OK) {");
 		increaseIdent();
@@ -2542,17 +2546,19 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		//todo formating of generated code is wrong
 	    appendStatement("String[] iDs = req.getParameterValues(PARAM_ID)");
 		appendString("if (iDs == null){");
+		increaseIdent();
 		appendStatement("throw new RuntimeException(\"Parameter \" + PARAM_ID + \" is not set.\")");
 		closeBlockNEW();
 		appendString("for (String id : iDs){");
 		increaseIdent();
-			appendStatement(doc.getName()+" "+doc.getVariableName()+"Curr = "+getServiceGetterCall(section.getModule())+".get"+doc.getName()+"(id)");
+		appendStatement(doc.getName()+" "+doc.getVariableName()+"Curr = "+getServiceGetterCall(section.getModule())+".get"+doc.getName()+"(id)");
          if(StorageType.CMS.equals(section.getDocument().getParentModule().getStorageType())){
 			appendString("if ("+doc.getVariableName()+"Curr instanceof LockableObject){ ");
+			increaseIdent();
 			appendStatement("LockableObject lockable = (LockableObject)" + doc.getVariableName() + "Curr");
 			//Actually We does not Care - about admin role in Delete action!  So checkExecutionPermission  2-nd parameter  can be anything!
 			appendStatement("DocumentLockingHelper.delete.checkExecutionPermission(lockable, false, getUserId(req))");
-			appendString("}");
+			closeBlockNEW();
         }
 	    appendStatement(getServiceGetterCall(section.getModule())+".delete"+doc.getName()+"(id)");
 		//delete images from file system
@@ -2651,7 +2657,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		//write imports...
 		addStandardActionImports(clazz);
 		clazz.addImport(ModuleBeanGenerator.getDialogBeanImport(dialog, doc));
-		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
+		//clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 		clazz.addImport("net.anotheria.asg.util.helper.cmsview.CMSViewHelperUtil");
 		clazz.addImport("net.anotheria.asg.util.helper.cmsview.CMSViewHelperRegistry");
 
@@ -2868,8 +2874,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 			clazz.addImport(CMSViewHelperRegistry.class);
 			clazz.addImport(CMSViewHelperUtil.class);
 		}
-		clazz.addImport("net.anotheria.maf.bean.FormBean");
-		clazz.setGeneric("T extends FormBean");
 		clazz.setName(getBaseActionName(section));
 	    clazz.setParent(BaseViewActionGenerator.getViewActionName(view));
 
@@ -3091,14 +3095,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	 * @return
 	 */
 	private String getExecuteDeclaration(String methodName){
-		return getExecuteDeclaration(methodName, "FormBean");
-	}
-
-	private String getExecuteDeclaration(String methodName, String formBeanName){
 	    String ret = "";
 	    ret += "public ActionCommand "+(methodName == null ? "anoDocExecute" : methodName ) + "(";
 		ret += "ActionMapping mapping, ";
-		ret += formBeanName + " af, ";
 		ret += "HttpServletRequest req, ";
 		ret += "HttpServletResponse res) ";
 		ret += "throws Exception{";
@@ -3109,7 +3108,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    String ret = "";
 	    ret += "super.anoDocExecute(";
 		ret += "mapping, ";
-		ret += "af, ";
 		ret += "req, ";
 		ret += "res) ";
 		return ret;
@@ -3124,7 +3122,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    clazz.addImport("javax.servlet.http.HttpServletResponse");
 	    clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 	    clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
-	    clazz.addImport(net.anotheria.maf.bean.FormBean.class);
 
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
@@ -3224,6 +3221,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport(DataFacadeGenerator.getDocumentFactoryImport(GeneratorDataRegistry.getInstance().getContext(), doc));
 		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 		clazz.addImport(ModuleBeanGenerator.getContainerEntryFormImport(doc, containerProperty));
+		clazz.addImport(PopulateUtility.class);
 //        if(StorageType.CMS.equals(section.getModule().getStorageType())){
 //            clazz.addImport("net.anotheria.asg.data.LockableObject");
 //            clazz.addImport("net.anotheria.asg.util.locking.helper.DocumentLockingHelper");
@@ -3349,7 +3347,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendString( getExecuteDeclaration(methodName));
 		increaseIdent();
 		appendStatement(ModuleBeanGenerator.getContainerEntryFormName(list)+" form = new "+ModuleBeanGenerator.getContainerEntryFormName(list)+"()");
-		appendStatement("populateFormBean(req, form)");
+		appendStatement("PopulateUtility.populate(form, req)");
+		//appendStatement("populateFormBean(req, form)"); <- replaced with call to populate utility.
 		appendStatement("String id = form.getOwnerId()");
 
 
@@ -3390,7 +3389,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (methodName==null)
 			appendStatement("return "+getSuperCall());
 		else
-			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, list, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, af, req, res)");
+			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, list, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, req, res)");
 		closeBlockNEW();
 
 	}
@@ -3427,7 +3426,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendString(getExecuteDeclaration(methodName));
 		increaseIdent();
 		appendStatement(ModuleBeanGenerator.getContainerQuickAddFormName(list)+" form = new "+ModuleBeanGenerator.getContainerQuickAddFormName(list)+"()");
-		appendStatement("populateFormBean(req, form)");
+		appendStatement("PopulateUtility.populate(form, req)");
+		//appendStatement("populateFormBean(req, form)");
 		appendStatement("String id = form.getOwnerId()");
 		appendStatement(doc.getName()+" "+doc.getVariableName());
 		appendStatement(doc.getVariableName()+" = "+getServiceGetterCall(section.getModule())+".get"+doc.getName()+"(id)");
@@ -3464,7 +3464,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (methodName==null)
 			appendStatement("return "+getSuperCall());
 		else
-			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, list, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, af, req, res)");
+			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, list, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, req, res)");
 		closeBlockNEW();
 
 	}
@@ -3493,7 +3493,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendString(getExecuteDeclaration());
 		increaseIdent();
 		appendStatement(ModuleBeanGenerator.getContainerEntryFormName(table)+" form = new "+ModuleBeanGenerator.getContainerEntryFormName(table)+"()");
-		appendStatement("populateFormBean(req, form)");
+		appendStatement("PopulateUtility.populate(form, req)");
+		//appendStatement("populateFormBean(req, form)");
 		appendStatement("String id = form.getOwnerId()");
 		appendStatement(doc.getName()+" "+doc.getVariableName());
 		appendStatement(doc.getVariableName()+" = "+getServiceGetterCall(section.getModule())+".get"+doc.getName()+"(id)");
@@ -3579,7 +3580,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (methodName==null)
 			appendStatement("return "+getSuperCall());
 		else
-			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, container, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, af, req, res)");
+			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, container, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, req, res)");
 		closeBlockNEW();
 	}
 
@@ -3658,7 +3659,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		if (methodName==null)
 			appendStatement("return "+getSuperCall());
 		else
-			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, container, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, af, req, res)");
+			appendStatement("return "+CMSMappingsConfiguratorGenerator.getContainerPath(doc, container, CMSMappingsConfiguratorGenerator.ACTION_SHOW)+"(mapping, req, res)");
 		closeBlockNEW();
 		emptyline();
 
