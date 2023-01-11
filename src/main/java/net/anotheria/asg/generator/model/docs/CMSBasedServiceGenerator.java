@@ -669,6 +669,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 					clazz.addImport("net.anotheria.anosite.config.DocumentTransferConfig");
 					clazz.addImport("org.glassfish.jersey.media.multipart.FormDataMultiPart");
 					clazz.addImport("org.glassfish.jersey.media.multipart.file.FileDataBodyPart");
+					clazz.addImport("org.glassfish.jersey.client.ClientResponse");
 
 
 					appendStatement("File imageFile = FileStorage.getFile(" + doc.getVariableName()  + "." + p.toBeanGetter() + "())");
@@ -680,7 +681,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 					appendStatement("FormDataMultiPart formDataMultiPart = new FormDataMultiPart()");
 					appendStatement("final FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart.bodyPart(filePart)");
 					appendStatement("final WebTarget target = client.target(domain + \"/api/asgimage/upload\")");
-					appendStatement("final Response response = target.request().post(Entity.entity(multipart, multipart.getMediaType()))");
+					appendStatement("final ClientResponse response = target.request().post(Entity.entity(multipart, multipart.getMediaType()), ClientResponse.class)");
 					appendStatement("Object responseResult = response.getEntity()");
 					appendStatement("log.info(responseResult.toString())");
 					appendStatement("formDataMultiPart.close()");

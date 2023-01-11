@@ -2027,11 +2027,12 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		emptyline();
 		appendString("@POST");
 		appendString("@Consumes(\"application/json;charset=utf-8\")");
-		appendString("public Response createTransferredObject(JSONArray input) {");
+		appendString("public Response createTransferredObject(String input) {");
 		emptyline();
 		increaseIdent();
 		openTry();
-		appendStatement("ParserUtilService.getInstance().executeParsingDocuments(input)");
+		appendStatement("JSONArray array = new JSONArray(input)");
+		appendStatement("ParserUtilService.getInstance().executeParsingDocuments(array)");
 		appendCatch("Exception");
 		appendStatement("LOGGER.error(\"Unable to parsing transferred objects\", e)");
 		appendStatement("return Response.status(500).build()");
@@ -2069,6 +2070,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("javax.ws.rs.client.Entity");
 		clazz.addImport("javax.ws.rs.core.MediaType");
 		clazz.addImport("javax.ws.rs.core.Response");
+		clazz.addImport("org.glassfish.jersey.client.ClientResponse");
 		clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
 		clazz.setName(getTransferActionName(section));
 		clazz.setParent(getBaseActionName(section));
@@ -2121,9 +2123,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
 		appendString("for (String domain :config.getDomains()) {");
 		increaseIdent();
-		appendString("Response clientResponse = client.target(domain + \"/api/" + doc.getName().toLowerCase() + "\")");
+		appendString("ClientResponse clientResponse = client.target(domain + \"/api/" + doc.getName().toLowerCase() + "\")");
 		appendString(" 		.request(MediaType.APPLICATION_JSON)");
-		appendString(" 		.post(Entity.entity(data, MediaType.APPLICATION_JSON));");
+		appendString(" 		.post(Entity.entity(data.toString(), MediaType.APPLICATION_JSON), ClientResponse.class);");
 		emptyline();
 		appendString("if (clientResponse.getStatus() != STATUS_OK) {");
 		increaseIdent();
