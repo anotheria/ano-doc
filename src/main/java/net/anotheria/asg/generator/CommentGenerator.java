@@ -13,7 +13,7 @@ public class CommentGenerator extends AbstractGenerator{
 	/**
 	 * Copyright string in the comments.
 	 */
-	public static final String COPYRIGHT = "Copyright (C) 2005 - 2020 Anotheria.net, www.anotheria.net";
+	public static final String COPYRIGHT = "Copyright (C) 2005 - 2023 Anotheria.net, www.anotheria.net";
 	/** Constant <code>RIGHTS="All Rights Reserved."</code> */
 	public static final String RIGHTS    = "All Rights Reserved.";
 	
