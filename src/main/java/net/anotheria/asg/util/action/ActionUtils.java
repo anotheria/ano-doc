@@ -5,7 +5,7 @@ import net.anotheria.util.slicer.Segment;
 import net.anotheria.util.slicer.Slice;
 import net.anotheria.util.slicer.Slicer;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

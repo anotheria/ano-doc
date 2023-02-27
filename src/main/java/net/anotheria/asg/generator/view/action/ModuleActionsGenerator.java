@@ -2863,7 +2863,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    emptyline();
 	    clazz.addImport(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".action."+BaseViewActionGenerator.getViewActionName(view));
 		if (isCMS) {
-			clazz.addImport("javax.servlet.http.HttpServletRequest");
+			clazz.addImport("jakarta.servlet.http.HttpServletRequest");
 			clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 			clazz.addImport("net.anotheria.asg.data.AbstractASGDocument");
 			clazz.addImport("net.anotheria.asg.data.LockableObject");
@@ -3118,8 +3118,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	 * @param clazz
 	 */
 	private void addStandardActionImports(GeneratedClass clazz){
-	    clazz.addImport("javax.servlet.http.HttpServletRequest");
-	    clazz.addImport("javax.servlet.http.HttpServletResponse");
+	    clazz.addImport("jakarta.servlet.http.HttpServletRequest");
+	    clazz.addImport("jakarta.servlet.http.HttpServletResponse");
 	    clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 	    clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
 

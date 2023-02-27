@@ -62,8 +62,8 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.addImport("net.anotheria.util.StringUtils");
 		clazz.addImport(ContextManager.class);
 		clazz.addImport("net.anotheria.webutils.actions.*");
-		clazz.addImport("javax.servlet.http.HttpServletRequest"); //those imports must be strings dependencywise.
-		clazz.addImport("javax.servlet.http.HttpServletResponse");//those imports must be strings dependencywise.
+		clazz.addImport("jakarta.servlet.http.HttpServletRequest"); //those imports must be strings dependencywise.
+		clazz.addImport("jakarta.servlet.http.HttpServletResponse");//those imports must be strings dependencywise.
 		clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
 		clazz.addImport(net.anotheria.webutils.bean.NavigationItemBean.class);
