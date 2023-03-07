@@ -1937,13 +1937,13 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("java.util.List");
 		clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactory");
 		clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactoryException");
-		clazz.addImport("javax.ws.rs.Consumes");
-		clazz.addImport("javax.ws.rs.Produces");
-		clazz.addImport("javax.ws.rs.POST");
-		clazz.addImport("javax.ws.rs.GET");
-		clazz.addImport("javax.ws.rs.Path");
-		clazz.addImport("javax.ws.rs.PathParam");
-		clazz.addImport("javax.ws.rs.core.Response");
+		clazz.addImport("jakarta.ws.rs.Consumes");
+		clazz.addImport("jakarta.ws.rs.Produces");
+		clazz.addImport("jakarta.ws.rs.POST");
+		clazz.addImport("jakarta.ws.rs.GET");
+		clazz.addImport("jakarta.ws.rs.Path");
+		clazz.addImport("jakarta.ws.rs.PathParam");
+		clazz.addImport("jakarta.ws.rs.core.Response");
 		clazz.addImport("com.google.gson.Gson");
 		clazz.addImport("com.google.gson.GsonBuilder");
 		clazz.addImport("org.codehaus.jettison.json.JSONArray");
@@ -2066,10 +2066,10 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("net.anotheria.maf.json.JSONResponse");
 
 		clazz.addImport("org.codehaus.jettison.json.JSONArray");
-		clazz.addImport("javax.ws.rs.client.Client");
-		clazz.addImport("javax.ws.rs.client.Entity");
-		clazz.addImport("javax.ws.rs.core.MediaType");
-		clazz.addImport("javax.ws.rs.core.Response");
+		clazz.addImport("jakarta.ws.rs.client.Client");
+		clazz.addImport("jakarta.ws.rs.client.Entity");
+		clazz.addImport("jakarta.ws.rs.core.MediaType");
+		clazz.addImport("jakarta.ws.rs.core.Response");
 		clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
 		clazz.setName(getTransferActionName(section));
 		clazz.setParent(getBaseActionName(section));

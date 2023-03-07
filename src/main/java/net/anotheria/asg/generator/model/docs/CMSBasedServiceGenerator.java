@@ -660,11 +660,11 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 					clazz.addImport("java.io.File");
 					clazz.addImport("java.io.FileNotFoundException");
 					clazz.addImport("java.io.IOException");
-					clazz.addImport("javax.ws.rs.client.Client");
-					clazz.addImport("javax.ws.rs.client.Entity");
-					clazz.addImport("javax.ws.rs.client.WebTarget");
-					clazz.addImport("javax.ws.rs.core.MediaType");
-					clazz.addImport("javax.ws.rs.core.Response");
+					clazz.addImport("jakarta.ws.rs.client.Client");
+					clazz.addImport("jakarta.ws.rs.client.Entity");
+					clazz.addImport("jakarta.ws.rs.client.WebTarget");
+					clazz.addImport("jakarta.ws.rs.core.MediaType");
+					clazz.addImport("jakarta.ws.rs.core.Response");
 					clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
 					clazz.addImport("net.anotheria.anosite.config.DocumentTransferConfig");
 					clazz.addImport("org.glassfish.jersey.media.multipart.FormDataMultiPart");
