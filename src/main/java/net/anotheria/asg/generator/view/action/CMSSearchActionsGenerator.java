@@ -72,7 +72,7 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		clazz.addImport("java.util.Collections");
 
 
-		clazz.addImport("jakarta.servlet.http.HttpServletRequest;");
+		clazz.addImport("jakarta.servlet.http.HttpServletRequest");
 		clazz.addImport("jakarta.servlet.http.HttpServletResponse");
 		clazz.addImport("net.anotheria.anodoc.query2.DocumentQuery");
 		clazz.addImport("net.anotheria.anodoc.query2.QueryResult");
