@@ -25,11 +25,11 @@ import java.util.List;
  *
  * @author asamoilich.
  */
-public class LinodeCloudStorage implements IStorage {
+public class S3CloudStorage implements IStorage {
     /**
      * {@link Logger} instance.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(LinodeCloudStorage.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(S3CloudStorage.class);
 
     private final String bucketName;
     /**
@@ -37,7 +37,7 @@ public class LinodeCloudStorage implements IStorage {
      */
     private final AmazonS3 conn;
 
-    public LinodeCloudStorage(String bucketName, String accessKey, String secretKey, String endPoint) {
+    public S3CloudStorage(String bucketName, String accessKey, String secretKey, String endPoint) {
         this.bucketName = bucketName;
         try {
             AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);

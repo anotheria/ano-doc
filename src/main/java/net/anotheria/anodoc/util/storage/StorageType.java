@@ -15,9 +15,9 @@ public enum StorageType {
      */
     GCS("gcs"),
     /**
-     * Linode cloud storage.
+     * S3 cloud storage.
      */
-    LCS("lcs");
+    S3("s3");
     /**
      * Storage type value.
      */

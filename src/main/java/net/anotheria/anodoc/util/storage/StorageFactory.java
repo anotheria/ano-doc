@@ -10,8 +10,8 @@ public class StorageFactory {
         switch (StorageType.getByTypeValue(storageType)) {
             case GCS:
                 return new GoogleCloudStorage(bucketName, credentials, projectId);
-            case LCS:
-                return new LinodeCloudStorage(bucketName, accessKey, secretKey, projectId);
+            case S3:
+                return new S3CloudStorage(bucketName, accessKey, secretKey, projectId);
             case FS:
             default:
                 return new FsStorage();

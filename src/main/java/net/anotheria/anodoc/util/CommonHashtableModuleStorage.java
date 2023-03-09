@@ -88,7 +88,7 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
     @Configure
     private String bucketName;
     /**
-     * Google project id.
+     *  Project id / S3 endpoint.
      */
     @Configure
     private String projectId;
