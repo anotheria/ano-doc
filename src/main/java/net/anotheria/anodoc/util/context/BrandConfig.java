@@ -24,6 +24,10 @@ public class BrandConfig {
      * Localizations according to this brand.
      */
     private final List<String> localizations;
+    /**
+     * Logo image id.
+     */
+    private final String logoId;
 
     /**
      * Constructor.
@@ -33,11 +37,12 @@ public class BrandConfig {
      * @param urlsToMap     urls of this brand
      * @param localizations localizations of this brand
      */
-    public BrandConfig(String name, boolean defaultBrand, List<String> urlsToMap, List<String> localizations) {
+    public BrandConfig(String name, boolean defaultBrand, List<String> urlsToMap, List<String> localizations, String logoId) {
         this.name = name;
         this.defaultBrand = defaultBrand;
         this.urlsToMap = urlsToMap;
         this.localizations = localizations;
+        this.logoId = logoId;
     }
 
     public String getName() {
@@ -56,6 +61,10 @@ public class BrandConfig {
         return localizations;
     }
 
+    public String getLogoId() {
+        return logoId;
+    }
+
     @Override
     public String toString() {
         return "BrandConfig{" +
@@ -63,6 +72,7 @@ public class BrandConfig {
                 ", defaultBrand=" + defaultBrand +
                 ", urlsToMap=" + urlsToMap +
                 ", localizations=" + localizations +
+                ", logoId='" + logoId + '\'' +
                 '}';
     }
 }
