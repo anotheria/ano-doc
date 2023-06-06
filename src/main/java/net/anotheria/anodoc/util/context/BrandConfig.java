@@ -24,6 +24,10 @@ public class BrandConfig {
      * Localizations according to this brand.
      */
     private final List<String> localizations;
+    /**
+     * Style file id for current brand.
+     */
+    private final String brandMediaLinkId;
 
     /**
      * Constructor.
@@ -33,9 +37,10 @@ public class BrandConfig {
      * @param urlsToMap     urls of this brand
      * @param localizations localizations of this brand
      */
-    public BrandConfig(String name, boolean defaultBrand, List<String> urlsToMap, List<String> localizations) {
+    public BrandConfig(String name, boolean defaultBrand, String brandMediaLinkId, List<String> urlsToMap, List<String> localizations) {
         this.name = name;
         this.defaultBrand = defaultBrand;
+        this.brandMediaLinkId = brandMediaLinkId;
         this.urlsToMap = urlsToMap;
         this.localizations = localizations;
     }
@@ -56,6 +61,10 @@ public class BrandConfig {
         return localizations;
     }
 
+    public String getBrandMediaLinkId() {
+        return brandMediaLinkId;
+    }
+
     @Override
     public String toString() {
         return "BrandConfig{" +
@@ -63,6 +72,7 @@ public class BrandConfig {
                 ", defaultBrand=" + defaultBrand +
                 ", urlsToMap=" + urlsToMap +
                 ", localizations=" + localizations +
+                ", brandMediaLinkId='" + brandMediaLinkId + '\'' +
                 '}';
     }
 }
