@@ -292,6 +292,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
         clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleImportMafAction");
         clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleExportToTxtAction");
         clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleMakeParentsMafAction");
+		clazz.addImport("net.anotheria.anosite.cms.action.LocalizationBundleTranslationMafAction");
 
 
 		clazz.addInterface("ActionMappingsConfigurator");
@@ -329,7 +330,8 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
         appendStatement("mappings.addMapping(\"asgLocalizationBundleExportView\", net.anotheria.anosite.cms.action.LocalizationBundleExportMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleExport.jsp\"))");
         appendStatement("mappings.addMapping(\"asgLocalizationBundleImportView\", net.anotheria.anosite.cms.action.LocalizationBundleImportMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleImport.jsp\"))");
         appendStatement("mappings.addMapping(\"asgLocalizationBundleMakeParentsView\", net.anotheria.anosite.cms.action.LocalizationBundleMakeParentsMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleMakeParents.jsp\"))");
-        appendStatement("mappings.addMapping(\"fileShow\", "+quote(ShowFile.class.getName())+", new CommandForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
+		appendStatement("mappings.addMapping(\"asgLocalizationBundleTranslationView\", net.anotheria.anosite.cms.action.LocalizationBundleTranslationMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleTranslation.jsp\"))");
+		appendStatement("mappings.addMapping(\"fileShow\", "+quote(ShowFile.class.getName())+", new CommandForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
         appendStatement("mappings.addMapping(\"fileUpload\", "+quote(FileAjaxUpload.class.getName())+")");
         appendStatement("mappings.addMapping(\"exportLocalizationBundlesToTxt\", net.anotheria.anosite.cms.action.LocalizationBundleExportToTxtAction.class)");
 
