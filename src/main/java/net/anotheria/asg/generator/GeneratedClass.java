@@ -136,10 +136,8 @@ public class GeneratedClass extends GeneratedArtefact{
 		}
 
 		for (String annotation : annotations) {
-			ret.append(annotation);
+			ret.append(annotation).append(CRLF);
 		}
-		ret.append(CRLF);
-
 		String nameDeclaration = "public "+(isAbstractClass()?"abstract ":"")+type.toJava()+" "+getName();
 		
 		if(!StringUtils.isEmpty(getGeneric()))
