@@ -122,20 +122,16 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         clazz.addImport("org.codehaus.jettison.json.JSONObject");
         clazz.addImport("org.codehaus.jettison.json.JSONArray");
         clazz.addImport("org.codehaus.jettison.json.JSONException");
-        clazz.addImport("org.slf4j.Logger");
-        clazz.addImport("org.slf4j.LoggerFactory");
 
         clazz.setClazzComment("Util service for processing transferred documents.");
         clazz.setName("ParserUtilService");
         clazz.setParent("BasicService");
         startClassBody();
 
-        appendComment("{@link Logger} instance.");
-        appendStatement("private static final Logger LOGGER = LoggerFactory.getLogger(ParserUtilService.class)");
         appendComment("Constructed instance.");
         appendStatement("private static final ParserUtilService instance = new ParserUtilService()");
         appendComment("Process parse documents in own worker. {@link QueuedProcessor} instance.");
-        appendStatement("private final QueuedProcessor<JSONArray> documentExecutor = new QueuedProcessor<>(\"DocumentTransferExecutorQueuedProcessor\", new DocumentExecutor(), 10, LOGGER)");
+        appendStatement("private final QueuedProcessor<JSONArray> documentExecutor = new QueuedProcessor<>(\"DocumentTransferExecutorQueuedProcessor\", new DocumentExecutor(), 10, log)");
         emptyline();
         appendComment("Default constructor.");
         appendString("private ParserUtilService() {}");
@@ -150,7 +146,7 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         appendString("public void addToQueueParsingDocuments(final JSONArray data) throws Exception {");
         increaseIdent();
         appendStatement("documentExecutor.addToQueue(data)");
-        appendStatement("LOGGER.info(\"Document added to work.\" + data)");
+        appendStatement("log.info(\"Document added to work.\" + data)");
         closeBlockNEW();
         emptyline();
         appendString("private void executeParsingDocuments (final JSONArray data) throws ASGRuntimeException, JSONException {");
@@ -159,7 +155,7 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         increaseIdent();
         appendStatement("executeParsingDocument(data.getJSONObject(i))");
         closeBlockNEW();
-        appendStatement("LOGGER.info(\"Finished parsing documents\" + data)");
+        appendStatement("log.info(\"Finished parsing documents\" + data)");
         closeBlockNEW();
         emptyline();
         appendString("private void executeParsingDocument(final JSONObject data) throws ASGRuntimeException {");
@@ -188,7 +184,7 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         }
         appendString("default:");
         increaseIdent();
-        appendStatement("LOGGER.error(\"There is no needed module\")");
+        appendStatement("log.error(\"There is no needed module\")");
         appendStatement("throw new ASGRuntimeException(\"No such module\")");
         decreaseIdent();
         closeBlockNEW();
