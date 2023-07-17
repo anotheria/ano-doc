@@ -2032,7 +2032,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		increaseIdent();
 		openTry();
 		appendStatement("JSONArray array = new JSONArray(input)");
-		appendStatement("ParserUtilService.getInstance().executeParsingDocuments(array)");
+		appendStatement("ParserUtilService.getInstance().addToQueueParsingDocuments(array)");
 		appendCatch("Exception");
 		appendStatement("LOGGER.error(\"Unable to parsing transferred objects\", e)");
 		appendStatement("return Response.status(500).build()");

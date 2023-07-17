@@ -117,29 +117,49 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         clazz.setPackageName(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".util");
         clazz.addImport("net.anotheria.anosite.gen.shared.service.BasicService");
         clazz.addImport("net.anotheria.asg.exception.ASGRuntimeException");
+        clazz.addImport("net.anotheria.util.queue.IQueueWorker");
+        clazz.addImport("net.anotheria.util.queue.QueuedProcessor");
         clazz.addImport("org.codehaus.jettison.json.JSONObject");
         clazz.addImport("org.codehaus.jettison.json.JSONArray");
         clazz.addImport("org.codehaus.jettison.json.JSONException");
+        clazz.addImport("org.slf4j.Logger");
+        clazz.addImport("org.slf4j.LoggerFactory");
 
+        clazz.setClazzComment("Util service for processing transferred documents.");
         clazz.setName("ParserUtilService");
         clazz.setParent("BasicService");
         startClassBody();
 
+        appendComment("{@link Logger} instance.");
+        appendStatement("private static final Logger LOGGER = LoggerFactory.getLogger(ParserUtilService.class)");
+        appendComment("Constructed instance.");
         appendStatement("private static final ParserUtilService instance = new ParserUtilService()");
+        appendComment("Process parse documents in own worker. {@link QueuedProcessor} instance.");
+        appendStatement("private final QueuedProcessor<JSONArray> documentExecutor = new QueuedProcessor<>(\"DocumentTransferExecutorQueuedProcessor\", new DocumentExecutor(), 10, LOGGER)");
         emptyline();
-        appendString("private ParserUtilService() { }");
+        appendComment("Default constructor.");
+        appendString("private ParserUtilService() {}");
         emptyline();
+        appendComment("Get configured {@link ParserUtilService} instance.\n\n@return {@link ParserUtilService} instance");
         appendString("public static ParserUtilService getInstance() {");
         increaseIdent();
         appendStatement("return instance");
         closeBlockNEW();
         emptyline();
-        appendString("public void executeParsingDocuments (final JSONArray data) throws ASGRuntimeException, JSONException {");
+        appendComment("Add transferred objects to processing queue.\n\n@param data {@link JSONArray} of documents\n@throws Exception if any errors occurs");
+        appendString("public void addToQueueParsingDocuments(final JSONArray data) throws Exception {");
+        increaseIdent();
+        appendStatement("documentExecutor.addToQueue(data)");
+        appendStatement("LOGGER.info(\"Document added to work.\" + data)");
+        closeBlockNEW();
+        emptyline();
+        appendString("private void executeParsingDocuments (final JSONArray data) throws ASGRuntimeException, JSONException {");
         increaseIdent();
         appendString("for (int i = 0; i < data.length(); i++) {");
         increaseIdent();
         appendStatement("executeParsingDocument(data.getJSONObject(i))");
         closeBlockNEW();
+        appendStatement("LOGGER.info(\"Finished parsing documents\" + data)");
         closeBlockNEW();
         emptyline();
         appendString("private void executeParsingDocument(final JSONObject data) throws ASGRuntimeException {");
@@ -168,11 +188,20 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         }
         appendString("default:");
         increaseIdent();
-        appendStatement("log.error(\"There is no needed module\")");
+        appendStatement("LOGGER.error(\"There is no needed module\")");
         appendStatement("throw new ASGRuntimeException(\"No such module\")");
+        decreaseIdent();
         closeBlockNEW();
         closeBlockNEW();
-
+        emptyline();
+        appendString("private class DocumentExecutor implements IQueueWorker<JSONArray> {");
+        increaseIdent();
+        appendString("@Override");
+        appendString("public void doWork(JSONArray jsonArray) throws Exception {");
+        increaseIdent();
+        appendStatement("executeParsingDocuments(jsonArray)");
+        closeBlockNEW();
+        closeBlockNEW();
         return clazz;
     }
 
