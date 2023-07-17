@@ -146,7 +146,7 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         appendString("public void addToQueueParsingDocuments(final JSONArray data) throws Exception {");
         increaseIdent();
         appendStatement("documentExecutor.addToQueue(data)");
-        appendStatement("log.info(\"Document added to work.\" + data)");
+        appendStatement("log.info(\"Document added to work. {} inner documents.\", data.length())");
         closeBlockNEW();
         emptyline();
         appendString("private void executeParsingDocuments (final JSONArray data) throws ASGRuntimeException, JSONException {");
@@ -155,7 +155,7 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         increaseIdent();
         appendStatement("executeParsingDocument(data.getJSONObject(i))");
         closeBlockNEW();
-        appendStatement("log.info(\"Finished parsing documents\" + data)");
+        appendStatement("log.info(\"Finished parsing documents. {} inner documents.\", data.length())");
         closeBlockNEW();
         emptyline();
         appendString("private void executeParsingDocument(final JSONObject data) throws ASGRuntimeException {");
