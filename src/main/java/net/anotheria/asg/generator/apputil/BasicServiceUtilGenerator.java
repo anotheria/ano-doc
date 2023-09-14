@@ -131,10 +131,14 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         appendComment("Constructed instance.");
         appendStatement("private static final ParserUtilService instance = new ParserUtilService()");
         appendComment("Process parse documents in own worker. {@link QueuedProcessor} instance.");
-        appendStatement("private final QueuedProcessor<JSONArray> documentExecutor = new QueuedProcessor<>(\"DocumentTransferExecutorQueuedProcessor\", new DocumentExecutor(), 10, log)");
+        appendStatement("private final QueuedProcessor<JSONArray> documentExecutor");
         emptyline();
         appendComment("Default constructor.");
-        appendString("private ParserUtilService() {}");
+        appendString("private ParserUtilService() {");
+        increaseIdent();
+        appendStatement("documentExecutor = new QueuedProcessor<>(\"DocumentTransferExecutorQueuedProcessor\", new DocumentExecutor(), 10, log)");
+        appendStatement("documentExecutor.start()");
+        closeBlockNEW();
         emptyline();
         appendComment("Get configured {@link ParserUtilService} instance.\n\n@return {@link ParserUtilService} instance");
         appendString("public static ParserUtilService getInstance() {");
