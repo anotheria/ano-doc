@@ -591,7 +591,7 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 
 	private String getElementEditor(MetaDocument doc, MetaViewElement element){
 		if (element instanceof MetaEmptyElement)
-			return "&nbsp;";
+			return "&nbsp;\n";
 		if (element instanceof MetaFieldElement)
 			return getFieldEditor((MetaFieldElement)element);
 		if (element instanceof MetaListElement)
@@ -610,7 +610,7 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 		for (int i=0; i<elements.size(); i++){
 			ret += getElementEditor(doc, elements.get(i));
 			if (i<elements.size()-1)
-				ret += "&nbsp;";
+				ret += "&nbsp;\n";
 		}
 
 
@@ -912,7 +912,7 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 			String onClick = "return confirm('All unsaved data will be lost!!!. Document will be unlocked";
 			String cancel = CMSMappingsConfiguratorGenerator.getPath(((MetaModuleSection) currentSection).getDocument(), CMSMappingsConfiguratorGenerator.ACTION_CLOSE);
 			cancel += "?pId=<ano:write name=" + quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)) + " property=\"id\"/>";
-			return "<a href=\"" + cancel + "\" class=\"button\" onClick=\""+onClick+"\"><span>Close</span></a>";
+			return "<a href=\"" + cancel + "\" class=\"button\" onClick=\""+onClick+"\"><span>Close</span></a>\n";
 		}
 		if (element.getName().equals("update")) {
 			return getUpdateAndCloseFunction(doc, element);
@@ -924,7 +924,8 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 		if (element.getName().equals("updateAndClose")) {
 			return getUpdateAndCloseFunction(doc, element);
 		}
-
+		if (element.getName().equals("transfer"))
+			return getTransferFunction(doc, element);
 		/*
 		if (element.getName().equals("lock") && StorageType.CMS.equals(doc.getParentModule().getStorageType())) {
 			//For now we dont draw Lock and Unlock functions here
@@ -979,7 +980,7 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
                 " document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".fieldName.value='"+p.getName()+"';" +
                 " document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".fileName.value='"+propertyWriter+"';" +
                 " if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><img src=\"/cms_static/img/delete.gif\" alt=\"Delete file\" title=\"Delete file\"></a>"+
-                "</ano:notEmpty>";
+                "</ano:notEmpty>\n";
 	}
 
     private String getUpdateAndStayFunction(MetaDocument doc, MetaFunctionElement element){
@@ -1005,8 +1006,9 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 		}
 		//Delete customSubmit in the bottom, if not using tinyMCE
 		return "<a href=\"#\" class=\"button\" onClick=\"customSubmit(); document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+
-				".nextAction.value='stay'; if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><span><ano:write name=\"apply.label.prefix\"/></span></a>";
+				".nextAction.value='stay'; if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><span><ano:write name=\"apply.label.prefix\"/></span></a>\n";
 	}
+
 	private String getUpdateAndCloseFunction(MetaDocument doc, MetaFunctionElement element){
 		if(StorageType.CMS.equals(doc.getParentModule().getStorageType())){
 			//creating logic for hiding or showing current operation link in Locking CASE!!!!!
@@ -1030,8 +1032,15 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 		}
 		//Delete customSubmit in the bottom, if not using tinyMCE
 		return "<a href=\"#\" class=\"button\" onClick=\"customSubmit(); document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+
-				".nextAction.value='close'; if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><span><ano:write name=\"save.label.prefix\"/></span></a>";
+				".nextAction.value='close'; if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><span><ano:write name=\"save.label.prefix\"/></span></a>\n";
 	}
+
+	private String getTransferFunction(MetaDocument doc, MetaFunctionElement element){
+		String path = CMSMappingsConfiguratorGenerator.getPath(doc, CMSMappingsConfiguratorGenerator.ACTION_TRANSFER);
+		return "<a href=\"#\" class=\"button\" onClick=\"$.post('" + path + "', {pId:'" + "<ano:write name=" + quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)) + " property=\"id\"/>" + "'}, function (response){if (response.errors != undefined && response.errors.length != 0){notification(response.errors.error);}else{notificationAutoClose('Done!');}})\"><span><ano:write name=\"transfer.label.prefix\"/></span></a>\n" ;
+	}
+
+
 
 	/**
 	 * Creating entries in JSP for Multilanguage Support!!!
