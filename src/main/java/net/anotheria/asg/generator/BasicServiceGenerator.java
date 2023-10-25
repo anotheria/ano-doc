@@ -76,7 +76,7 @@ public class BasicServiceGenerator extends AbstractGenerator{
         //generate constructor
         appendString("protected BasicService(){");
         increaseIdent();
-        appendStatement("log = LoggerFactory.getLogger(this.getClass())");
+        appendStatement("log = LoggerFactory.getLogger(\"AnoSiteLog\")");
         closeBlockNEW();
         emptyline();
 

@@ -13,7 +13,8 @@ public abstract class CallContext implements Serializable{
 	
 	private String currentAuthor;
 	private String currentLanguage;
-	private DBContext dbContext; 
+	private DBContext dbContext;
+	private BrandConfig brandConfig;
 	
 	/**
 	 * <p>reset.</p>
@@ -21,6 +22,7 @@ public abstract class CallContext implements Serializable{
 	public void reset(){
 		currentLanguage = null;
 		dbContext = null;
+		brandConfig = null;
 	}
 
 	/**
@@ -94,6 +96,24 @@ public abstract class CallContext implements Serializable{
 	 */
 	public void setCurrentAuthor(String currentAuthor) {
 		this.currentAuthor = currentAuthor;
+	}
+
+	/**
+	 * <p>Getter for the field <code>brandConfig</code>.</p>
+	 *
+	 * @return a {@link BrandConfig} object.
+	 */
+	public BrandConfig getBrandConfig() {
+		return brandConfig;
+	}
+
+	/**
+	 * <p>Setter for the field <code>brandConfig</code>.</p>
+	 *
+	 * @param brandConfig a {@link BrandConfig} object.
+	 */
+	public void setBrandConfig(BrandConfig brandConfig) {
+		this.brandConfig = brandConfig;
 	}
 }
 
