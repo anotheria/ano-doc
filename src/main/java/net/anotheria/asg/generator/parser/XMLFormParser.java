@@ -7,10 +7,10 @@ import net.anotheria.asg.generator.forms.meta.MetaFormSingleField;
 import net.anotheria.asg.generator.forms.meta.MetaFormTableColumn;
 import net.anotheria.asg.generator.forms.meta.MetaFormTableField;
 import net.anotheria.asg.generator.forms.meta.MetaFormTableHeader;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 import java.io.IOException;
 import java.io.StringReader;

@@ -2,7 +2,7 @@ package net.anotheria.asg.generator.parser;
 
 import java.util.List;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 import net.anotheria.asg.generator.GenerationOption;
 import net.anotheria.asg.generator.GenerationOptions;

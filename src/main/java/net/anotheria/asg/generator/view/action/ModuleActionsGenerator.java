@@ -695,7 +695,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
                     clazz.addImport("java.lang.reflect.Method");
                     clazz.addImport("java.lang.reflect.InvocationTargetException");
                     clazz.addImport("net.anotheria.util.StringUtils");
-                    clazz.addImport("org.apache.commons.lang.WordUtils");
+                    clazz.addImport("org.apache.commons.text.WordUtils");
 					break;
 				}
 				if (elem.isValidated()) {
