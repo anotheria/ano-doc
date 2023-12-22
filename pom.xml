@@ -2,7 +2,7 @@
 	<parent>
 		<groupId>net.anotheria</groupId>
 		<artifactId>parent</artifactId>
-		<version>4.0-SNAPSHOT</version>
+		<version>4.0</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
@@ -11,13 +11,13 @@
 	<name>anotheria.net document and site generation framework</name>
 
 	<properties>
-		<ano-util.version>4.0.0-SNAPSHOT</ano-util.version>
+		<ano-util.version>4.0.0</ano-util.version>
 		<ano-maf.version>4.0.0-SNAPSHOT</ano-maf.version>
 		<ano-web.version>4.0.0-SNAPSHOT</ano-web.version>
 		<ano-plass.version>4.0.0-SNAPSHOT</ano-plass.version>
 		<ano-prise.version>4.0.0-SNAPSHOT</ano-prise.version>
 
-		<configureme.version>4.0.0-SNAPSHOT</configureme.version>
+		<configureme.version>4.0.0</configureme.version>
 		<moskito.version>4.0.0-SNAPSHOT</moskito.version>
 
 		<jdom.version>2.0.6.1</jdom.version>
