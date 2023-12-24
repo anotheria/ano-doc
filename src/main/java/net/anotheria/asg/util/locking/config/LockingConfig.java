@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  *
  * Actually   contains  'autolocking' property  and  timeout.
  *
- * @author: h3llka
+ * @author h3llka
  * @author another
  * @version $Id: $Id
  */

@@ -17,7 +17,7 @@ public final class OptionsParser {
 	/**
 	 * <p>parseOptions.</p>
 	 *
-	 * @param element a {@link org.jdom.Element} object.
+	 * @param element a {@link org.jdom2.Element} object.
 	 * @return a {@link net.anotheria.asg.generator.GenerationOptions} object.
 	 */
 	public static final GenerationOptions parseOptions(Element element){
