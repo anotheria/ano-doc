@@ -12,13 +12,13 @@
 
 	<properties>
 		<ano-util.version>4.0.0</ano-util.version>
-		<ano-maf.version>4.0.0-SNAPSHOT</ano-maf.version>
-		<ano-web.version>4.0.0-SNAPSHOT</ano-web.version>
-		<ano-plass.version>4.0.0-SNAPSHOT</ano-plass.version>
-		<ano-prise.version>4.0.0-SNAPSHOT</ano-prise.version>
+		<ano-maf.version>4.0.0</ano-maf.version>
+		<ano-web.version>4.0.0</ano-web.version>
+		<ano-plass.version>4.0.0</ano-plass.version>
+		<ano-prise.version>4.0.0</ano-prise.version>
 
 		<configureme.version>4.0.0</configureme.version>
-		<moskito.version>4.0.0-SNAPSHOT</moskito.version>
+		<moskito.version>4.0.0</moskito.version>
 
 		<jdom.version>2.0.6.1</jdom.version>
 		<ant.version>1.8.1</ant.version>
