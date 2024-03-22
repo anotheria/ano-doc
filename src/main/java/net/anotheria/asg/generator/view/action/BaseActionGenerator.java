@@ -62,8 +62,8 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.addImport("net.anotheria.util.StringUtils");
 		clazz.addImport(ContextManager.class);
 		clazz.addImport("net.anotheria.webutils.actions.*");
-		clazz.addImport("javax.servlet.http.HttpServletRequest"); //those imports must be strings dependencywise.
-		clazz.addImport("javax.servlet.http.HttpServletResponse");//those imports must be strings dependencywise.
+		clazz.addImport("jakarta.servlet.http.HttpServletRequest"); //those imports must be strings dependencywise.
+		clazz.addImport("jakarta.servlet.http.HttpServletResponse");//those imports must be strings dependencywise.
 		clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
 		clazz.addImport(net.anotheria.webutils.bean.NavigationItemBean.class);
@@ -354,11 +354,14 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		localizationBundleTranslation.setPath("asgLocalizationBundleTranslationView");
 		MetaCustomSection localizationBundleSpecificTranslation = new MetaCustomSection("LocalizationBundleSpecificTranslation");
 		localizationBundleSpecificTranslation.setPath("asgLocalizationBundleSpecificTranslationView");
+		MetaCustomSection localizationBundlesDifference = new MetaCustomSection("LocalizationBundlesDifference");
+		localizationBundlesDifference.setPath("asgLocalizationBundlesDifferenceView");
 		toolsView.addSection(localizationBundleExport);
 		toolsView.addSection(localizationBundleImport);
 		toolsView.addSection(localizationBundleMakeParents);
 		toolsView.addSection(localizationBundleTranslation);
 		toolsView.addSection(localizationBundleSpecificTranslation);
+		toolsView.addSection(localizationBundlesDifference);
         views.add(toolsView);
 		for (int i=0; i<views.size(); i++){
 			MetaView view = views.get(i);

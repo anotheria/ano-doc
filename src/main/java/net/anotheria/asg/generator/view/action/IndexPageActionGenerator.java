@@ -101,8 +101,8 @@ public class IndexPageActionGenerator extends AbstractGenerator {
 		clazz.setPackageName(getIndexPagePackageName());
 
 		
-		clazz.addImport("javax.servlet.http.HttpServletRequest");
-		clazz.addImport("javax.servlet.http.HttpServletResponse");
+		clazz.addImport("jakarta.servlet.http.HttpServletRequest");
+		clazz.addImport("jakarta.servlet.http.HttpServletResponse");
 		emptyline();
 		clazz.addImport("net.anotheria.maf.action.ActionCommand");
 		clazz.addImport("net.anotheria.maf.action.ActionMapping");

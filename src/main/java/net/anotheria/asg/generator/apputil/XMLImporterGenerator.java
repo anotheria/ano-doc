@@ -73,14 +73,14 @@ public class XMLImporterGenerator extends AbstractGenerator{
 		clazz.addImport("java.io.IOException");
 		clazz.addImport("java.io.OutputStreamWriter");
 		
-		clazz.addImport("org.jdom.Element");
-		clazz.addImport("org.jdom.Attribute");
-		clazz.addImport("org.jdom.Document");
+		clazz.addImport("org.jdom2.Element");
+		clazz.addImport("org.jdom2.Attribute");
+		clazz.addImport("org.jdom2.Document");
 
 
 		clazz.addImport("java.io.StringReader");
-		clazz.addImport("org.jdom.JDOMException");
-		clazz.addImport("org.jdom.input.SAXBuilder");
+		clazz.addImport("org.jdom2.JDOMException");
+		clazz.addImport("org.jdom2.input.SAXBuilder");
 
 		clazz.addImport("net.anotheria.util.xml.XMLNode");
 		clazz.addImport("net.anotheria.util.xml.XMLTree");
