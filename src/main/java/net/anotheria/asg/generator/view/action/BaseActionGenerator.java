@@ -41,7 +41,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 	public FileEntry generate(List<MetaView> views) {
 		return new FileEntry(generateBaseAction(views));
 	}
-	
+
 	/**
 	 * Generates the base action.
 	 *
@@ -51,7 +51,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 	public GeneratedClass generateBaseAction(List<MetaView> views){
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
-		
+
 		clazz.setPackageName(getSharedActionPackageName());
 
 		Collection<MetaModule> modules = GeneratorDataRegistry.getInstance().getModules();
@@ -62,8 +62,8 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.addImport("net.anotheria.util.StringUtils");
 		clazz.addImport(ContextManager.class);
 		clazz.addImport("net.anotheria.webutils.actions.*");
-		clazz.addImport("javax.servlet.http.HttpServletRequest"); //those imports must be strings dependencywise.
-		clazz.addImport("javax.servlet.http.HttpServletResponse");//those imports must be strings dependencywise.
+		clazz.addImport("jakarta.servlet.http.HttpServletRequest"); //those imports must be strings dependencywise.
+		clazz.addImport("jakarta.servlet.http.HttpServletResponse");//those imports must be strings dependencywise.
 		clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
 		clazz.addImport(net.anotheria.webutils.bean.NavigationItemBean.class);
@@ -74,9 +74,9 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.setName(getBaseActionName());
 
 		startClassBody();
-		
+
 		appendGenerationPoint("generateBaseAction");
-		
+
 		appendStatement("public static final String BEAN_MAIN_NAVIGATION = \"mainNavigation\"");
 		appendStatement("public static final String BEAN_CURRENT_SYSTEM = \"currentSystem\"");
 		appendStatement("public static final String BEAN_CURRENT_APPLICATION = \"currentApplication\"");
@@ -115,12 +115,12 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.addImport("org.slf4j.MarkerFactory");
 		appendString("static{");
 		increaseIdent();
-		
+
 		clazz.addImport(MetaFactory.class);
 		clazz.addImport(Extension.class);
 		clazz.addImport(MetaFactoryException.class);
-		
-		
+
+
 		for (MetaModule m:modules){
 			clazz.addImport(ServiceGenerator.getInterfaceImport(m));
 		}
@@ -143,10 +143,10 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		appendIncreasedStatement("log.error(MarkerFactory.getMarker(\"FATAL\"), "+quote("Can't init lockConfig")+", e)");
 		appendString("}");
         // end initing Lock Config
-	
+
 		closeBlock("");
 		emptyline();
-		
+
 		appendString("public void preProcess(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception {");
 		increaseIdent();
 		appendString("super.preProcess(mapping, req, res);");
@@ -163,7 +163,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		appendStatement("addBeanToSession(req, BEAN_CURRENT_APPLICATION, systemConfigurationAPI.getCurrentApplication())");
 		closeBlock("preProcess");
 		emptyline();
-		
+
 		appendString("public abstract ActionCommand anoDocExecute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception;");
 		emptyline();
 		appendGenerationPoint("generateBaseAction");
@@ -183,7 +183,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 					appendStatement("addBeanToSession(req, BEAN_TARGET_ACTION, url)");
 					appendStatement("String redUrl = "+quote(GeneratorDataRegistry.getInstance().getContext().getApplicationURLPath()+"/"+GeneratorDataRegistry.getInstance().getContext().getServletMapping()+"/login"));
 					appendStatement("res.sendRedirect(redUrl)");
-					appendStatement("return null");		
+					appendStatement("return null");
 				closeBlock("if");
 			closeBlock("if");
         emptyline();
@@ -213,19 +213,19 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 			closeBlock("... if null");
 			closeBlock("... synch");
 			closeBlock("... if");
-			
+
 			appendStatement("return "+ModuleActionsGenerator.getServiceInstanceName(m));
 			closeBlock("end  "+ModuleActionsGenerator.getServiceGetterCall(m));
 			emptyline();
 		}
-		
+
 		//security...
 		appendString("protected boolean isAuthorizationRequired(){");
 		increaseIdent();
 		appendStatement("return false");
 		closeBlockNEW();
 		emptyline();
-		
+
 		clazz.addImport(List.class);
 		clazz.addImport(ArrayList.class);
 		appendStatement("private static final List<String> EMPTY_ROLE_LIST = new ArrayList<String>()");
@@ -244,13 +244,13 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		appendStatement("return true");
 		closeBlock("checkAuthorization");
 		emptyline();
-		
+
 		appendString("public String getSubsystem() {");
 		increaseIdent();
 		appendStatement("return "+quote("asg"));
 		closeBlockNEW();
 		emptyline();
-	
+
 		appendString("protected String stripPath(String path){");
 		increaseIdent();
 		appendString("if (path==null || path.length()==0)");
@@ -324,7 +324,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		closeBlockNEW();
 		appendStatement("return false");
 		closeBlockNEW();
-		
+
 		appendString("protected void prepareMenu(HttpServletRequest req) {");
 		increaseIdent();
 		appendString("List<NavigationItemBean> navigation = getMainNavigation(req);");
@@ -337,7 +337,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 
 		appendString("protected abstract List<NavigationItemBean> getSubNavigation();");
 		emptyline();
-		
+
 		appendString("protected List<NavigationItemBean> getMainNavigation(HttpServletRequest req) {");
 		increaseIdent();
 		appendString("List<NavigationItemBean> menu = new ArrayList<NavigationItemBean>();");
@@ -350,14 +350,23 @@ public class BaseActionGenerator extends AbstractActionGenerator {
         localizationBundleImport.setPath("asgLocalizationBundleImportView");
         MetaCustomSection localizationBundleMakeParents = new MetaCustomSection("LocalizationBundleMakeParents");
         localizationBundleMakeParents.setPath("asgLocalizationBundleMakeParentsView");
-        toolsView.addSection(localizationBundleExport);
-        toolsView.addSection(localizationBundleImport);
-        toolsView.addSection(localizationBundleMakeParents);
+		MetaCustomSection localizationBundleTranslation = new MetaCustomSection("LocalizationBundleTranslation");
+		localizationBundleTranslation.setPath("asgLocalizationBundleTranslationView");
+		MetaCustomSection localizationBundleSpecificTranslation = new MetaCustomSection("LocalizationBundleSpecificTranslation");
+		localizationBundleSpecificTranslation.setPath("asgLocalizationBundleSpecificTranslationView");
+		MetaCustomSection localizationBundlesDifference = new MetaCustomSection("LocalizationBundlesDifference");
+		localizationBundlesDifference.setPath("asgLocalizationBundlesDifferenceView");
+		toolsView.addSection(localizationBundleExport);
+		toolsView.addSection(localizationBundleImport);
+		toolsView.addSection(localizationBundleMakeParents);
+		toolsView.addSection(localizationBundleTranslation);
+		toolsView.addSection(localizationBundleSpecificTranslation);
+		toolsView.addSection(localizationBundlesDifference);
         views.add(toolsView);
 		for (int i=0; i<views.size(); i++){
 			MetaView view = views.get(i);
 			MetaSection first = view.getSections().get(0);
-			
+
 			String firstPath = null;
 			if(first instanceof MetaModuleSection)
 				firstPath = CMSMappingsConfiguratorGenerator.getPath(((MetaModuleSection)first).getDocument(), CMSMappingsConfiguratorGenerator.ACTION_SHOW);
@@ -365,7 +374,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 				firstPath = ((MetaCustomSection)first).getPath();
 			else
 				throw new RuntimeException("MetaSection extension Class: " + first.getClass());
-			
+
 			String statement = "menu.add(makeMenuItemBean("+quote(view.getTitle())+", "+quote(firstPath)+"))";
 			if (view.getRequiredRoles()!=null && view.getRequiredRoles().size()>0){
 				String roles = "";
@@ -381,18 +390,18 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 				appendStatement(statement);
 			}
 		}
-	
+
 		appendString("return menu;");
 		closeBlockNEW();
 		emptyline();
-		
+
 		appendString("protected abstract String getActiveMainNavi();");
 		emptyline();
-		
+
 		appendString("protected abstract String getCurrentModuleDefName();");
 		appendString("protected abstract String getCurrentDocumentDefName();");
 		emptyline();
-		
+
 		appendComment("Get current application supported languages wrapper method.");
 		appendString("public static List<String> getSupportedLanguages() {");
 		increaseIdent();
@@ -400,14 +409,14 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		if (GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()) {
 			clazz.addImport(GeneratorDataRegistry.getInstance().getContext().getServicePackageName(MetaModule.SHARED) + "." + StringUtils.capitalize(GeneratorDataRegistry.getInstance().getContext().getApplicationName()) + "LanguageUtils");
 			appendStatement("return " + StringUtils.capitalize(GeneratorDataRegistry.getInstance().getContext().getApplicationName())
-					+ "LanguageUtils.getSupportedLanguages()");			
+					+ "LanguageUtils.getSupportedLanguages()");
 		} else {
 			appendStatement("return new ArrayList<String>()");
-		}			
+		}
 		closeBlockNEW();
 		emptyline();
-		
-		
+
+
 		appendString("private NavigationItemBean makeMenuItemBean(String title, String link){");
 		increaseIdent();
 		appendString("NavigationItemBean bean = new NavigationItemBean();");
@@ -531,7 +540,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		increaseIdent();
 		appendStatement("this.documentClazz = aDocumentClazz");
 		closeBlockNEW();
-		emptyline();				
+		emptyline();
 
 		appendString("public boolean equals(Object o) {");
 		increaseIdent();

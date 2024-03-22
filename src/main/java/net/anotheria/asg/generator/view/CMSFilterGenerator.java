@@ -49,8 +49,8 @@ public class CMSFilterGenerator extends AbstractGenerator{
 		clazz.addImport(Logger.class);
 		clazz.addImport(LoggerFactory.class);
 		clazz.addImport(File.class);
-		clazz.addImport("javax.servlet.FilterConfig");
-		clazz.addImport("javax.servlet.ServletException");
+		clazz.addImport("jakarta.servlet.FilterConfig");
+		clazz.addImport("jakarta.servlet.ServletException");
 		clazz.addImport("net.anotheria.maf.MAFFilter");
 		clazz.addImport("net.anotheria.maf.action.ActionMappingsConfigurator");
         clazz.addImport("net.anotheria.anosite.cms.user.CMSUserManager");

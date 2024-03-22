@@ -16,10 +16,10 @@ import net.anotheria.asg.generator.view.meta.MetaValidator;
 import net.anotheria.asg.generator.view.meta.MetaView;
 import net.anotheria.asg.generator.view.meta.MetaViewElement;
 import net.anotheria.util.StringUtils;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -117,29 +117,49 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         clazz.setPackageName(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".util");
         clazz.addImport("net.anotheria.anosite.gen.shared.service.BasicService");
         clazz.addImport("net.anotheria.asg.exception.ASGRuntimeException");
+        clazz.addImport("net.anotheria.util.queue.IQueueWorker");
+        clazz.addImport("net.anotheria.util.queue.QueuedProcessor");
         clazz.addImport("org.codehaus.jettison.json.JSONObject");
         clazz.addImport("org.codehaus.jettison.json.JSONArray");
         clazz.addImport("org.codehaus.jettison.json.JSONException");
 
+        clazz.setClazzComment("Util service for processing transferred documents.");
         clazz.setName("ParserUtilService");
         clazz.setParent("BasicService");
         startClassBody();
 
+        appendComment("Constructed instance.");
         appendStatement("private static final ParserUtilService instance = new ParserUtilService()");
+        appendComment("Process parse documents in own worker. {@link QueuedProcessor} instance.");
+        appendStatement("private final QueuedProcessor<JSONArray> documentExecutor");
         emptyline();
-        appendString("private ParserUtilService() { }");
+        appendComment("Default constructor.");
+        appendString("private ParserUtilService() {");
+        increaseIdent();
+        appendStatement("documentExecutor = new QueuedProcessor<>(\"DocumentTransferExecutorQueuedProcessor\", new DocumentExecutor(), 10, log)");
+        appendStatement("documentExecutor.start()");
+        closeBlockNEW();
         emptyline();
+        appendComment("Get configured {@link ParserUtilService} instance.\n\n@return {@link ParserUtilService} instance");
         appendString("public static ParserUtilService getInstance() {");
         increaseIdent();
         appendStatement("return instance");
         closeBlockNEW();
         emptyline();
-        appendString("public void executeParsingDocuments (final JSONArray data) throws ASGRuntimeException, JSONException {");
+        appendComment("Add transferred objects to processing queue.\n\n@param data {@link JSONArray} of documents\n@throws Exception if any errors occurs");
+        appendString("public void addToQueueParsingDocuments(final JSONArray data) throws Exception {");
+        increaseIdent();
+        appendStatement("documentExecutor.addToQueue(data)");
+        appendStatement("log.info(\"Document added to work. Total document size:\" + data.length())");
+        closeBlockNEW();
+        emptyline();
+        appendString("private void executeParsingDocuments (final JSONArray data) throws ASGRuntimeException, JSONException {");
         increaseIdent();
         appendString("for (int i = 0; i < data.length(); i++) {");
         increaseIdent();
         appendStatement("executeParsingDocument(data.getJSONObject(i))");
         closeBlockNEW();
+        appendStatement("log.info(\"Finished parsing documents. Total document size:\" + data.length())");
         closeBlockNEW();
         emptyline();
         appendString("private void executeParsingDocument(final JSONObject data) throws ASGRuntimeException {");
@@ -170,9 +190,18 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         increaseIdent();
         appendStatement("log.error(\"There is no needed module\")");
         appendStatement("throw new ASGRuntimeException(\"No such module\")");
+        decreaseIdent();
         closeBlockNEW();
         closeBlockNEW();
-
+        emptyline();
+        appendString("private class DocumentExecutor implements IQueueWorker<JSONArray> {");
+        increaseIdent();
+        appendString("@Override");
+        appendString("public void doWork(JSONArray jsonArray) throws Exception {");
+        increaseIdent();
+        appendStatement("executeParsingDocuments(jsonArray)");
+        closeBlockNEW();
+        closeBlockNEW();
         return clazz;
     }
 
@@ -186,14 +215,14 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
 
         clazz.addImport("org.glassfish.jersey.media.multipart.FormDataContentDisposition");
         clazz.addImport("org.glassfish.jersey.media.multipart.FormDataParam");
-        clazz.addImport("javax.ws.rs.Consumes");
-        clazz.addImport("javax.ws.rs.Produces");
-        clazz.addImport("javax.ws.rs.POST");
-        clazz.addImport("javax.ws.rs.Path");
-        clazz.addImport("javax.ws.rs.core.Context");
-        clazz.addImport("javax.ws.rs.core.MediaType");
-        clazz.addImport("javax.ws.rs.core.Response");
-        clazz.addImport("javax.ws.rs.core.UriInfo");
+        clazz.addImport("jakarta.ws.rs.Consumes");
+        clazz.addImport("jakarta.ws.rs.Produces");
+        clazz.addImport("jakarta.ws.rs.POST");
+        clazz.addImport("jakarta.ws.rs.Path");
+        clazz.addImport("jakarta.ws.rs.core.Context");
+        clazz.addImport("jakarta.ws.rs.core.MediaType");
+        clazz.addImport("jakarta.ws.rs.core.Response");
+        clazz.addImport("jakarta.ws.rs.core.UriInfo");
         clazz.addImport("java.io.File");
         clazz.addImport("java.io.FileOutputStream");
         clazz.addImport("java.io.IOException");
