@@ -11,7 +11,7 @@ import net.anotheria.asg.generator.meta.StorageType;
 import net.anotheria.asg.generator.model.ServiceGenerator;
 
 /**
- * TODO please remined another to comment this class
+ * TODO please remind another to comment this class
  *
  * @author another
  * @version $Id: $Id

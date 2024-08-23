@@ -197,7 +197,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		
 		clazz.setPackageName(getPackage(doc));
 		clazz.addImport("net.anotheria.webutils.bean.BaseActionForm");
-		clazz.addImport("javax.servlet.http.HttpServletRequest");
+		clazz.addImport("jakarta.servlet.http.HttpServletRequest");
 		clazz.addImport("org.apache.struts.action.ActionMapping");
 		
 		clazz.setName(getContainerEntryFormName(p));

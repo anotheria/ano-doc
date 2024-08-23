@@ -3,7 +3,7 @@ package net.anotheria.asg.util.locking.exeption;
 /**
  * Exception for locking functionality. Shoud be used insteed of RuntimeException.
  *
- * @author: h3llka
+ * @author h3llka
  * @author another
  * @version $Id: $Id
  */

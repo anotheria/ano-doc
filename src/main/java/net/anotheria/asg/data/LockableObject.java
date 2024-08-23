@@ -3,7 +3,7 @@ package net.anotheria.asg.data;
 /**
  * Describes Lockable object.
  *
- * @author: h3llka
+ * @author h3llka
  * @author another
  * @version $Id: $Id
  */

@@ -695,7 +695,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
                     clazz.addImport("java.lang.reflect.Method");
                     clazz.addImport("java.lang.reflect.InvocationTargetException");
                     clazz.addImport("net.anotheria.util.StringUtils");
-                    clazz.addImport("org.apache.commons.lang.WordUtils");
+                    clazz.addImport("org.apache.commons.text.WordUtils");
 					break;
 				}
 				if (elem.isValidated()) {
@@ -1937,13 +1937,13 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("java.util.List");
 		clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactory");
 		clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactoryException");
-		clazz.addImport("javax.ws.rs.Consumes");
-		clazz.addImport("javax.ws.rs.Produces");
-		clazz.addImport("javax.ws.rs.POST");
-		clazz.addImport("javax.ws.rs.GET");
-		clazz.addImport("javax.ws.rs.Path");
-		clazz.addImport("javax.ws.rs.PathParam");
-		clazz.addImport("javax.ws.rs.core.Response");
+		clazz.addImport("jakarta.ws.rs.Consumes");
+		clazz.addImport("jakarta.ws.rs.Produces");
+		clazz.addImport("jakarta.ws.rs.POST");
+		clazz.addImport("jakarta.ws.rs.GET");
+		clazz.addImport("jakarta.ws.rs.Path");
+		clazz.addImport("jakarta.ws.rs.PathParam");
+		clazz.addImport("jakarta.ws.rs.core.Response");
 		clazz.addImport("com.google.gson.Gson");
 		clazz.addImport("com.google.gson.GsonBuilder");
 		clazz.addImport("org.codehaus.jettison.json.JSONArray");
@@ -2032,7 +2032,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		increaseIdent();
 		openTry();
 		appendStatement("JSONArray array = new JSONArray(input)");
-		appendStatement("ParserUtilService.getInstance().executeParsingDocuments(array)");
+		appendStatement("ParserUtilService.getInstance().addToQueueParsingDocuments(array)");
 		appendCatch("Exception");
 		appendStatement("LOGGER.error(\"Unable to parsing transferred objects\", e)");
 		appendStatement("return Response.status(500).build()");
@@ -2066,10 +2066,10 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("net.anotheria.maf.json.JSONResponse");
 
 		clazz.addImport("org.codehaus.jettison.json.JSONArray");
-		clazz.addImport("javax.ws.rs.client.Client");
-		clazz.addImport("javax.ws.rs.client.Entity");
-		clazz.addImport("javax.ws.rs.core.MediaType");
-		clazz.addImport("javax.ws.rs.core.Response");
+		clazz.addImport("jakarta.ws.rs.client.Client");
+		clazz.addImport("jakarta.ws.rs.client.Entity");
+		clazz.addImport("jakarta.ws.rs.core.MediaType");
+		clazz.addImport("jakarta.ws.rs.core.Response");
 		clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
 		clazz.setName(getTransferActionName(section));
 		clazz.setParent(getBaseActionName(section));
@@ -2415,6 +2415,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("addBeanToRequest(req, "+quote("objectInfoString")+" , "+doc.getVariableName()+".getObjectInfo().toString())");
 		appendStatement("addBeanToRequest(req, "+quote("apply.label.prefix")+", "+quote("Apply")+")");
 		appendStatement("addBeanToRequest(req, "+quote("save.label.prefix")+", "+quote("Save")+")");
+		appendStatement("addBeanToRequest(req, "+quote("transfer.label.prefix")+", "+quote("Transfer")+")");
 
 		//add field descriptions ...
 		emptyline();
@@ -2750,6 +2751,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("addBeanToRequest(req, "+quote(CMSMappingsConfiguratorGenerator.getDialogFormName(dialog, doc))+" , form)");
 		appendStatement("addBeanToRequest(req, "+quote("save.label.prefix")+", "+quote("Save")+")");
 		appendStatement("addBeanToRequest(req, "+quote("apply.label.prefix")+" , "+quote("Apply")+")");
+		appendStatement("addBeanToRequest(req, "+quote("transfer.label.prefix")+", "+quote("Transfer")+")");
 		appendStatement("addBeanToRequest(req, "+quote("objectInfoString")+" , "+quote("none")+")");
 
 		//add field descriptions ...
@@ -2863,7 +2865,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	    emptyline();
 	    clazz.addImport(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".action."+BaseViewActionGenerator.getViewActionName(view));
 		if (isCMS) {
-			clazz.addImport("javax.servlet.http.HttpServletRequest");
+			clazz.addImport("jakarta.servlet.http.HttpServletRequest");
 			clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 			clazz.addImport("net.anotheria.asg.data.AbstractASGDocument");
 			clazz.addImport("net.anotheria.asg.data.LockableObject");
@@ -3118,8 +3120,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	 * @param clazz
 	 */
 	private void addStandardActionImports(GeneratedClass clazz){
-	    clazz.addImport("javax.servlet.http.HttpServletRequest");
-	    clazz.addImport("javax.servlet.http.HttpServletResponse");
+	    clazz.addImport("jakarta.servlet.http.HttpServletRequest");
+	    clazz.addImport("jakarta.servlet.http.HttpServletResponse");
 	    clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 	    clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
 

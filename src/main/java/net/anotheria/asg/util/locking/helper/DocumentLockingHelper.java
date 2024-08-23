@@ -7,7 +7,7 @@ import net.anotheria.asg.util.locking.exeption.LockingException;
  * Current Helper only  checks permission for action on LockableObject.
  * Actually should be used in CMS actions - as additional permission checker.
  *
- * @author: h3llka
+ * @author h3llka
  * @author another
  * @version $Id: $Id
  */
