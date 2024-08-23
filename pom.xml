@@ -23,7 +23,7 @@
 		<jdom.version>2.0.6.1</jdom.version>
 		<ant.version>1.8.1</ant.version>
 
-        <google.cloud-version>25.3.0</google.cloud-version>
+        <google.cloud-version>26.44.0</google.cloud-version>
 	</properties>
 
 	<dependencies>
