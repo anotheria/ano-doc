@@ -22,6 +22,8 @@
 
 		<jdom.version>2.0.6.1</jdom.version>
 		<ant.version>1.8.1</ant.version>
+
+        <google.cloud-version>26.44.0</google.cloud-version>
 	</properties>
 
 	<dependencies>
@@ -137,9 +139,32 @@
 			<artifactId>jakarta.servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-storage</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.421</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>1.12.421</version>
+        </dependency>
 	</dependencies>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.cloud</groupId>
+                <artifactId>libraries-bom</artifactId>
+                <version>${google.cloud-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <scm>
              <url>https://github.com/anotheria/ano-doc</url>
              <connection>scm:git:git@github.com:anotheria/ano-doc.git</connection>
