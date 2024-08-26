@@ -308,6 +308,9 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
      * @return a {@link java.lang.String} object.
      */
     protected String getFilePath(String aFilename) {
+        if ("gcs".equalsIgnoreCase(storageType))
+            return filename;
+
         return storageDir + File.separator + aFilename;
     }
 
