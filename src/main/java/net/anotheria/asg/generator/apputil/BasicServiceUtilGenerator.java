@@ -271,20 +271,6 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         closeBlockNEW();
         appendStatement("return Response.status(201).build()");
         closeBlockNEW();
-        emptyline();
-
-        openFun("private void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) throws IOException");
-        appendStatement("OutputStream out = new FileOutputStream(uploadedFileLocation)");
-        appendStatement("int read = 0");
-        appendStatement("byte[] bytes = new byte[4096];");
-        appendString("while ((read = uploadedInputStream.read(bytes)) != -1) {");
-        increaseIdent();
-        appendStatement("out.write(bytes, 0, read)");
-        closeBlockNEW();
-        appendStatement("out.flush()");
-        appendStatement("out.close()");
-        closeBlockNEW();
-
         return clazz;
     }
 }
