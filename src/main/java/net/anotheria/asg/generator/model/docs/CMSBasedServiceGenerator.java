@@ -657,8 +657,8 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			for (MetaProperty p: doc.getProperties()) {
 				if (p.getType() == MetaProperty.Type.IMAGE || (p.getType() == MetaProperty.Type.LIST && ((MetaListProperty) p).getContainedProperty().getType() == MetaProperty.Type.IMAGE)) {
 					clazz.addImport("net.anotheria.webutils.filehandling.actions.FileStorage");
-					clazz.addImport("java.io.File");
-					clazz.addImport("java.io.FileNotFoundException");
+					clazz.addImport("net.anotheria.webutils.filehandling.beans.TemporaryFileHolder");
+					clazz.addImport("java.io.ByteArrayInputStream");
 					clazz.addImport("java.io.IOException");
 					clazz.addImport("jakarta.ws.rs.client.Client");
 					clazz.addImport("jakarta.ws.rs.client.Entity");
@@ -668,17 +668,18 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 					clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
 					clazz.addImport("net.anotheria.anosite.config.DocumentTransferConfig");
 					clazz.addImport("org.glassfish.jersey.media.multipart.FormDataMultiPart");
-					clazz.addImport("org.glassfish.jersey.media.multipart.file.FileDataBodyPart");
+					clazz.addImport("org.glassfish.jersey.media.multipart.file.StreamDataBodyPart");
 
 
-					appendStatement("File imageFile = FileStorage.getFile(" + doc.getVariableName()  + "." + p.toBeanGetter() + "())");
+					appendStatement("TemporaryFileHolder temporaryFileHolder = FileStorage.loadFile(" + doc.getVariableName()  + "." + p.toBeanGetter() + "())");
 					appendStatement("Client client = JerseyClientUtil.getClientInstance()");
 					appendString("for (String domain :DocumentTransferConfig.getInstance().getDomains()) {");
 					increaseIdent();
 
-					appendStatement("final FileDataBodyPart filePart = new FileDataBodyPart(\"file\", imageFile)");
+					appendStatement("final StreamDataBodyPart filePart = new StreamDataBodyPart(\"file\", new ByteArrayInputStream(temporaryFileHolder.getData()), temporaryFileHolder.getFileName())");
 					appendStatement("FormDataMultiPart formDataMultiPart = new FormDataMultiPart()");
 					appendStatement("final FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart.bodyPart(filePart)");
+					appendStatement("multipart.setMediaType(MediaType.valueOf(temporaryFileHolder.getMimeType()))");
 					appendStatement("final WebTarget target = client.target(domain + \"/api/asgimage/upload\")");
 					appendStatement("final Response response = target.request().post(Entity.entity(multipart, multipart.getMediaType()))");
 					appendStatement("String responseResult = response.readEntity(String.class)");
@@ -686,9 +687,6 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 					appendStatement("formDataMultiPart.close()");
 					appendStatement("multipart.close()");
 					closeBlockNEW();
-
-					appendCatch("FileNotFoundException");
-					appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + " (\"Problem with getting image file for " + doc.getName() + "\" + e.getMessage())");
 				}
 			}
 
