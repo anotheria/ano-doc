@@ -213,6 +213,9 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
 
         clazz.setPackageName(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".rest");
 
+        clazz.addImport("net.anotheria.util.IOUtils");
+        clazz.addImport("net.anotheria.webutils.filehandling.actions.FileStorage");
+        clazz.addImport("net.anotheria.webutils.filehandling.beans.TemporaryFileHolder");
         clazz.addImport("org.glassfish.jersey.media.multipart.FormDataContentDisposition");
         clazz.addImport("org.glassfish.jersey.media.multipart.FormDataParam");
         clazz.addImport("jakarta.ws.rs.Consumes");
@@ -223,14 +226,10 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         clazz.addImport("jakarta.ws.rs.core.MediaType");
         clazz.addImport("jakarta.ws.rs.core.Response");
         clazz.addImport("jakarta.ws.rs.core.UriInfo");
-        clazz.addImport("java.io.File");
-        clazz.addImport("java.io.FileOutputStream");
         clazz.addImport("java.io.IOException");
         clazz.addImport("java.io.InputStream");
-        clazz.addImport("java.io.OutputStream");
         clazz.addImport("org.slf4j.Logger");
         clazz.addImport("org.slf4j.LoggerFactory");
-        clazz.addImport("net.anotheria.webutils.filehandling.FileStorageConfig");
         clazz.addImport("net.anotheria.util.log.LogMessageUtil");
 
         clazz.addAnnotation("@Path(\"/asgimage\")");
@@ -239,7 +238,6 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
 
         appendStatement("private static final Logger LOGGER = LoggerFactory.getLogger(UploadImageResource.class)");
         emptyline();
-        appendStatement("private static final FileStorageConfig CONFIG = FileStorageConfig.getInstance()");
         emptyline();
         appendString("@Context");
         appendStatement("private UriInfo context");
@@ -256,30 +254,23 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         appendStatement("return Response.status(400).entity(\"Invalid form data\").build()");
         decreaseIdent();
         emptyline();
-        appendStatement("String uploadedFileLocation = CONFIG.getDirectory() + File.separator + fileDetail.getFileName()");
         openTry();
-        appendStatement("writeToFile(uploadedInputStream, uploadedFileLocation)");
+        appendStatement("TemporaryFileHolder temporaryFileHolder = new TemporaryFileHolder()");
+        appendStatement("temporaryFileHolder.setFileName(fileDetail.getFileName())");
+        appendStatement("temporaryFileHolder.setMimeType(fileDetail.getType())");
+        appendStatement("temporaryFileHolder.setData(uploadedInputStream.readAllBytes())");
+        appendStatement("FileStorage.storeTemporaryFilePermanently(temporaryFileHolder)");
         appendCatch("IOException");
         appendStatement("String failMsg = LogMessageUtil.failMsg(e)");
         appendStatement("LOGGER.error(failMsg)");
         appendStatement("return Response.status(500).entity(failMsg).build()");
+        decreaseIdent();
+        appendString("} finally {");
+        increaseIdent();
+        appendStatement("IOUtils.closeIgnoringException(uploadedInputStream)");
         closeBlockNEW();
         appendStatement("return Response.status(201).build()");
         closeBlockNEW();
-        emptyline();
-
-        openFun("private void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) throws IOException");
-        appendStatement("OutputStream out = new FileOutputStream(uploadedFileLocation)");
-        appendStatement("int read = 0");
-        appendStatement("byte[] bytes = new byte[4096];");
-        appendString("while ((read = uploadedInputStream.read(bytes)) != -1) {");
-        increaseIdent();
-        appendStatement("out.write(bytes, 0, read)");
-        closeBlockNEW();
-        appendStatement("out.flush()");
-        appendStatement("out.close()");
-        closeBlockNEW();
-
         return clazz;
     }
 }

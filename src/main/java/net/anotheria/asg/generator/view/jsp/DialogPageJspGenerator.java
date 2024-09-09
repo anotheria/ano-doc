@@ -761,6 +761,7 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 		String propertyWriter = "<ano:write name="+quote(beanName)+" property="+quote(p.getName()) + "/>";
 		String ret ="";
 		ret += "<ano:present name="+quote(beanName)+" property="+quote(p.getName()) + ">\r";
+		ret += "<input id=\"fileNameInputValue\" type=\"hidden\" value=\"" + propertyWriter + "\"/>\r";
 		ret += "<a target=\"_blank\" href=\"getFile?pName=" + propertyWriter + "\"><img class=\"thumbnail\" alt=" + quote(propertyWriter) + " src=\"getFile?pName=" + propertyWriter + "\"/></a>\r";
 		ret += "</ano:present>\r";
         ret += getUpdateAndDeleteFileAndStayFunction(((MetaModuleSection)currentSection).getDocument(),p);
@@ -769,6 +770,9 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 		ret += "<div id=\"file-uploader-" + p.getName() + "\" class=\"image_uploader\"><!-- --></div>\r";
 		ret += "<script>\r";
 		ret += "$(document).ready(function() {\r";
+		ret += "	var $fileName = $('#fileNameInputValue');\r";
+		ret += "	if ($fileName.length)\r";
+		ret += "		getFileInfo($fileName.val());\r\n\n";
 		ret += "	var uploader = new qq.FileUploader({\r";
 		ret += "	    element: document.getElementById('file-uploader-" + p.getName() +"'),\r";
 		ret += "	    action: '${pageContext.request.contextPath}/cms/fileUpload',\r";
@@ -948,39 +952,41 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
         String propertyWriter = "<ano:write name="+quote(beanName)+" property="+quote(p.getName()) + "/>";
         if(StorageType.CMS.equals(doc.getParentModule().getStorageType())){
             //creating logic for hiding or showing current operation link in Locking CASE!!!!!
-            String result = "<ano:notEmpty name="+quote(beanName)+" property="+quote(p.getName())+">";
+            String result = "<ul class=\"file-info\"><ano:notEmpty name="+quote(beanName)+" property="+quote(p.getName())+">";
             result += "<ano:equal name=" + quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)) +
                     " property=" + quote(LockableObject.INT_LOCK_PROPERTY_NAME) + " value=" + quote("true") + "> \n";
             result+="  <ano:equal name=" + quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)) +
                     " property=" + quote(LockableObject.INT_LOCKER_ID_PROPERTY_NAME) + " value=" + quote("<%=(java.lang.String)session.getAttribute(\\"+quote("currentUserId\\")+")%>") + "> \n";
-            result+="\t<a href=\"#\" onClick=\"" +
+            result+="\t<li class=\"file-info-item\"><a href=\"#\" onClick=\"" +
                     "document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".nextAction.value='stay';" +
                     " document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".fieldName.value='"+p.getName()+"';" +
                     " document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".fileName.value='"+propertyWriter+"';" +
-                    " if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><img src=\"/cms_static/img/delete.gif\" alt=\"Delete file\" title=\"Delete file\"></a> \n";
+                    " if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><img src=\"/cms_static/img/delete.gif\" alt=\"Delete file\" title=\"Delete file\"></a><li> \n";
             result+="  </ano:equal> \n";
             result+="</ano:equal> \n";
             result+="<ano:equal name=" + quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)) + " property=" + quote(LockableObject.INT_LOCK_PROPERTY_NAME) + " value=" + quote("false") + "> \n";
-            result+="\t<a href=\"#\" onClick=";
+            result+="\t<li class=\"file-info-item\"><a href=\"#\" onClick=";
             //tinyMCE save hack start
             result+="\"customSubmit(); ";
             //tinyMCE save hack end
             result+="document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".nextAction.value='stay';" +
                     " document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".fieldName.value='"+p.getName()+"';" +
                     " document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".fileName.value='"+propertyWriter+"';" +
-                    " if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><img src=\"/cms_static/img/delete.gif\" alt=\"Delete file\" title=\"Delete file\"></a>\n";
+                    " if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><img src=\"/cms_static/img/delete.gif\" alt=\"Delete file\" title=\"Delete file\"></a></li>\n";
             result+="</ano:equal> \n";
             result+="</ano:notEmpty> \n";
+			result+= "<li class=\"file-info-item\"><span id=\"fileInfoPixels\" class=\"name\"></span></li>\n";
+			result+= "<li class=\"file-info-item\"><span id=\"fileInfoSize\" class=\"size\"></span></li>\n</ul>\n";
             return result;
         }
         //Delete customSubmit in the bottom, if not using tinyMCE
-        return "<ano:notEmpty name="+quote(beanName)+" property="+quote(p.getName())+">"+
-                "<a href=\"#\" onClick=\"customSubmit(); " +
+        return "<ul class=\"file-info\"><ano:notEmpty name="+quote(beanName)+" property="+quote(p.getName())+">"+
+                "<li class=\"file-info-item\"><a href=\"#\" onClick=\"customSubmit(); " +
                 "document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".nextAction.value='stay';" +
                 " document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".fieldName.value='"+p.getName()+"';" +
                 " document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".fileName.value='"+propertyWriter+"';" +
-                " if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><img src=\"/cms_static/img/delete.gif\" alt=\"Delete file\" title=\"Delete file\"></a>"+
-                "</ano:notEmpty>\n";
+                " if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><img src=\"/cms_static/img/delete.gif\" alt=\"Delete file\" title=\"Delete file\"></a></li>"+
+                "</ano:notEmpty>\n<li class=\"file-info-item\"><span id=\"fileInfoPixels\" class=\"name\"></span></li>\n<li class=\"file-info-item\"><span id=\"fileInfoSize\" class=\"size\"></span></li>\n</ul>\n";
 	}
 
     private String getUpdateAndStayFunction(MetaDocument doc, MetaFunctionElement element){
