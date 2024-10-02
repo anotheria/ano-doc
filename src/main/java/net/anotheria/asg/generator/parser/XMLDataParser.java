@@ -77,10 +77,6 @@ public final class XMLDataParser {
 				}
 					
 			}
-			String storageKey = m.getAttributeValue("storageKey");
-			if (storageKey!=null){
-				mod.setStorageKey(storageKey);
-			}
 		}catch(Exception ignored){
 			ignored.printStackTrace();
 		}

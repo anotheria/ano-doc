@@ -153,13 +153,10 @@ public class ConfiguratorGenerator extends AbstractGenerator implements IGenerat
 		appendString("public static final String getEncoding(){ return "+quote(GeneratorDataRegistry.getInstance().getContext().getEncoding())+"; }");
 		emptyline();
 
-		appendString("private static void addCommonStorage(String moduleId, IModuleService service, IModuleFactory factory, String storageDirConfigKey){");
+		appendString("private static void addCommonStorage(String moduleId, IModuleService service, IModuleFactory factory){");
 		increaseIdent();
 		appendString("service.attachModuleFactory(moduleId, factory );");
-		appendString("if (storageDirConfigKey==null)");
-		appendIncreasedString("service.attachModuleStorage(moduleId, new CommonHashtableModuleStorage(moduleId+\".dat\", factory));");
-		appendString("else");
-		appendIncreasedString("service.attachModuleStorage(moduleId, new CommonHashtableModuleStorage(moduleId+\".dat\", factory, storageDirConfigKey));");
+		appendString("service.attachModuleStorage(moduleId, new CommonHashtableModuleStorage(moduleId+\".dat\", factory));");
 		append(closeBlock());
 		emptyline();
 		
@@ -186,12 +183,7 @@ public class ConfiguratorGenerator extends AbstractGenerator implements IGenerat
 				call += ", ";
 				call += "service";
 				call += ", ";
-				call += "new "+m.getFactoryClassName()+"()";
-				if (m.getStorageKey()!=null)
-					call += ", "+quote(m.getStorageKey());
-				else
-					call += ", null";
-				call +=")";
+				call += "new "+m.getFactoryClassName()+"())";
 				appendStatement(call);
 			}
 			  

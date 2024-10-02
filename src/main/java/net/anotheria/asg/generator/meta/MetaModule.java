@@ -44,10 +44,6 @@ public class MetaModule implements IGenerateable{
 	 * Type of the storge for this module.
 	 */
 	private StorageType storageType;
-	/**
-	 * The sense of this parameter is lost in the depth of the code.
-	 */
-	private String storageKey;
 	
 	private Map<String, ModuleParameter> parameters;
 	
@@ -247,26 +243,6 @@ public class MetaModule implements IGenerateable{
 	 */
 	public void setStorageType(StorageType aStorageType) {
 		storageType = aStorageType;
-	}
-
-	/**
-	 * <p>Getter for the field <code>storageKey</code>.</p>
-	 *
-	 * @deprecated Noone knows what storagekey does.
-	 * @return a {@link java.lang.String} object.
-	 */
-	public String getStorageKey() {
-		return storageKey;
-	}
-
-	/**
-	 * <p>Setter for the field <code>storageKey</code>.</p>
-	 *
-	 * @deprecated Noone knows what storagekey does.
-	 * @param aStorageKey a {@link java.lang.String} object.
-	 */
-	public void setStorageKey(String aStorageKey) {
-		storageKey = aStorageKey;
 	}
 	
 	/**
