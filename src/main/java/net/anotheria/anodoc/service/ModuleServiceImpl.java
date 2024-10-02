@@ -3,8 +3,6 @@ package net.anotheria.anodoc.service;
 import net.anotheria.anodoc.data.Module;
 import net.anotheria.asg.util.listener.IModuleListener;
 import org.configureme.ConfigurationManager;
-import org.configureme.annotations.AfterConfiguration;
-import org.configureme.annotations.ConfigureMe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author another
  * @version $Id: $Id
  */
-@ConfigureMe (name="anodoc.storage")
 public class ModuleServiceImpl implements IModuleService, IModuleListener{
 
 	/**
@@ -362,13 +359,4 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	public void removeModuleListener(String moduleId, String ownerId) {
 		moduleListeners.remove(getKey(moduleId, DEFAULT_COPY_ID, ownerId));
 	}
-
-	/**
-	 * <p>notifyConfigurationFinished.</p>
-	 */
-	@AfterConfiguration public void notifyConfigurationFinished() {
-		LOGGER.info("Cleaning cache.");
-		cache.clear();
-	}
-
 }
