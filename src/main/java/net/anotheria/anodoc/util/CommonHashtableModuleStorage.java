@@ -13,6 +13,7 @@ import net.anotheria.asg.util.listener.IModuleListener;
 import org.configureme.ConfigurationManager;
 import org.configureme.annotations.Configure;
 import org.configureme.annotations.ConfigureMe;
+import org.configureme.annotations.DontConfigure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,55 +34,61 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 @ConfigureMe(name = "anodoc.storage")
 public class CommonHashtableModuleStorage implements IModuleStorage {
-
     /**
      * {@link Logger} instance.
      */
+    @DontConfigure
     private static final Logger LOGGER = LoggerFactory.getLogger(CommonHashtableModuleStorage.class);
-
-    /**
-     * Key for storage directory.
-     */
-    public static final String DEF_KEY_CFG_STORAGE_DIRECTORY = "storage.dir";
     /**
      * Internal storage.
      */
-    private Hashtable<String, Module> internalStorage;
+    @DontConfigure
+    private final Hashtable<String, Module> internalStorage;
     /**
      * Name of the file.
      */
-    private String filename;
+    @DontConfigure
+    private final String filename;
     /**
      * The factory for modules and documents.
      */
-    private IModuleFactory factory;
-    /**
-     * Configuration key for the storage dir.
-     */
-    private String cfgKeyStorageDir;
+    @DontConfigure
+    private final IModuleFactory factory;
     /**
      * Default name for storage directory.
      */
+    @DontConfigure
     public static final String DEF_STORAGE_DIR = ".";
+    /**
+     * Default period for checking file in milliseconds.
+     */
+    @DontConfigure
+    private static final long FILE_CHECK_PERIOD = 5 * 1000;
+    /**
+     * Task for file's changes watching.
+     */
+    @DontConfigure
+    private FileWatcher fileWatchingTimer;
+    /**
+     * List with listeners. This list is a CopyOnWriteArrayList, hence its safe to add a new listener anytime. However, typically you will add a listener on init of some stuff.
+     */
+    @DontConfigure
+    private final List<IModuleListener> listeners = new CopyOnWriteArrayList<>();
+    /**
+     * External storage.
+     */
+    @DontConfigure
+    private final IStorage externalStorage;
     /**
      * Storage directory path.
      */
     @Configure
     private String storageDir = DEF_STORAGE_DIR;
-
     /**
      * Period for checking file in milliseconds.
      */
-    private static final long FILE_CHECK_PERIOD = 5 * 1000; //todo make it configureable by ConfigureMe
-    /**
-     * Task for file's changes watching.
-     */
-    private FileWatcher fileWatchingTimer;
-
-    /**
-     * List with listeners. This list is a CopyOnWriteArrayList, hence its safe to add a new listener anytime. However, typically you will add a listener on init of some stuff.
-     */
-    private List<IModuleListener> listeners = new CopyOnWriteArrayList<IModuleListener>();
+    @Configure
+    private long fileCheckPeriodInMilliseconds = FILE_CHECK_PERIOD;
     /**
      * Bucket name for asg content.
      */
@@ -97,7 +104,6 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
      */
     @Configure
     private String credentialsPath;
-
     /**
      * Storage type.
      */
@@ -108,39 +114,22 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
      */
     @Configure
     private String accessKey;
-
     /**
      * Secret key.
      */
     @Configure
     private String secretKey;
-    /**
-     * External storage.
-     */
-    private IStorage externalStorage;
-
-    /**
-     * <p>Constructor for CommonHashtableModuleStorage.</p>
-     *
-     * @param aFilename a {@link java.lang.String} object.
-     * @param aFactory  a {@link net.anotheria.anodoc.service.IModuleFactory} object.
-     */
-    public CommonHashtableModuleStorage(String aFilename, IModuleFactory aFactory) {
-        this(aFilename, aFactory, DEF_KEY_CFG_STORAGE_DIRECTORY);
-    }
 
     /**
      * <p>Constructor for CommonHashtableModuleStorage.</p>
      *
      * @param aFilename         a {@link java.lang.String} object.
      * @param aFactory          a {@link net.anotheria.anodoc.service.IModuleFactory} object.
-     * @param aCfgKeyStorageDir a {@link java.lang.String} object.
      */
-    public CommonHashtableModuleStorage(String aFilename, IModuleFactory aFactory, String aCfgKeyStorageDir) {
+    public CommonHashtableModuleStorage(String aFilename, IModuleFactory aFactory) {
         internalStorage = new Hashtable<>();
         filename = aFilename;
         factory = aFactory;
-        cfgKeyStorageDir = aCfgKeyStorageDir;
         ConfigurationManager.INSTANCE.configure(this);
         externalStorage = StorageFactory.createStorage(storageType, bucketName, credentialsPath, projectId, accessKey, secretKey);
         load();
@@ -193,6 +182,14 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
+    }
+
+    public long getFileCheckPeriodInMilliseconds() {
+        return fileCheckPeriodInMilliseconds;
+    }
+
+    public void setFileCheckPeriodInMilliseconds(long fileCheckPeriodInMilliseconds) {
+        this.fileCheckPeriodInMilliseconds = fileCheckPeriodInMilliseconds;
     }
 
     /**
@@ -331,7 +328,7 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
 
         //erstmal konvertieren
         Enumeration<String> allKeys = internalStorage.keys();
-        Hashtable<String, Hashtable> toSave = new Hashtable<String, Hashtable>(internalStorage.size());
+        Hashtable<String, Hashtable> toSave = new Hashtable<>(internalStorage.size());
         while (allKeys.hasMoreElements()) {
             String aKey = allKeys.nextElement();
 
@@ -447,7 +444,7 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
         if (fileWatchingTimer != null)
             fileWatchingTimer.stop();
 
-        fileWatchingTimer = new FileWatcher(getFileLock(filename), FILE_CHECK_PERIOD) {
+        fileWatchingTimer = new FileWatcher(getFileLock(filename), fileCheckPeriodInMilliseconds) {
             @Override
             protected void onChange() {
                 LOGGER.info("content of modules in " + getFilePath(filename) + " has been changed");
