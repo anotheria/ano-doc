@@ -19,43 +19,26 @@ public class StoragePlaceHolder implements IModuleStorage{
 	 *
 	 * Always throws new NoStoredModuleEntityException("placeholder storage")
 	 */
-	@Override public Module loadModule(String ownerId, String copyId)
+	@Override
+	public Module loadModule(String ownerId, String copyId)
 		throws NoStoredModuleEntityException {
 		throw new NoStoredModuleEntityException("placeholder storage");
 	}
- 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * Does nothing
-	 */
-	@Override public void saveModule(Module module) {
-	}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 * Does nothing
-	 */
-	@Override public void deleteModule(String ownerId, String copyId){
-	}
+	@Override
+	public void saveModule(Module module) {}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 *
-	 * Does nothing.
-	 */
-	@Override public void addModuleListener(IModuleListener listener) {
-	}
+	@Override
+	public void deleteModule(String ownerId, String copyId){}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 *
-	 * Does nothing.
-	 */
-	@Override public void removeModuleListener(IModuleListener listener) {
-	}
+	@Override
+	public void addModuleListener(IModuleListener listener) {}
 
+	@Override
+	public void removeModuleListener(IModuleListener listener) {}
+
+	@Override
+	public long getStoreModuleCacheTime() {
+		return 0;
+	}
 }

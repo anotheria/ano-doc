@@ -40,6 +40,11 @@ public interface IModuleStorage {
 	void deleteModule(String ownerId, String copyId) throws StorageFailureException;
 
 	/**
+	 * How much time module will be stored in cache.
+	 */
+	long getStoreModuleCacheTime();
+
+	/**
 	 * Adds a module listener.
 	 *
 	 * @param listener the listener to add.

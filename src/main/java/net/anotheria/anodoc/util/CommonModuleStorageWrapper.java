@@ -39,9 +39,9 @@ public class CommonModuleStorageWrapper implements IModuleStorage {
 		factory = aFactory;
 		delegate = aDelegate;
 	}
-	
-	/** {@inheritDoc} */
-	@Override public void saveModule(Module module) throws StorageFailureException{
+
+	@Override
+	public void saveModule(Module module) throws StorageFailureException{
 		try {
 			delegate.saveModule(module);
 		} catch (CommonModuleStorageException e) {
@@ -54,8 +54,8 @@ public class CommonModuleStorageWrapper implements IModuleStorage {
 		}
 	}
 
-	/** {@inheritDoc} */
-	@Override public Module loadModule(String ownerId, String copyId) throws NoStoredModuleEntityException, StorageFailureException{
+	@Override
+	public Module loadModule(String ownerId, String copyId) throws NoStoredModuleEntityException, StorageFailureException{
 		try {
 			Module module = delegate.loadModule(moduleId,ownerId,copyId,factory);
 			if(module == null){
@@ -69,9 +69,9 @@ public class CommonModuleStorageWrapper implements IModuleStorage {
 			throw new StorageFailureException(e.getMessage());
 		}
 	}
-	
-	/** {@inheritDoc} */
-	@Override public void deleteModule(String ownerId, String copyId) throws StorageFailureException{
+
+	@Override
+	public void deleteModule(String ownerId, String copyId) throws StorageFailureException{
 		try{
 			delegate.deleteModule(moduleId,ownerId,copyId);
 		}catch(Exception ex){
@@ -80,22 +80,14 @@ public class CommonModuleStorageWrapper implements IModuleStorage {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 *
-	 * Does nothing.
-	 */
-	@Override public void addModuleListener(IModuleListener listener) {
-	}
+	@Override
+	public void addModuleListener(IModuleListener listener) {}
 
-	/**
-	 * {@inheritDoc}
-	 *
-	 *
-	 * Does nothing.
-	 */
-	@Override public void removeModuleListener(IModuleListener listener) {
-	}
+	@Override
+	public void removeModuleListener(IModuleListener listener) {}
 
+	@Override
+	public long getStoreModuleCacheTime() {
+		return 0;
+	}
 }

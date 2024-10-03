@@ -52,7 +52,7 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	/**
 	 * The local cache - loaded modules.
 	 */
-	private Map<String,Module> cache;
+	private Map<String, ModuleHolder> cache;
 
 	/**
 	 * The current instance. ModuleServiceImpl is a Singleton.
@@ -73,10 +73,10 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	 */
 	private ModuleServiceImpl(){
 		//initialize local data.
-		factories = new ConcurrentHashMap<String, IModuleFactory>();
-		storages  = new ConcurrentHashMap<String, IModuleStorage>();
-		cache = new ConcurrentHashMap<String, Module>();
-		moduleListeners = new ConcurrentHashMap<String, IModuleListener>();
+		factories = new ConcurrentHashMap<>();
+		storages  = new ConcurrentHashMap<>();
+		cache = new ConcurrentHashMap<>();
+		moduleListeners = new ConcurrentHashMap<>();
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Created new ModuleServiceImplementation");
@@ -117,7 +117,7 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	 */	
 	private void putInCache(Module module){
 		String key = getKey(module);
-		cache.put(key, module);
+		cache.put(key, new ModuleHolder(module, System.currentTimeMillis()));
 	}
 
 	/**
@@ -126,18 +126,6 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 	private void removeFromCache(String moduleId, String ownerId, String copyId){
 		String key = getKey(moduleId,copyId, ownerId);
 		cache.remove(key);
-	}
-
-	/**
-	 * Returns module from.
-	 * @param module module to serch in cache.
-	 * @return module if it was in cache, otherwise null.
-	 */
-	private Module getModuleFromCache(Module module) {
-		String key = getKey(module);
-		Module cachedModule = cache.get(key);
-
-		return cachedModule;
 	}
 
 	/**
@@ -204,40 +192,26 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 			throws NoStorageForModuleException, NoFactoryForModuleException, NoStoredModuleEntityException, StorageFailureException{
 		return getModule(ownerId, moduleId, DEFAULT_COPY_ID, create);
 	}
-	
 
-	/** {@inheritDoc} */
-	@Override public Module getModule(
-		String ownerId,
-		String moduleId,
-		String copyId,
-		boolean create) 
-			throws NoStorageForModuleException, NoFactoryForModuleException, NoStoredModuleEntityException, StorageFailureException{
-		
-		
+	@Override
+	public Module getModule(String ownerId, String moduleId, String copyId, boolean create) throws NoStorageForModuleException, NoFactoryForModuleException, NoStoredModuleEntityException, StorageFailureException{
+
 		String key = getKey(moduleId, copyId, ownerId);
-		//System.out.println("getModule() "+key+" called");
-
+		ModuleHolder moduleHolder = cache.get(key);
 		
-		//first we check if we have this module in cache.
-		Module module = cache.get(key);
-		
-		if (module!=null){
+		if (isInCache(moduleHolder, moduleId)){
 			LOGGER.debug("Module " + key + " was in cache");
-			return module;
+			return moduleHolder.getModule();
 		}
 		
-		
+		Module module;
 		try{
 			LOGGER.debug("Trying to load module from storage:" + key);
 			module = loadModule(moduleId, ownerId, copyId);
-			//System.out.println("Loading from disk.");
 			LOGGER.debug("Loaded module from storage.");
 			putInCache(module);
-			//long en = System.currentTimeMillis();
 			return module;
 		}catch(NoStoredModuleEntityException e){
-			//log.debug("Loading failed:",e);
 			if (create){
 				LOGGER.debug("Creating new instance of " + moduleId + ", " + ownerId + ", " + copyId);
 				//eigentlich sollte das die factory schon tun,
@@ -253,8 +227,11 @@ public class ModuleServiceImpl implements IModuleService, IModuleListener{
 			
 			LOGGER.debug("Loading failed:", e);
 			throw e;
-			
 		}
+	}
+
+	private boolean isInCache(ModuleHolder moduleHolder, String moduleId) {
+		return moduleHolder != null && moduleHolder.getModule() != null && System.currentTimeMillis() - moduleHolder.getAddingTime() < storages.get(moduleId).getStoreModuleCacheTime();
 	}
 
 	/**

@@ -10,6 +10,7 @@ import net.anotheria.anodoc.service.NoStoredModuleEntityException;
 import net.anotheria.anodoc.util.storage.IStorage;
 import net.anotheria.anodoc.util.storage.StorageFactory;
 import net.anotheria.asg.util.listener.IModuleListener;
+import net.anotheria.util.TimeUnit;
 import org.configureme.ConfigurationManager;
 import org.configureme.annotations.Configure;
 import org.configureme.annotations.ConfigureMe;
@@ -60,15 +61,10 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
     @DontConfigure
     public static final String DEF_STORAGE_DIR = ".";
     /**
-     * Default period for checking file in milliseconds.
+     * Default period for storing module in cache in minutes.
      */
     @DontConfigure
-    private static final long FILE_CHECK_PERIOD = 5 * 1000;
-    /**
-     * Task for file's changes watching.
-     */
-    @DontConfigure
-    private FileWatcher fileWatchingTimer;
+    private static final long MODULE_CHECK_PERIOD = 5;
     /**
      * List with listeners. This list is a CopyOnWriteArrayList, hence its safe to add a new listener anytime. However, typically you will add a listener on init of some stuff.
      */
@@ -88,7 +84,7 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
      * Period for checking file in milliseconds.
      */
     @Configure
-    private long fileCheckPeriodInMilliseconds = FILE_CHECK_PERIOD;
+    private long storeModuleInCacheInMinutes = MODULE_CHECK_PERIOD;
     /**
      * Bucket name for asg content.
      */
@@ -133,7 +129,14 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
         ConfigurationManager.INSTANCE.configure(this);
         externalStorage = StorageFactory.createStorage(storageType, bucketName, credentialsPath, projectId, accessKey, secretKey);
         load();
-        startFileWatcherTask();
+    }
+
+    public String getStorageDir() {
+        return storageDir;
+    }
+
+    public void setStorageDir(String storageDir) {
+        this.storageDir = storageDir;
     }
 
     public String getBucketName() {
@@ -184,12 +187,12 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
         this.secretKey = secretKey;
     }
 
-    public long getFileCheckPeriodInMilliseconds() {
-        return fileCheckPeriodInMilliseconds;
+    public long getStoreModuleInCacheInMinutes() {
+        return storeModuleInCacheInMinutes;
     }
 
-    public void setFileCheckPeriodInMilliseconds(long fileCheckPeriodInMilliseconds) {
-        this.fileCheckPeriodInMilliseconds = fileCheckPeriodInMilliseconds;
+    public void setStoreModuleInCacheInMinutes(long storeModuleInCacheInMinutes) {
+        this.storeModuleInCacheInMinutes = storeModuleInCacheInMinutes;
     }
 
     /**
@@ -393,13 +396,9 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
         }
     }
 
-    /**
-     * <p>Setter for the field <code>storageDir</code>.</p>
-     *
-     * @param value a {@link java.lang.String} object.
-     */
-    public void setStorageDir(String value) {
-        storageDir = value;
+    @Override
+    public long getStoreModuleCacheTime(){
+        return storeModuleInCacheInMinutes * TimeUnit.MINUTE.getMillis();
     }
 
     /**
@@ -420,38 +419,5 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
     @Override
     public void removeModuleListener(IModuleListener listener) {
         listeners.remove(listener);
-    }
-
-    /**
-     * Fires the module changed event. Exceptions persistence from listeners are ignored (and logged).
-     */
-    private void firePersistenceChangedEvent() {
-        load();
-
-        for (IModuleListener listener : listeners)
-            for (Module changed : internalStorage.values())
-                try {
-                    listener.moduleLoaded(changed);
-                } catch (Exception e) {
-                    LOGGER.error("Caught uncaught exception by the listener " + listener + ", moduleLoaded(" + changed + ")", e);
-                }
-    }
-
-    /**
-     * Starts file watching task.
-     */
-    private void startFileWatcherTask() {
-        if (fileWatchingTimer != null)
-            fileWatchingTimer.stop();
-
-        fileWatchingTimer = new FileWatcher(getFileLock(filename), fileCheckPeriodInMilliseconds) {
-            @Override
-            protected void onChange() {
-                LOGGER.info("content of modules in " + getFilePath(filename) + " has been changed");
-                firePersistenceChangedEvent();
-            }
-        };
-
-        fileWatchingTimer.start();
     }
 }
