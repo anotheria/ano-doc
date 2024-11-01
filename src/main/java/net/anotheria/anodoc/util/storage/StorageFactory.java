@@ -6,8 +6,8 @@ package net.anotheria.anodoc.util.storage;
  * @author asamoilich.
  */
 public class StorageFactory {
-    public static IStorage createStorage(String storageType, String bucketName, String credentials, String projectId, String accessKey, String secretKey) {
-        switch (StorageType.getByTypeValue(storageType)) {
+    public static IStorage createStorage(StorageType storageType, String bucketName, String credentials, String projectId, String accessKey, String secretKey) {
+        switch (storageType) {
             case GCS:
                 return new GoogleCloudStorage(bucketName, credentials, projectId);
             case S3:

@@ -9,6 +9,7 @@ import net.anotheria.anodoc.service.IModuleStorage;
 import net.anotheria.anodoc.service.NoStoredModuleEntityException;
 import net.anotheria.anodoc.util.storage.IStorage;
 import net.anotheria.anodoc.util.storage.StorageFactory;
+import net.anotheria.anodoc.util.storage.StorageType;
 import net.anotheria.asg.util.listener.IModuleListener;
 import org.configureme.ConfigurationManager;
 import org.configureme.annotations.Configure;
@@ -142,9 +143,11 @@ public class CommonHashtableModuleStorage implements IModuleStorage {
         factory = aFactory;
         cfgKeyStorageDir = aCfgKeyStorageDir;
         ConfigurationManager.INSTANCE.configure(this);
-        externalStorage = StorageFactory.createStorage(storageType, bucketName, credentialsPath, projectId, accessKey, secretKey);
+        StorageType storageTypeValue = StorageType.getByTypeValue(storageType);
+        externalStorage = StorageFactory.createStorage(storageTypeValue, bucketName, credentialsPath, projectId, accessKey, secretKey);
         load();
-        startFileWatcherTask();
+        if (storageTypeValue == StorageType.FS)
+            startFileWatcherTask();
     }
 
     public String getBucketName() {
