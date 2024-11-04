@@ -2416,6 +2416,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("addBeanToRequest(req, "+quote("apply.label.prefix")+", "+quote("Apply")+")");
 		appendStatement("addBeanToRequest(req, "+quote("save.label.prefix")+", "+quote("Save")+")");
 		appendStatement("addBeanToRequest(req, "+quote("transfer.label.prefix")+", "+quote("Transfer")+")");
+		appendStatement("addBeanToRequest(req, "+quote("sortTextData.label.prefix")+", "+quote("Sort Text Data")+")");
 
 		//add field descriptions ...
 		emptyline();
@@ -2752,6 +2753,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("addBeanToRequest(req, "+quote("save.label.prefix")+", "+quote("Save")+")");
 		appendStatement("addBeanToRequest(req, "+quote("apply.label.prefix")+" , "+quote("Apply")+")");
 		appendStatement("addBeanToRequest(req, "+quote("transfer.label.prefix")+", "+quote("Transfer")+")");
+		appendStatement("addBeanToRequest(req, "+quote("sortTextData.label.prefix")+", "+quote("Sort Text Data")+")");
 		appendStatement("addBeanToRequest(req, "+quote("objectInfoString")+" , "+quote("none")+")");
 
 		//add field descriptions ...

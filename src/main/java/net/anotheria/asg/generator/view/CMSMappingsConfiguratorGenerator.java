@@ -347,6 +347,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
         appendStatement("mappings.addMapping(\"changePass\", net.anotheria.anosite.cms.action.ChangePassAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/ChangePass.jsp\"))");
 		appendStatement("mappings.addMapping(\"showFileInfo\", net.anotheria.anosite.cms.action.ShowFileInfoAction.class)");
         appendStatement("mappings.addMapping(\"showUsages\", net.anotheria.anosite.bredcrambs.action.ShowUsagesOfDocumentAction.class)");
+		appendStatement("mappings.addMapping(\"sortTextData\", net.anotheria.anosite.cms.action.SortTextDataAction.class)");
 
         generateSharedMappings(clazz);
 
@@ -521,6 +522,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	 * Transfers current document to prod.
 	 */
 	public static final String ACTION_TRANSFER = "transfer";
+	public static final String ACTION_SORT_TEXT_DATA = "sortTextData";
 
 	/**
 	 * <p>getPath.</p>

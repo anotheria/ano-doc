@@ -930,6 +930,9 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 		}
 		if (element.getName().equals("transfer"))
 			return getTransferFunction(doc, element);
+
+		if (element.getName().equals("sortTextData"))
+			return getSortTextDataFunction(doc);
 		/*
 		if (element.getName().equals("lock") && StorageType.CMS.equals(doc.getParentModule().getStorageType())) {
 			//For now we dont draw Lock and Unlock functions here
@@ -1046,7 +1049,9 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 		return "<a href=\"#\" class=\"button\" onClick=\"$.post('" + path + "', {pId:'" + "<ano:write name=" + quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)) + " property=\"id\"/>" + "'}, function (response){if (response.errors != undefined && response.errors.length != 0){notification(response.errors.error);}else{notificationAutoClose('Done!');}})\"><span><ano:write name=\"transfer.label.prefix\"/></span></a>\n" ;
 	}
 
-
+	private String getSortTextDataFunction(MetaDocument doc){
+		return "<a href=\"#\" class=\"button\" onclick=\"sortTextData('" +doc.getName() + "', '" + "<ano:write name=" + quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)) + " property=\"id\"/>" + "'); return false;\"><span><ano:write name=\"sortTextData.label.prefix\"/></span></a>\n";
+	}
 
 	/**
 	 * Creating entries in JSP for Multilanguage Support!!!
