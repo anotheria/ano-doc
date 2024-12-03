@@ -13,7 +13,6 @@
 	<properties>
 		<ano-util.version>4.0.0</ano-util.version>
 		<ano-maf.version>4.0.0</ano-maf.version>
-		<ano-web.version>4.0.1-SNAPSHOT</ano-web.version>
 		<ano-plass.version>4.0.0</ano-plass.version>
 		<ano-prise.version>4.0.0</ano-prise.version>
 
@@ -56,22 +55,22 @@
 			<artifactId>moskito-web</artifactId>
 			<version>${moskito.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>net.anotheria</groupId>
-			<artifactId>ano-web</artifactId>
-			<version>${ano-web.version}</version>
-			<exclusions>
-				<exclusion>  
-		          <groupId>net.anotheria</groupId>
-		          <artifactId>ano-maf</artifactId>
-		        </exclusion>
-				<exclusion>  
-		          <groupId>blowfish</groupId>
-		          <artifactId>blowfish</artifactId>
-		        </exclusion>
-			</exclusions>
-			
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>net.anotheria</groupId>-->
+<!--			<artifactId>ano-web</artifactId>-->
+<!--			<version>${ano-web.version}</version>-->
+<!--			<exclusions>-->
+<!--				<exclusion>  -->
+<!--		          <groupId>net.anotheria</groupId>-->
+<!--		          <artifactId>ano-maf</artifactId>-->
+<!--		        </exclusion>-->
+<!--				<exclusion>  -->
+<!--		          <groupId>blowfish</groupId>-->
+<!--		          <artifactId>blowfish</artifactId>-->
+<!--		        </exclusion>-->
+<!--			</exclusions>-->
+<!--			-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>net.anotheria</groupId>
 			<artifactId>ano-maf</artifactId>
