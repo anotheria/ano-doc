@@ -333,10 +333,10 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		appendStatement("mappings.addMapping(\"asgLocalizationBundlesDifferenceView\", net.anotheria.anosite.cms.action.LocalizationBundlesDifferenceMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundlesDifference.jsp\"))");
 		appendStatement("mappings.addMapping(\"exportLocalizationBundlesToTxt\", net.anotheria.anosite.cms.action.LocalizationBundleExportToTxtAction.class)");
 
-		appendStatement("mappings.addMapping(\"fileShow\", net.anotheria.anosite.cms.filehandling.ShowFile.class, new CommandForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
-        appendStatement("mappings.addMapping(\"fileUpload\", net.anotheria.anosite.cms.filehandling.ShowFile.FileAjaxUpload.class");
-		appendStatement("mappings.addMapping(\"showTmpFile\", net.anotheria.anosite.cms.filehandling.ShowTmpFile.class");
-		appendStatement("mappings.addMapping(\"getFile\", net.anotheria.anosite.cms.filehandling.GetFile.class");
+		appendStatement("mappings.addMapping(\"fileShow\", net.anotheria.webutils.filehandling.action.ShowFile.class, new CommandForward(\"success\", \"/net/anotheria/webutils/filehandling/jsp/UploadFile.jsp\"))");
+        appendStatement("mappings.addMapping(\"fileUpload\", net.anotheria.webutils.filehandling.action.FileAjaxUpload.class)");
+		appendStatement("mappings.addMapping(\"showTmpFile\", net.anotheria.webutils.filehandling.action.ShowTmpFile.class)");
+		appendStatement("mappings.addMapping(\"getFile\", net.anotheria.webutils.filehandling.action.GetFile.class)");
 
 		appendStatement("mappings.addMapping(\"login\", net.anotheria.anosite.cms.action.LoginAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/Login.jsp\"))");
 		appendStatement("mappings.addMapping(\"logout\", net.anotheria.anosite.cms.action.LogoutAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/Login.jsp\"))");
