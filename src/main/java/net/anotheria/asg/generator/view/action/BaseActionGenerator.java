@@ -66,7 +66,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.addImport("jakarta.servlet.http.HttpServletResponse");//those imports must be strings dependencywise.
 		clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
-		clazz.addImport(net.anotheria.webutils.bean.NavigationItemBean.class);
+		clazz.addImport("net.anotheria.webutils.bean.NavigationItemBean.class");
 		clazz.addImport(SortType.class);
 
 		clazz.setAbstractClass(true);

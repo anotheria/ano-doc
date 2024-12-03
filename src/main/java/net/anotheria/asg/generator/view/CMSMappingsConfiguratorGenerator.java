@@ -22,10 +22,6 @@ import net.anotheria.asg.generator.view.meta.MetaModuleSection;
 import net.anotheria.asg.generator.view.meta.MetaSection;
 import net.anotheria.asg.generator.view.meta.MetaView;
 import net.anotheria.util.StringUtils;
-import net.anotheria.webutils.filehandling.actions.FileAjaxUpload;
-import net.anotheria.webutils.filehandling.actions.GetFile;
-import net.anotheria.webutils.filehandling.actions.ShowFile;
-import net.anotheria.webutils.filehandling.actions.ShowTmpFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -335,12 +331,12 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		appendStatement("mappings.addMapping(\"asgLocalizationBundleTranslationView\", net.anotheria.anosite.cms.action.LocalizationBundleTranslationMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleTranslation.jsp\"))");
 		appendStatement("mappings.addMapping(\"asgLocalizationBundleSpecificTranslationView\", net.anotheria.anosite.cms.action.LocalizationBundleSpecificTranslationMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundleSpecificTranslation.jsp\"))");
 		appendStatement("mappings.addMapping(\"asgLocalizationBundlesDifferenceView\", net.anotheria.anosite.cms.action.LocalizationBundlesDifferenceMafAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/LocalizationBundlesDifference.jsp\"))");
-		appendStatement("mappings.addMapping(\"fileShow\", "+quote(ShowFile.class.getName())+", new CommandForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
-        appendStatement("mappings.addMapping(\"fileUpload\", "+quote(FileAjaxUpload.class.getName())+")");
-        appendStatement("mappings.addMapping(\"exportLocalizationBundlesToTxt\", net.anotheria.anosite.cms.action.LocalizationBundleExportToTxtAction.class)");
+		appendStatement("mappings.addMapping(\"exportLocalizationBundlesToTxt\", net.anotheria.anosite.cms.action.LocalizationBundleExportToTxtAction.class)");
 
-		appendStatement("mappings.addMapping(\"showTmpFile\", "+quote(ShowTmpFile.class.getName())+")");
-		appendStatement("mappings.addMapping(\"getFile\", "+quote(GetFile.class.getName())+")");
+		appendStatement("mappings.addMapping(\"fileShow\", net.anotheria.anosite.cms.filehandling.ShowFile.class, new CommandForward(\"success\", \"/net/anotheria/webutils/jsp/UploadFile.jsp\"))");
+        appendStatement("mappings.addMapping(\"fileUpload\", net.anotheria.anosite.cms.filehandling.ShowFile.FileAjaxUpload.class");
+		appendStatement("mappings.addMapping(\"showTmpFile\", net.anotheria.anosite.cms.filehandling.ShowTmpFile.class");
+		appendStatement("mappings.addMapping(\"getFile\", net.anotheria.anosite.cms.filehandling.GetFile.class");
 
 		appendStatement("mappings.addMapping(\"login\", net.anotheria.anosite.cms.action.LoginAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/Login.jsp\"))");
 		appendStatement("mappings.addMapping(\"logout\", net.anotheria.anosite.cms.action.LogoutAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/Login.jsp\"))");
