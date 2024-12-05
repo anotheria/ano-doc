@@ -10,6 +10,7 @@ import net.anotheria.asg.generator.GeneratorDataRegistry;
 import net.anotheria.asg.generator.meta.MetaModule;
 import net.anotheria.asg.generator.view.CMSMappingsConfiguratorGenerator;
 import net.anotheria.asg.generator.view.meta.MetaView;
+import net.anotheria.asg.util.bean.NavigationItemBean;
 import net.anotheria.util.Date;
 
 /**
@@ -107,7 +108,7 @@ public class IndexPageActionGenerator extends AbstractGenerator {
 		clazz.addImport("net.anotheria.maf.action.ActionCommand");
 		clazz.addImport("net.anotheria.maf.action.ActionMapping");
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
-		clazz.addImport("net.anotheria.webutils.bean.NavigationItemBean");
+		clazz.addImport(NavigationItemBean.class);
 		clazz.addImport("net.anotheria.asg.util.DocumentChange");
 		clazz.addImport("net.anotheria.asg.util.CmsChangesTracker");
 		clazz.addImport(CMSMappingsConfiguratorGenerator.getClassName());

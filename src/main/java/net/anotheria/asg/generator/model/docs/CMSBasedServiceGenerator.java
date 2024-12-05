@@ -16,6 +16,8 @@ import net.anotheria.asg.generator.meta.MetaProperty;
 import net.anotheria.asg.generator.model.AbstractServiceGenerator;
 import net.anotheria.asg.generator.model.DataFacadeGenerator;
 import net.anotheria.asg.generator.model.ServiceGenerator;
+import net.anotheria.asg.util.filestorage.FileStorage;
+import net.anotheria.asg.util.filestorage.TemporaryFileHolder;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -656,8 +658,8 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 			for (MetaProperty p: doc.getProperties()) {
 				if (p.getType() == MetaProperty.Type.IMAGE || (p.getType() == MetaProperty.Type.LIST && ((MetaListProperty) p).getContainedProperty().getType() == MetaProperty.Type.IMAGE)) {
-					clazz.addImport("net.anotheria.webutils.filehandling.actions.FileStorage");
-					clazz.addImport("net.anotheria.webutils.filehandling.beans.TemporaryFileHolder");
+					clazz.addImport(FileStorage.class);
+					clazz.addImport(TemporaryFileHolder.class);
 					clazz.addImport("java.io.ByteArrayInputStream");
 					clazz.addImport("java.io.IOException");
 					clazz.addImport("jakarta.ws.rs.client.Client");

@@ -4,6 +4,8 @@ import net.anotheria.asg.generator.*;
 import net.anotheria.asg.generator.meta.MetaDocument;
 import net.anotheria.asg.generator.meta.MetaModule;
 import net.anotheria.asg.generator.view.action.ModuleActionsGenerator;
+import net.anotheria.asg.util.filestorage.FileStorage;
+import net.anotheria.asg.util.filestorage.TemporaryFileHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -214,8 +216,8 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         clazz.setPackageName(GeneratorDataRegistry.getInstance().getContext().getPackageName(MetaModule.SHARED)+".rest");
 
         clazz.addImport("net.anotheria.util.IOUtils");
-        clazz.addImport("net.anotheria.webutils.filehandling.actions.FileStorage");
-        clazz.addImport("net.anotheria.webutils.filehandling.beans.TemporaryFileHolder");
+        clazz.addImport(FileStorage.class);
+        clazz.addImport(TemporaryFileHolder.class);
         clazz.addImport("org.glassfish.jersey.media.multipart.FormDataContentDisposition");
         clazz.addImport("org.glassfish.jersey.media.multipart.FormDataParam");
         clazz.addImport("jakarta.ws.rs.Consumes");
