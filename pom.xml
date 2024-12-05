@@ -55,22 +55,6 @@
 			<artifactId>moskito-web</artifactId>
 			<version>${moskito.version}</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>net.anotheria</groupId>-->
-<!--			<artifactId>ano-web</artifactId>-->
-<!--			<version>${ano-web.version}</version>-->
-<!--			<exclusions>-->
-<!--				<exclusion>  -->
-<!--		          <groupId>net.anotheria</groupId>-->
-<!--		          <artifactId>ano-maf</artifactId>-->
-<!--		        </exclusion>-->
-<!--				<exclusion>  -->
-<!--		          <groupId>blowfish</groupId>-->
-<!--		          <artifactId>blowfish</artifactId>-->
-<!--		        </exclusion>-->
-<!--			</exclusions>-->
-<!--			-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>net.anotheria</groupId>
 			<artifactId>ano-maf</artifactId>
