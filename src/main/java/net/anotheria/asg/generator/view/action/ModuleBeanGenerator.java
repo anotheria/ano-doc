@@ -197,12 +197,12 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		startNewJob(clazz);
 		
 		clazz.setPackageName(getPackage(doc));
-		clazz.addImport("net.anotheria.webutils.bean.BaseActionForm");
+		clazz.addImport("net.anotheria.asg.util.bean.BaseActionFormBean");
 		clazz.addImport("jakarta.servlet.http.HttpServletRequest");
 		clazz.addImport("org.apache.struts.action.ActionMapping");
 		
 		clazz.setName(getContainerEntryFormName(p));
-		clazz.setParent("BaseActionForm");
+		clazz.setParent("BaseActionFormBean");
 
 		startClassBody();
 		appendGenerationPoint("generateTableRowForm");
