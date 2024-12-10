@@ -15,6 +15,7 @@ import net.anotheria.asg.generator.view.meta.MetaCustomSection;
 import net.anotheria.asg.generator.view.meta.MetaModuleSection;
 import net.anotheria.asg.generator.view.meta.MetaSection;
 import net.anotheria.asg.generator.view.meta.MetaView;
+import net.anotheria.asg.util.bean.NavigationItemBean;
 import net.anotheria.util.StringUtils;
 
 /**
@@ -77,7 +78,7 @@ public class BaseViewActionGenerator extends AbstractGenerator {
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
 		//clazz.addImport("net.anotheria.maf.bean.FormBean");
-		clazz.addImport("net.anotheria.webutils.bean.NavigationItemBean");
+		clazz.addImport(NavigationItemBean.class);
 
 		clazz.setAbstractClass(true);
 		clazz.setParent(BaseActionGenerator.getBaseActionName());

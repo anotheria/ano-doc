@@ -137,7 +137,7 @@ public class MenuJspGenerator extends AbstractJSPGenerator {
 								
 							appendString("<ul class=\"main_navigation\">");
 								increaseIdent();
-								appendString("<ano:iterate name=\"mainNavigation\" type=\"net.anotheria.webutils.bean.NavigationItemBean\" id=\"NaviItem\">");
+								appendString("<ano:iterate name=\"mainNavigation\" type=\"net.anotheria.asg.util.bean.NavigationItemBean\" id=\"NaviItem\">");
 									increaseIdent();
 									appendString("<ano:equal name=\"NaviItem\" property=\"active\" value=\"true\">");
 										increaseIdent();

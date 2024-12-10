@@ -855,7 +855,7 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 
 			appendString("//Initializing items for " + elCapitalName);
 			appendString("var " +el.getName() + el.getLang() + "Json = {items:[");
-			appendString("<ano:iterate id=\"item\" name="+quote(beanName)+" property=\""+el.getName()+"Collection" + el.getLang() + "\" type=\"net.anotheria.webutils.bean.LabelValueBean\">");
+			appendString("<ano:iterate id=\"item\" name="+quote(beanName)+" property=\""+el.getName()+"Collection" + el.getLang() + "\" type=\"net.anotheria.asg.util.bean.LabelValueBean\">");
 			increaseIdent();
 			appendString("{id:\"<ano:write name=\"item\" property=\"value\" filter=\"true\"/>\",name:\"<ano:write name=\"item\" property=\"label\" filter=\"true\"/>\"},");
 			//appendString("{id:\"${item.value}\",name:\"${item.label}\"},");

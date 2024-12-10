@@ -45,7 +45,10 @@ import net.anotheria.asg.generator.view.meta.MetaView;
 import net.anotheria.asg.generator.view.meta.MetaViewElement;
 import net.anotheria.asg.generator.view.meta.MultilingualFieldElement;
 import net.anotheria.asg.util.action.ActionUtils;
+import net.anotheria.asg.util.bean.LabelValueBean;
 import net.anotheria.asg.util.bean.PopulateUtility;
+import net.anotheria.asg.util.filestorage.FileStorage;
+import net.anotheria.asg.util.filestorage.TemporaryFileHolder;
 import net.anotheria.asg.util.helper.cmsview.CMSViewHelperRegistry;
 import net.anotheria.asg.util.helper.cmsview.CMSViewHelperUtil;
 import net.anotheria.util.ExecutionTimer;
@@ -690,8 +693,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 				MetaFieldElement field = (MetaFieldElement)elem;
 				MetaProperty p = doc.getField(field.getName());
 				if (p.getType() == MetaProperty.Type.IMAGE || (p.getType() == MetaProperty.Type.LIST && ((MetaListProperty)p).getContainedProperty().getType() == MetaProperty.Type.IMAGE)){
-					clazz.addImport("net.anotheria.webutils.filehandling.actions.FileStorage");
-					clazz.addImport("net.anotheria.webutils.filehandling.beans.TemporaryFileHolder");
+					clazz.addImport(FileStorage.class);
+					clazz.addImport(TemporaryFileHolder.class);
                     clazz.addImport("java.lang.reflect.Method");
                     clazz.addImport("java.lang.reflect.InvocationTargetException");
                     clazz.addImport("net.anotheria.util.StringUtils");
@@ -773,7 +776,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 					if (p.isLinked() || p instanceof MetaEnumerationProperty) {
 						clazz.addImport("java.util.List");
 						clazz.addImport("java.util.ArrayList");
-						clazz.addImport("net.anotheria.webutils.bean.LabelValueBean");
+						clazz.addImport(LabelValueBean.class);
 					}
 					if (p instanceof MetaEnumerationProperty) {
 	                    MetaEnumerationProperty mep = (MetaEnumerationProperty) p;
@@ -1386,7 +1389,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 		clazz.setPackageName(getPackage(section.getModule()));
 		addStandardActionImports(clazz);
-		clazz.addImport("net.anotheria.webutils.bean.LabelValueBean");
+		clazz.addImport(LabelValueBean.class);
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
 		clazz.addImport("java.util.Iterator");
@@ -1610,8 +1613,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 				MetaFieldElement field = (MetaFieldElement)elem;
 				MetaProperty p = doc.getField(field.getName());
 				if (p.getType() == MetaProperty.Type.IMAGE){
-					clazz.addImport("net.anotheria.webutils.filehandling.actions.FileStorage");
-					clazz.addImport("net.anotheria.webutils.filehandling.beans.TemporaryFileHolder");
+					clazz.addImport(FileStorage.class);
+					clazz.addImport(TemporaryFileHolder.class);
 					break;
 				}
 			}
@@ -2178,7 +2181,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 				if (p.isLinked() || p instanceof MetaEnumerationProperty){
 					clazz.addImport("java.util.List");
 					clazz.addImport("java.util.ArrayList");
-					clazz.addImport("net.anotheria.webutils.bean.LabelValueBean");
+					clazz.addImport(LabelValueBean.class);
 					break;
 				}
 			}
@@ -2671,7 +2674,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 				if (p.isLinked() || p instanceof MetaEnumerationProperty) {
 					clazz.addImport("java.util.List");
 					clazz.addImport("java.util.ArrayList");
-					clazz.addImport("net.anotheria.webutils.bean.LabelValueBean");
+					clazz.addImport(LabelValueBean.class);
 				}
 			}
 		}
@@ -3244,18 +3247,18 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 				MetaDocument targetDocument = targetModule.getDocumentByName(tDocName);
 				clazz.addImport(DataFacadeGenerator.getDocumentImport(targetDocument));
 				clazz.addImport(AbstractDataObjectGenerator.getSortTypeImport(targetDocument));
-				clazz.addImport("net.anotheria.webutils.bean.LabelValueBean");
+				clazz.addImport(LabelValueBean.class);
 				clazz.addImport("net.anotheria.anodoc.data.NoSuchDocumentException");
 				clazz.addImport("net.anotheria.util.StringUtils");
 			}
 			if(containedProperty instanceof MetaEnumerationProperty){
-				clazz.addImport("net.anotheria.webutils.bean.LabelValueBean");
+				clazz.addImport(LabelValueBean.class);
 				EnumerationType type = (EnumerationType)GeneratorDataRegistry.getInstance().getType(((MetaEnumerationProperty) containedProperty).getEnumeration());
 				clazz.addImport(EnumTypeGenerator.getEnumImport(type));
 			}
 			if (containedProperty.getType() == MetaProperty.Type.IMAGE){
-				clazz.addImport("net.anotheria.webutils.filehandling.actions.FileStorage");
-				clazz.addImport("net.anotheria.webutils.filehandling.beans.TemporaryFileHolder");
+				clazz.addImport(FileStorage.class);
+				clazz.addImport(TemporaryFileHolder.class);
 			}
 		}
 

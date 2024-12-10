@@ -5,6 +5,7 @@ import net.anotheria.asg.generator.forms.meta.MetaForm;
 import net.anotheria.asg.generator.meta.*;
 import net.anotheria.asg.generator.meta.MetaProperty.Type;
 import net.anotheria.asg.generator.view.meta.*;
+import net.anotheria.asg.util.bean.LabelValueBean;
 import net.anotheria.util.ExecutionTimer;
 import net.anotheria.util.StringUtils;
 
@@ -196,12 +197,12 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 		startNewJob(clazz);
 		
 		clazz.setPackageName(getPackage(doc));
-		clazz.addImport("net.anotheria.webutils.bean.BaseActionForm");
+		clazz.addImport("net.anotheria.asg.util.bean.BaseActionFormBean");
 		clazz.addImport("jakarta.servlet.http.HttpServletRequest");
 		clazz.addImport("org.apache.struts.action.ActionMapping");
 		
 		clazz.setName(getContainerEntryFormName(p));
-		clazz.setParent("BaseActionForm");
+		clazz.setParent("BaseActionFormBean");
 
 		startClassBody();
 		appendGenerationPoint("generateTableRowForm");
@@ -270,7 +271,7 @@ public class ModuleBeanGenerator extends AbstractGenerator implements IGenerator
 				MetaProperty p = doc.getField(field.getName());
 				if (p.isLinked() || p instanceof MetaEnumerationProperty){
 					clazz.addImport("java.util.List");
-					clazz.addImport("net.anotheria.webutils.bean.LabelValueBean");
+					clazz.addImport(LabelValueBean.class);
 					break;
 				}
 			}

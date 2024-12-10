@@ -16,6 +16,7 @@ import net.anotheria.asg.generator.view.meta.MetaCustomSection;
 import net.anotheria.asg.generator.view.meta.MetaModuleSection;
 import net.anotheria.asg.generator.view.meta.MetaSection;
 import net.anotheria.asg.generator.view.meta.MetaView;
+import net.anotheria.asg.util.bean.NavigationItemBean;
 import net.anotheria.util.StringUtils;
 import net.anotheria.util.sorter.SortType;
 
@@ -61,12 +62,12 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.addImport("net.anotheria.anosite.api.configuration.SystemConfigurationAPI");
 		clazz.addImport("net.anotheria.util.StringUtils");
 		clazz.addImport(ContextManager.class);
-		clazz.addImport("net.anotheria.webutils.actions.*");
+		clazz.addImport("net.anotheria.anosite.cms.action.BaseAction");
 		clazz.addImport("jakarta.servlet.http.HttpServletRequest"); //those imports must be strings dependencywise.
 		clazz.addImport("jakarta.servlet.http.HttpServletResponse");//those imports must be strings dependencywise.
 		clazz.addImport(net.anotheria.maf.action.ActionCommand.class);
 		clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
-		clazz.addImport(net.anotheria.webutils.bean.NavigationItemBean.class);
+		clazz.addImport(NavigationItemBean.class);
 		clazz.addImport(SortType.class);
 
 		clazz.setAbstractClass(true);

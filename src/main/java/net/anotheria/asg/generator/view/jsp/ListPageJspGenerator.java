@@ -288,7 +288,7 @@ public class ListPageJspGenerator extends AbstractJSPGenerator {
 
         appendString("//Initializing items for " + elName);
         appendString("var " + elName + "Json = {items:[");
-        appendString("<ano:iterate id=\"item\" name=\"" + elName + "\" type=\"net.anotheria.webutils.bean.LabelValueBean\">");
+        appendString("<ano:iterate id=\"item\" name=\"" + elName + "\" type=\"net.anotheria.asg.util.bean.LabelValueBean\">");
         increaseIdent();
         appendString("{id:\"<ano:write name=\"item\" property=\"value\" filter=\"true\"/>\",name:\"<ano:write name=\"item\" property=\"label\" filter=\"true\"/>\"},");
         // appendString("{id:\"${item.value}\",name:\"${item.label}\"},");

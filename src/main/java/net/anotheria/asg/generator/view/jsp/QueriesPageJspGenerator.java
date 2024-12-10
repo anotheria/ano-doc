@@ -125,7 +125,7 @@ public class QueriesPageJspGenerator extends AbstractJSPGenerator implements IGe
 			increaseIdent();
 			
 			appendString("<option value=\"\">none</option>");
-			appendString("<ano:iterate name="+quote(targetDocument.getMultiple().toLowerCase())+" type="+quote("net.anotheria.webutils.bean.LabelValueBean")+" id="+quote("entry")+">");
+			appendString("<ano:iterate name="+quote(targetDocument.getMultiple().toLowerCase())+" type="+quote("net.anotheria.asg.util.bean.LabelValueBean")+" id="+quote("entry")+">");
 			appendIncreasedString("<option value="+quote("<ano:write name="+quote("entry")+" property="+quote("value")+"/>")+">"+"<ano:write name="+quote("entry")+" property="+quote("label")+" filter="+quote("false")+"/>"+"</option>");
 			appendString("</ano:iterate>");
 			//ret += writeClosingTag("select");
@@ -168,7 +168,7 @@ public class QueriesPageJspGenerator extends AbstractJSPGenerator implements IGe
 		increaseIdent();
 		appendString("<tr>");
 		increaseIdent();
-		appendString("<ano:iterate name=\"queriesMenu\" type=\"net.anotheria.webutils.bean.MenuItemBean\" id=\"entry\">");
+		appendString("<ano:iterate name=\"queriesMenu\" type=\"net.anotheria.asg.util.bean.MenuItemBean\" id=\"entry\">");
 		increaseIdent();
 		appendString("<td>");
 		increaseIdent();

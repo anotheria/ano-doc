@@ -95,7 +95,7 @@ public class JspGenerator extends AbstractJSPGenerator implements IGenerator{
 		increaseIdent();
 		
 		openTR();
-		appendString("<ano:iterate name=\"menu\" type=\"net.anotheria.webutils.bean.MenuItemBean\" id=\"entry\">");
+		appendString("<ano:iterate name=\"menu\" type=\"net.anotheria.asg.util.bean.MenuItemBean\" id=\"entry\">");
 		appendString("<td>");
 		increaseIdent();
 		appendString("<ano:equal name=\"entry\" property=\"active\" value=\"true\">");
