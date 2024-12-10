@@ -466,8 +466,12 @@ public class ShowPageJspGenerator extends AbstractJSPGenerator {
 			return getDeleteWithConfirmationFunction(entryName, element);
 		}
 		
-		if (element.getName().equals("preview"))
-			return "<a target=\"_blank\" href=../<ano:write filter=\"false\" name=\"pagex\" property=\"nameForSorting\"/>.html>"+getPreviewImage()+"</a>";
+		if (element.getName().equals("preview")) {
+			if(section.getDocument().getName().equalsIgnoreCase("LPEntryPoint"))
+				return "<a target=\"_blank\" href=\"../ep/<ano:write filter=\"false\" name=\"lpentrypoint\" property=\"name\"/>\">" + getPreviewImage() + "</a>";
+
+			return "<a target=\"_blank\" href=../<ano:write filter=\"false\" name=\"pagex\" property=\"nameForSorting\"/>.html>" + getPreviewImage() + "</a>";
+		}
 
 		if (element.getName().equals("edit"))
 			return getEditFunction(entryName, element);

@@ -9,6 +9,7 @@ import net.anotheria.asg.generator.view.CMSMappingsConfiguratorGenerator.SharedA
 import net.anotheria.asg.generator.view.meta.MetaModuleSection;
 import net.anotheria.asg.generator.view.meta.MetaSection;
 import net.anotheria.asg.generator.view.meta.MetaView;
+import net.anotheria.asg.util.bean.NavigationItemBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +84,7 @@ public class CMSSearchActionsGenerator extends AbstractGenerator {
 		clazz.addImport("net.anotheria.maf.action.ActionCommand");
 		clazz.addImport("net.anotheria.maf.action.ActionMapping");
 		clazz.addImport("net.anotheria.maf.bean.FormBean");
-		clazz.addImport("net.anotheria.webutils.bean.NavigationItemBean");
+		clazz.addImport(NavigationItemBean.class);
 		clazz.addImport("net.anotheria.util.StringUtils");
 		clazz.addImport("net.anotheria.asg.data.DataObject");
 

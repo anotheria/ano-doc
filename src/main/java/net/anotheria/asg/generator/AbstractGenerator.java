@@ -12,7 +12,7 @@ import net.anotheria.util.StringUtils;
 
 
 /**
- * TODO please remined another to comment this class.
+ * TODO please remind another to comment this class.
  *
  * @author another
  * @version $Id: $Id

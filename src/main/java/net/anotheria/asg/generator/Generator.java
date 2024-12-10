@@ -10,6 +10,7 @@ import net.anotheria.asg.generator.parser.XMLPreprocessor;
 import net.anotheria.asg.generator.parser.XMLTypesParser;
 import net.anotheria.asg.generator.parser.XMLValidatorsParser;
 import net.anotheria.asg.generator.parser.XMLViewParser;
+import net.anotheria.asg.generator.restapi.RestAPIGenerator;
 import net.anotheria.asg.generator.types.TypesGenerator;
 import net.anotheria.asg.generator.types.meta.DataType;
 import net.anotheria.asg.generator.util.IncludedDocuments;
@@ -161,6 +162,10 @@ public class Generator {
             //	System.out.println("Parsed views: "+views);
             ViewGenerator v = new ViewGenerator();
             v.generate("java", views);
+
+            //now lets generate info for the views and the new rest api.
+            RestAPIGenerator restAPIGenerator = new RestAPIGenerator();
+            restAPIGenerator.generate("java", modules, views);
         }else{
             System.out.println("VIEW_CONTENT = NULL");
         }
@@ -200,7 +205,7 @@ public class Generator {
      * @return a {@link java.lang.String} object.
      */
     public static String getVersionString(){
-        return "3.2.2";
+        return "4.2.2";
     }
 
     /**
