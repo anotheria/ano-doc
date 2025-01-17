@@ -554,7 +554,6 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 			appendString(decl);
 			increaseIdent();
 			
-//			appendStatement("getListPropertyAnyCase("+list.toNameConstant(l)+").add(new "+c.toJavaType()+"Property("+c.getName()+", "+c.getName()+"))");
 			appendStatement("getListPropertyAnyCase("+list.toNameConstant(l)+").add(new "+accesserType+"Property("+quote("")+" + "+c.getName()+", "+c.getName()+"))");
 			closeBlockNEW();
 			emptyline();
@@ -568,29 +567,18 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 			
 			appendString("public void "+getContainerEntrySwapperName(list, l)+"(int index1, int index2){");
 			increaseIdent();
-			appendStatement(c.toJavaType()+" tmp1, tmp2");
-//			appendStatement("tmp1 = (("+c.toJavaType()+"Property"+")getList("+list.toNameConstant(l)+").get(index1)).get"+c.toJavaType()+"()");
-//			appendStatement("tmp2 = (("+c.toJavaType()+"Property"+")getList("+list.toNameConstant(l)+").get(index2)).get"+c.toJavaType()+"()");
-//			appendStatement("(("+c.toJavaType()+"Property"+")getList("+list.toNameConstant(l)+").get(index1)).set"+c.toJavaType()+"(tmp2)");
-//			appendStatement("(("+c.toJavaType()+"Property"+")getList("+list.toNameConstant(l)+").get(index2)).set"+c.toJavaType()+"(tmp1)");
-			appendStatement("tmp1 = (("+accesserType+"Property"+")getList("+list.toNameConstant(l)+").get(index1)).get"+accesserType+"()");
-			appendStatement("tmp2 = (("+accesserType+"Property"+")getList("+list.toNameConstant(l)+").get(index2)).get"+accesserType+"()");
-			appendStatement("(("+accesserType+"Property"+")getList("+list.toNameConstant(l)+").get(index1)).set"+accesserType+"(tmp2)");
-			appendStatement("(("+accesserType+"Property"+")getList("+list.toNameConstant(l)+").get(index2)).set"+accesserType+"(tmp1)");
+			appendStatement("swapListElement("+list.toNameConstant(l)+", index1, index2)");
 			closeBlockNEW();
 			emptyline();
 	
 			appendString("public "+c.toJavaType()+ " "+getListElementGetterName(list, l)+"(int index){");
 			increaseIdent();
-//			appendStatement(c.toJavaType()+"Property p = ("+c.toJavaType()+"Property"+")getList("+list.toNameConstant(l)+").get(index)");
-//			appendStatement("return p.get"+c.toJavaType()+"()");
 			appendStatement(accesserType+"Property p = ("+accesserType+"Property"+")getList("+list.toNameConstant(l)+").get(index)");
 			appendStatement("return p.get"+accesserType+"()");
 			closeBlockNEW();
 			emptyline();
 		}
 		
-//		quote(container.getName()+"_")+"+"+GET_CURRENT_LANG+
 		String decl = "public void "+getContainerEntryAdderName(list )+"(";
 		decl += c.toJavaType()+" "+c.getName();
 		decl += "){";
@@ -612,10 +600,7 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 		appendString("public void "+getContainerEntrySwapperName(list)+"(int index1, int index2){");
 		increaseIdent();
 		appendStatement(c.toJavaType()+" tmp1, tmp2");
-//		appendStatement("tmp1 = (("+c.toJavaType()+"Property"+")getList("+quote(list.getName()+"_")+"+"+GET_CURRENT_LANG+").get(index1)).get"+c.toJavaType()+"()");
-//		appendStatement("tmp2 = (("+c.toJavaType()+"Property"+")getList("+quote(list.getName()+"_")+"+"+GET_CURRENT_LANG+").get(index2)).get"+c.toJavaType()+"()");
-//		appendStatement("(("+c.toJavaType()+"Property"+")getList("+quote(list.getName()+"_")+"+"+GET_CURRENT_LANG+").get(index1)).set"+c.toJavaType()+"(tmp2)");
-//		appendStatement("(("+c.toJavaType()+"Property"+")getList("+quote(list.getName()+"_")+"+"+GET_CURRENT_LANG+").get(index2)).set"+c.toJavaType()+"(tmp1)");
+		appendStatement(c.toJavaType()+" tmp1, tmp2");
 		appendStatement("tmp1 = (("+accesserType+"Property"+")getList("+quote(list.getName()+"_")+"+"+GET_CURRENT_LANG+").get(index1)).get"+accesserType+"()");
 		appendStatement("tmp2 = (("+accesserType+"Property"+")getList("+quote(list.getName()+"_")+"+"+GET_CURRENT_LANG+").get(index2)).get"+accesserType+"()");
 		appendStatement("(("+accesserType+"Property"+")getList("+quote(list.getName()+"_")+"+"+GET_CURRENT_LANG+").get(index1)).set"+accesserType+"(tmp2)");
