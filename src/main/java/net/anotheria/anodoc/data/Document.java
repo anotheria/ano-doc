@@ -335,7 +335,16 @@ public class Document extends DataHolder
 		 putProperty(list);
 		 return list;
 	}
-	
+
+	protected void swapListElement(String listName, int index1, int index2){
+		String tmp1, tmp2;
+		tmp1 = ((StringProperty)getList(listName).get(index1)).getString();
+		tmp2 = ((StringProperty)getList(listName).get(index2)).getString();
+		((StringProperty)getList(listName).get(index1)).setString(tmp2);
+		((StringProperty)getList(listName).get(index2)).setString(tmp1);
+	}
+
+
 	/**
 	 * Creates a new DocumentList. Overwrite this, if your document
 	 * uses special lists.

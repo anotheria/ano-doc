@@ -491,11 +491,13 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 	}
 
 	private void generateListMethods(MetaListProperty list){
-		
+
 		if (list.isMultilingual()){
 			generateListMethodsMultilingual(list);
 			return;
 		}
+
+		writeCommentLine("List methods for "+list.getName());
 
 		MetaProperty c = list.getContainedProperty();
 		String accesserType = StringUtils.capitalize(c.toJavaType()); 
@@ -507,43 +509,35 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 		increaseIdent();
 		
 		
-//		appendStatement("getListPropertyAnyCase("+list.toNameConstant()+").add(new "+c.toJavaType()+"Property("+c.getName()+", "+c.getName()+"))");
-		if (c instanceof MetaEnumerationProperty) 
+		if (c instanceof MetaEnumerationProperty)
 			openFun("if (!getListPropertyAnyCase(" + list.toNameConstant() + ").getList().contains(new " + accesserType + "Property(" + quote("") + " + " + c.getName() + ", " + c.getName() + ")))");
 		appendStatement("getListPropertyAnyCase("+list.toNameConstant()+").add(new "+accesserType+"Property("+quote("")+" + "+c.getName()+", "+c.getName()+"))");
 		if (c instanceof MetaEnumerationProperty)
 			closeBlock("if");
-		closeBlock("method");
+		closeBlock("getListPropertyAnyCase");
 		emptyline();
 		
 		
 		appendString("public void "+getContainerEntryDeleterName(list)+"(int index){");
 		increaseIdent();
 		appendStatement("getListProperty("+list.toNameConstant()+").remove(index)");
-		closeBlock("method");
+		closeBlock(getContainerEntryDeleterName(list));
 		emptyline();
-		
+
+		//element swapper
 		appendString("public void "+getContainerEntrySwapperName(list)+"(int index1, int index2){");
 		increaseIdent();
-		appendStatement(c.toJavaType()+" tmp1, tmp2");
-//		appendStatement("tmp1 = (("+c.toJavaType()+"Property"+")getList("+list.toNameConstant()+").get(index1)).get"+c.toJavaType()+"()");
-//		appendStatement("tmp2 = (("+c.toJavaType()+"Property"+")getList("+list.toNameConstant()+").get(index2)).get"+c.toJavaType()+"()");
-//		appendStatement("(("+c.toJavaType()+"Property"+")getList("+list.toNameConstant()+").get(index1)).set"+c.toJavaType()+"(tmp2)");
-//		appendStatement("(("+c.toJavaType()+"Property"+")getList("+list.toNameConstant()+").get(index2)).set"+c.toJavaType()+"(tmp1)");
-		appendStatement("tmp1 = (("+accesserType+"Property"+")getList("+list.toNameConstant()+").get(index1)).get"+accesserType+"()");
-		appendStatement("tmp2 = (("+accesserType+"Property"+")getList("+list.toNameConstant()+").get(index2)).get"+accesserType+"()");
-		appendStatement("(("+accesserType+"Property"+")getList("+list.toNameConstant()+").get(index1)).set"+accesserType+"(tmp2)");
-		appendStatement("(("+accesserType+"Property"+")getList("+list.toNameConstant()+").get(index2)).set"+accesserType+"(tmp1)");
-		closeBlock("method");
+		appendStatement("swapListElement("+list.toNameConstant()+", index1, index2)");
+		closeBlock(getContainerEntrySwapperName(list));
 		emptyline();
 
 		appendString("public "+c.toJavaType()+ " "+getListElementGetterName(list)+"(int index){");
 		increaseIdent();
-//		appendStatement(c.toJavaType()+"Property p = ("+c.toJavaType()+"Property"+")getList("+list.toNameConstant()+").get(index)");
-//		appendStatement("return p.get"+c.toJavaType()+"()");
 		appendStatement(accesserType+"Property p = ("+accesserType+"Property"+")getList("+list.toNameConstant()+").get(index)");
 		appendStatement("return p.get"+accesserType+"()");
-		closeBlock("method");
+		closeBlock(getListElementGetterName(list));
+
+		writeCommentLine("//End list methods for "+list.getName());
 		emptyline();
 
 	}
