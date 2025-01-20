@@ -145,7 +145,7 @@ public class BasicServiceGenerator extends AbstractGenerator{
         appendString("protected void updateModule(Module mod){");
         increaseIdent();
         appendString("try{");
-        appendString("service.storeModule(mod);");
+        appendIncreasedStatement("service.storeModule(mod)");
         appendString("}catch(Exception e){");
         increaseIdent();
         appendString("log.error(\"updateModule\", e);");
@@ -155,15 +155,15 @@ public class BasicServiceGenerator extends AbstractGenerator{
 
         //generate method for adding module listener.
         appendString("protected void addModuleListener(String moduleId, IModuleListener moduleListener){");
-        increaseIdent();
-        appendString("service.addModuleListener(moduleId, MY_OWNER_ID, moduleListener);");
+		increaseIdent();
+        appendStatement("service.addModuleListener(moduleId, MY_OWNER_ID, moduleListener)");
         closeBlockNEW();
     	emptyline();
 
         appendString("protected Module getModule(String moduleId){");
         increaseIdent();
         appendString("try{");
-        appendString("return service.getModule(MY_OWNER_ID, moduleId, true);");
+		appendIncreasedStatement("return service.getModule(MY_OWNER_ID, moduleId, true)");
         appendString("}catch(Exception e){");
         increaseIdent();
         appendString("log.error(\"getModule\", e);");
