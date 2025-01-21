@@ -357,6 +357,11 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 			emptyline();
 
 			//this method checks whether a document with the given document set exists or no.
+
+			//Adding methods to purge languages.
+			appendComment("Purges all attributes in the given language from documents of type "+doc.getName());
+			appendStatement("void purgeLanguageFrom"+doc.getMultiple()+"(String language)"+throwsClause);
+			emptyline();
 	    }
 
 		appendComment("Save transferred document by its own type.");
@@ -370,10 +375,15 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 	    
 	    appendComment("Executes a query on all data objects (documents, vo) which are part of this module and managed by this service.");
 	    appendStatement("QueryResult executeQueryOnAllObjects(DocumentQuery query)" +throwsClause);
-	    
-	    
-		
-	    appendComment("creates an xml element with all contained data.");
+
+		//Adding methods to purge languages.
+		appendComment("Purges all attributes in the given language from all documents of this module.");
+		appendStatement("void purgeLanguageFromAllObjects(String language)"+throwsClause);
+		emptyline();
+
+
+
+		appendComment("creates an xml element with all contained data.");
 		appendStatement("XMLNode exportToXML()"+throwsClause);
 		
 		emptyline();

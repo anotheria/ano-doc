@@ -414,8 +414,28 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 			closeBlockNEW();
 			emptyline();
 			// end get elements Segment with SORTING, FILTER
-	    }
-	    
+
+			//adding purge language #38
+			appendComment("Purges all attributes in the given language from documents of type "+doc.getName());
+			appendString("@Override");
+			appendString("public void purgeLanguageFrom"+doc.getMultiple()+"(String language)"+throwsClause+"{");
+			increaseIdent();
+			appendComment("Do nothing. This is a fixture service.");
+			closeBlockNEW();
+			emptyline();
+
+		}
+
+		//Adding methods to purge languages.
+		appendComment("Purges all attributes in the given language from all documents of this module.");
+		appendString("@Override");
+		appendString("public void purgeLanguageFromAllObjects(String language) throws "+ServiceGenerator.getExceptionName(module)+" {");
+		increaseIdent();
+		appendComment("Do nothing. This is a fixture service.");
+		closeBlockNEW();
+		emptyline();
+
+
 		boolean containsAnyMultilingualDocs = false;
 	    
 	    

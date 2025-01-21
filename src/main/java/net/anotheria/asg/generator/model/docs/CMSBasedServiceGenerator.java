@@ -751,8 +751,29 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 			}
 
+			//adding purge language #38
+			appendComment("Purges all attributes in the given language from documents of type "+doc.getName());
+			appendString("@Override");
+			appendString("public void purgeLanguageFrom"+doc.getMultiple()+"(String language)"+throwsClause+"{");
+			increaseIdent();
+			appendStatement("System.out.println("+quote("Purging language")+" + language)");
+			closeBlockNEW();
+			emptyline();
+
 
 	    }
+
+		//Adding methods to purge languages.
+		appendComment("Purges all attributes in the given language from all documents of this module.");
+		appendString("@Override");
+		appendString("public void purgeLanguageFromAllObjects(String language) throws "+ServiceGenerator.getExceptionName(module)+" {");
+		increaseIdent();
+		for (MetaDocument doc: docs){
+			appendStatement("purgeLanguageFrom"+doc.getMultiple()+"(language)");
+		}
+		closeBlockNEW();
+		emptyline();
+
 
 		appendString("public void executeParsingForDocument (final DocumentName documentName, final JSONObject data) throws " + ServiceGenerator.getExceptionName(module)+ " {");
 		increaseIdent();
