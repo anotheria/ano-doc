@@ -3,6 +3,7 @@ package net.anotheria.asg.generator.apputil;
 import net.anotheria.asg.generator.*;
 import net.anotheria.asg.generator.meta.MetaDocument;
 import net.anotheria.asg.generator.meta.MetaModule;
+import net.anotheria.asg.generator.model.ServiceGenerator;
 import net.anotheria.asg.generator.view.action.ModuleActionsGenerator;
 import net.anotheria.asg.util.filestorage.FileStorage;
 import net.anotheria.asg.util.filestorage.TemporaryFileHolder;
@@ -196,6 +197,18 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         closeBlockNEW();
         closeBlockNEW();
         emptyline();
+
+        appendComment("Purges all attributes in the given language from all documents of this module.");
+        appendString("@Override");
+        appendString("public void purgeLanguageFromAllObjects(String language){");
+        increaseIdent();
+        appendCommentLine("Do nothing, this is not supported by this service service.");
+        appendCommentLine("Completely unclear why this service is a basicservice? it shouldn't have listeners as well.");
+        closeBlockNEW();
+        emptyline();
+
+
+
         appendString("private class DocumentExecutor implements IQueueWorker<JSONArray> {");
         increaseIdent();
         appendString("@Override");
@@ -203,6 +216,7 @@ public class BasicServiceUtilGenerator extends AbstractGenerator {
         increaseIdent();
         appendStatement("executeParsingDocuments(jsonArray)");
         closeBlockNEW();
+
         closeBlockNEW();
         return clazz;
     }

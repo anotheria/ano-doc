@@ -1,6 +1,7 @@
 package net.anotheria.asg.service;
 
 import net.anotheria.anoprise.metafactory.Service;
+import net.anotheria.asg.exception.ASGRuntimeException;
 import net.anotheria.asg.util.listener.IServiceListener;
 
 /**
@@ -30,4 +31,7 @@ public interface ASGService extends Service{
 	 * @return true if there are service listeners attached.
 	 */
 	boolean hasServiceListeners();
+
+	/** Purges a language from all objects. */
+	void purgeLanguageFromAllObjects(String language) throws ASGRuntimeException;
 }

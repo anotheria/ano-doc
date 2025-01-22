@@ -212,7 +212,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 	        	emptyline();
 	        	appendString("private List<"+doc.getName()+"> copy"+doc.getName()+"List"+mapping.getTargetKey()+"(List<"+target.getName()+"> list){");
 	        	increaseIdent();
-	        	appendStatement("List<"+doc.getName()+"> ret = new ArrayList<"+doc.getName()+">(list.size())");
+	        	appendStatement("List<"+doc.getName()+"> ret = new ArrayList<>(list.size())");
 	        	appendString("for ("+target.getName()+" d : list)");
 	        	appendIncreasedStatement("ret.add(copy(d))");
 	        	//we assume that we always have identical properties, or at least all properties from federation doc have a corresponding property in target doc.
@@ -446,7 +446,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 			closeBlockNEW();
 			emptyline();
 			// end get elements Segment with SORTING, FILTER
-			appendStatement("public XMLNode export" + doc.getMultiple() + "ToXML(List<" + doc.getName() + "> list" + doc.getMultiple() + "){");
+			appendString("public XMLNode export" + doc.getMultiple() + "ToXML(List<" + doc.getName() + "> list" + doc.getMultiple() + "){");
 			increaseIdent();
 			appendStatement("return new XMLNode(" + quote("unimplemented_federated_export_" + module.getName()) + ")");
 			closeBlockNEW();
@@ -493,7 +493,27 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 			closeBlockNEW();
 			emptyline();
 		//end fetch document with dependencies function
+
+			//adding purge language #38
+			appendComment("Purges all attributes in the given language from documents of type #38"+doc.getName());
+			appendString("@Override");
+			appendString("public void purgeLanguageFrom"+doc.getMultiple()+"(String language)"+throwsClause+"{");
+			increaseIdent();
+			appendCommentLine("Do nothing, this is not supported by federation service.");
+			closeBlockNEW();
+			emptyline();
+
 		}
+
+		//Adding methods to purge languages.
+		appendComment("Purges all attributes in the given language from all documents of this module.");
+		appendString("@Override");
+		appendString("public void purgeLanguageFromAllObjects(String language) throws "+ServiceGenerator.getExceptionName(module)+" {");
+		increaseIdent();
+		appendCommentLine("Do nothing, this is not supported by federation service.");
+		closeBlockNEW();
+		emptyline();
+
 
 		appendString("public void executeParsingForDocument (final DocumentName documentName, final JSONObject data)" + throwsClause + "{");
 		increaseIdent();

@@ -16,6 +16,7 @@ import net.anotheria.asg.generator.view.meta.MetaCustomSection;
 import net.anotheria.asg.generator.view.meta.MetaModuleSection;
 import net.anotheria.asg.generator.view.meta.MetaSection;
 import net.anotheria.asg.generator.view.meta.MetaView;
+import net.anotheria.asg.service.ASGService;
 import net.anotheria.asg.util.bean.NavigationItemBean;
 import net.anotheria.util.StringUtils;
 import net.anotheria.util.sorter.SortType;
@@ -69,6 +70,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		clazz.addImport(net.anotheria.maf.action.ActionMapping.class);
 		clazz.addImport(NavigationItemBean.class);
 		clazz.addImport(SortType.class);
+		clazz.addImport(ASGService.class);
 
 		clazz.setAbstractClass(true);
 		clazz.setParent("BaseAction");
@@ -219,6 +221,17 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 			closeBlock("end  "+ModuleActionsGenerator.getServiceGetterCall(m));
 			emptyline();
 		}
+
+		//adding support to retrieve all services, this is in context of https://github.com/anotheria/ano-doc/issues/38
+		appendString("protected List<ASGService> getAllServices(){");
+		increaseIdent();
+		appendStatement("List<ASGService> ret = new ArrayList<ASGService>()");
+		for (MetaModule m:modules){
+			appendStatement("ret.add("+ModuleActionsGenerator.getServiceGetterCall(m)+")");
+		}
+		appendStatement("return ret");
+		closeBlockNEW();
+		emptyline();
 
 		//security...
 		appendString("protected boolean isAuthorizationRequired(){");

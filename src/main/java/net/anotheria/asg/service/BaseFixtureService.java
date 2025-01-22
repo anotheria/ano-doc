@@ -1,5 +1,7 @@
 package net.anotheria.asg.service;
 
+import net.anotheria.asg.exception.ASGRuntimeException;
+
 /**
  * <p>Abstract BaseFixtureService class.</p>
  *
@@ -19,4 +21,8 @@ public abstract class BaseFixtureService extends AbstractASGService implements I
 	public void tearDown() {
 	}
 
+	@Override
+	public void purgeLanguageFromAllObjects(String language) throws ASGRuntimeException {
+		// Should be overriden.
+	}
 }

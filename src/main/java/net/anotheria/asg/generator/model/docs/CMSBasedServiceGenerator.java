@@ -756,7 +756,17 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			appendString("@Override");
 			appendString("public void purgeLanguageFrom"+doc.getMultiple()+"(String language)"+throwsClause+"{");
 			increaseIdent();
-			appendStatement("System.out.println("+quote("Purging language")+" + language)");
+			appendStatement("System.out.println("+quote("Purging language ")+" + language+ "+quote(" from all documents of type " + doc.getName())+")");
+			appendStatement("boolean needToSave = false");
+			appendStatement("List<"+doc.getName()+"> allDocuments = get"+doc.getMultiple()+"()");
+			appendStatement("for ("+doc.getName()+" document : allDocuments){");
+			increaseIdent();
+			appendStatement("needToSave |= (("+DocumentGenerator.getDocumentName(doc)+")document).purgeLanguage(language)");
+			closeBlockNEW();
+			appendString("if (needToSave){");
+			increaseIdent();
+			appendStatement("updateModule("+getModuleGetterCall(module)+")");
+			closeBlockNEW();
 			closeBlockNEW();
 			emptyline();
 

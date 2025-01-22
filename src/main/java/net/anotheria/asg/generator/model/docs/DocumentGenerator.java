@@ -170,6 +170,20 @@ public class DocumentGenerator extends AbstractDataObjectGenerator implements IG
 		
 		//emptyline();
 		//generateCopyMethod(doc);
+
+		emptyline();
+		appendComment("Purges the language, from all properties if this document type support mulitlingual properties. Otherwise does nothing. Returns true if the language was purged, and an update is required.");
+		appendStatement("public boolean purgeLanguage(String lang){");
+		increaseIdent();
+		boolean hasMultilingualProperties = false;
+		for (MetaProperty p : doc.getProperties()){
+			if (p.isMultilingual()){
+				appendStatement("removeProperty(\""+p.getName()+"_\"+lang)");
+				hasMultilingualProperties = true;
+			}
+		}
+		appendStatement("return "+(hasMultilingualProperties ? "true" : "false"));
+		closeBlockNEW();
 		
 		return clazz;
 	}
