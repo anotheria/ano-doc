@@ -14,7 +14,7 @@ import net.anotheria.util.xml.XMLNode;
 
 /**
  * This class represents a basic document, which is a container for properties and therefore a
- * corresponding modell object to a simple class (with attributes).
+ * corresponding model object to a simple class (with attributes).
  *
  * @since 1.0
  * @author lrosenberg
