@@ -9,11 +9,20 @@ import com.google.cloud.storage.BucketInfo;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageClass;
 import com.google.cloud.storage.StorageOptions;
+import net.anotheria.anoprise.cache.Cache;
+import net.anotheria.anoprise.cache.Caches;
+import net.anotheria.asg.util.filestorage.FileStorageConfig;
 import net.anotheria.asg.util.filestorage.TemporaryFileHolder;
+import net.anotheria.util.queue.IQueueWorker;
+import net.anotheria.util.queue.QueuedProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 /**
@@ -26,14 +35,35 @@ public class GoogleCloudStorage implements IFileStorage {
      * {@link Logger} instance.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(GoogleCloudStorage.class);
+    /**
+     * Bucket name for storing photos data.
+     */
     private final String bucketName;
     /**
      * {@link Storage} instance.
      */
     private final Storage cloudStorage;
+    /**
+     * Cache for storing metadata of files.
+     */
+    private final Cache<String, Blob> blobInfoCache;
+    /**
+     * A {@link QueuedProcessor} for processing file metadata and storing files in a cache directory.
+     */
+    private final QueuedProcessor<String> fileProcessor;
 
+    /**
+     * Default constructor.
+     *
+     * @param bucketName        bucket name
+     * @param credentialsPath   credentials path for connect to bucket
+     * @param projectId         google project id
+     */
     public GoogleCloudStorage(String bucketName, String credentialsPath, String projectId) {
         this.bucketName = bucketName;
+        this.blobInfoCache = Caches.createHardwiredCache(FileStorageConfig.getInstance().getCacheName(),
+                FileStorageConfig.getInstance().getCacheMinSize(),
+                FileStorageConfig.getInstance().getCacheMaxSize());
         try {
             URL url = getClass().getClassLoader().getResource(credentialsPath);
             cloudStorage = StorageOptions.newBuilder()
@@ -46,6 +76,10 @@ public class GoogleCloudStorage implements IFileStorage {
         } catch (Exception e) {
             throw new RuntimeException("Unable to initialize google storage. ", e);
         }
+
+        createCacheDirectory();
+        this.fileProcessor = new QueuedProcessor<>("ASGFileCacheProcessor", new FileProcessor(), 1_000, LOGGER);
+        this.fileProcessor.start();
     }
 
     private void initializeBucket() {
@@ -56,7 +90,15 @@ public class GoogleCloudStorage implements IFileStorage {
                     .setStorageClass(StorageClass.STANDARD)
                     .setLocation("EU")
                     .build());
-            LOGGER.info("Bucket created: " + bucket.toString());
+            LOGGER.info("Bucket created: {}", bucket.toString());
+        }
+    }
+
+    private void createCacheDirectory() {
+        File cacheDirectory = new File(FileStorageConfig.getInstance().getCacheDirectory());
+        if (!cacheDirectory.exists()) {
+            boolean created = cacheDirectory.mkdirs();
+            LOGGER.info("Cache directory created: {}", created);
         }
     }
 
@@ -65,11 +107,12 @@ public class GoogleCloudStorage implements IFileStorage {
         BlobId blobId = BlobId.of(bucketName, fileName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
         cloudStorage.create(blobInfo, fileContent);
+        fileProcessor.addToQueue(fileName);
     }
 
     @Override
     public boolean isFileExists(String fileName) {
-        return cloudStorage.get(bucketName, fileName) != null;
+        return blobInfoCache.get(fileName) != null;
     }
 
     @Override
@@ -78,22 +121,56 @@ public class GoogleCloudStorage implements IFileStorage {
         BlobId blobId = BlobId.of(bucketName, destinationFileName);
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
         cloudStorage.create(blobInfo, data);
+        fileProcessor.addToQueue(destinationFileName);
     }
 
     @Override
     public void removeFile(String fileName) throws Exception {
         cloudStorage.delete(bucketName, fileName);
+        blobInfoCache.remove(fileName);
+        File file = new File(FileStorageConfig.getInstance().getCacheDirectory(), fileName);
+        boolean deleted = file.delete();
+        LOGGER.info("File deleted: {}", deleted);
     }
 
     @Override
     public TemporaryFileHolder loadFile(String fileName) throws Exception {
-        byte[] fileData = cloudStorage.readAllBytes(bucketName, fileName);
-        Blob fileBlob = cloudStorage.get(bucketName, fileName);
+        Blob blob = blobInfoCache.get(fileName);
+        byte[] fileData;
+
+        if (blob != null) {
+            fileData = Files.readAllBytes(Paths.get(FileStorageConfig.getInstance().getCacheDirectory(), fileName));
+        } else {
+            blob = cloudStorage.get(bucketName, fileName);
+            fileData = cloudStorage.readAllBytes(bucketName, fileName);
+        }
+
         TemporaryFileHolder f = new TemporaryFileHolder();
         f.setData(fileData);
         f.setFileName(fileName);
-        f.setMimeType(fileBlob.getContentType());
-        f.setLastModified(fileBlob.getUpdateTime());
+        f.setMimeType(blob.getContentType());
+        f.setLastModified(blob.getUpdateTimeOffsetDateTime().toEpochSecond());
+        fileProcessor.addToQueue(fileName);
         return f;
+    }
+
+    private class FileProcessor implements IQueueWorker<String>{
+
+        @Override
+        public void doWork(String fileName) throws Exception {
+            try {
+                Blob cached = blobInfoCache.get(fileName);
+                Blob actual = cloudStorage.get(bucketName, fileName);
+                if ((cached == null && actual != null) || (cached != null && actual != null && !cached.getEtag().equals(actual.getEtag()))) {
+                    blobInfoCache.put(fileName, actual);
+                    File file = new File(FileStorageConfig.getInstance().getCacheDirectory(), fileName);
+                    try (FileOutputStream fos = new FileOutputStream(file)) {
+                        fos.write(cloudStorage.readAllBytes(bucketName, fileName));
+                    }
+                }
+            } catch (Exception e){
+                LOGGER.warn("Unable to process data for file", e);
+            }
+        }
     }
 }

@@ -1,8 +1,10 @@
 package net.anotheria.asg.util.filestorage;
 
+import org.checkerframework.checker.units.qual.C;
 import org.configureme.ConfigurationManager;
 import org.configureme.annotations.Configure;
 import org.configureme.annotations.ConfigureMe;
+import org.configureme.annotations.DontConfigure;
 import org.slf4j.LoggerFactory;
 
 
@@ -13,15 +15,15 @@ import org.slf4j.LoggerFactory;
  */
 @ConfigureMe(name = "filestorage")
 public class FileStorageConfig {
-
 	/**
 	 * Default file storage directory.
 	 */
+    @DontConfigure
 	private static final String DEF_FILE_STORAGE_DIR = "/work/data/files/";
-
 	/**
 	 * FileStorageConfig instance.
 	 */
+    @DontConfigure
 	private static FileStorageConfig instance;
 	/**
 	 * Actually storage directory.
@@ -43,7 +45,6 @@ public class FileStorageConfig {
      */
     @Configure
     private String credentialsPath;
-
     /**
      * Storage type.
      */
@@ -54,12 +55,33 @@ public class FileStorageConfig {
      */
     @Configure
     private String accessKey;
-
     /**
      * Secret key.
      */
     @Configure
     private String secretKey;
+
+    //OPTIONAL. Cache parameters. Now used only in google cloud storage for storing metadata of the file.
+    /**
+     * Directory for storing cached files.
+     */
+    @Configure
+    private String cacheDirectory = "/work/data/files/cache/";
+    /**
+     * Cache name.
+     */
+    @Configure
+    private String cacheName = "fileStorageCache";
+    /**
+     * Cache min size. By default, 200 elements
+     */
+    @Configure
+    private int cacheMinSize = 200;
+    /**
+     * Cache max size. By default, 2000 elements
+     */
+    @Configure
+    private int cacheMaxSize = 2000;
 
 	/**
 	 * Get instance method.
@@ -141,10 +163,52 @@ public class FileStorageConfig {
         this.secretKey = secretKey;
     }
 
+    public String getCacheDirectory() {
+        return cacheDirectory;
+    }
+
+    public void setCacheDirectory(String cacheDirectory) {
+        this.cacheDirectory = cacheDirectory;
+    }
+
+    public String getCacheName() {
+        return cacheName;
+    }
+
+    public void setCacheName(String cacheName) {
+        this.cacheName = cacheName;
+    }
+
+    public int getCacheMinSize() {
+        return cacheMinSize;
+    }
+
+    public void setCacheMinSize(int cacheMinSize) {
+        this.cacheMinSize = cacheMinSize;
+    }
+
+    public int getCacheMaxSize() {
+        return cacheMaxSize;
+    }
+
+    public void setCacheMaxSize(int cacheMaxSize) {
+        this.cacheMaxSize = cacheMaxSize;
+    }
+
     @Override
-	public String toString() {
-		return "FileStorageConfig{" +
-				"directory='" + directory + '\'' +
-				'}';
-	}
+    public String toString() {
+        return "FileStorageConfig{" +
+                "directory='" + directory + '\'' +
+                ", bucketName='" + bucketName + '\'' +
+                ", projectId='" + projectId + '\'' +
+                ", credentialsPath='" + credentialsPath + '\'' +
+                ", storageType='" + storageType + '\'' +
+                ", accessKey='" + accessKey + '\'' +
+                ", secretKey='" + secretKey + '\'' +
+                ", cacheDirectory='" + cacheDirectory + '\'' +
+                ", cacheName='" + cacheName + '\'' +
+                ", cacheMinSize=" + cacheMinSize +
+                ", cacheMaxSize=" + cacheMaxSize +
+                '}';
+    }
 }
