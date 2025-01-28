@@ -1,6 +1,5 @@
 package net.anotheria.asg.util.filestorage;
 
-import org.checkerframework.checker.units.qual.C;
 import org.configureme.ConfigurationManager;
 import org.configureme.annotations.Configure;
 import org.configureme.annotations.ConfigureMe;
