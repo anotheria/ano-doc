@@ -143,6 +143,7 @@ public class GoogleCloudStorage implements IFileStorage {
         } else {
             blob = cloudStorage.get(bucketName, fileName);
             fileData = cloudStorage.readAllBytes(bucketName, fileName);
+            addFileToCache(fileName, fileData, blob);
         }
 
         TemporaryFileHolder f = new TemporaryFileHolder();
@@ -150,7 +151,6 @@ public class GoogleCloudStorage implements IFileStorage {
         f.setFileName(fileName);
         f.setMimeType(blob.getContentType());
         f.setLastModified(blob.getUpdateTimeOffsetDateTime().toEpochSecond());
-        fileProcessor.addToQueue(fileName);
         return f;
     }
 
@@ -161,16 +161,20 @@ public class GoogleCloudStorage implements IFileStorage {
             try {
                 Blob cached = blobInfoCache.get(fileName);
                 Blob actual = cloudStorage.get(bucketName, fileName);
-                if ((cached == null && actual != null) || (cached != null && actual != null && !cached.getEtag().equals(actual.getEtag()))) {
-                    blobInfoCache.put(fileName, actual);
-                    File file = new File(FileStorageConfig.getInstance().getCacheDirectory(), fileName);
-                    try (FileOutputStream fos = new FileOutputStream(file)) {
-                        fos.write(cloudStorage.readAllBytes(bucketName, fileName));
-                    }
-                }
+                if ((cached == null && actual != null) || (cached != null && actual != null && !cached.getEtag().equals(actual.getEtag())))
+                    addFileToCache(fileName, cloudStorage.readAllBytes(bucketName, fileName), actual);
+
             } catch (Exception e){
                 LOGGER.warn("Unable to process data for file", e);
             }
+        }
+    }
+
+    private void addFileToCache(String fileName, byte[] fileContent, Blob blob) throws Exception {
+        blobInfoCache.put(fileName, blob);
+        File file = new File(FileStorageConfig.getInstance().getCacheDirectory(), fileName);
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(fileContent);
         }
     }
 }
