@@ -344,10 +344,10 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 				containsAnyMultilingualDocs = true;
 			}
 
-			appendComment("Creates an xml element with selected contained data.");
+			appendComment("Creates a xml element with selected contained data.");
 			appendStatement("XMLNode export"+doc.getMultiple()+"ToXML(List<"+doc.getName()+"> list"+doc.getMultiple()+") "+throwsClause);
 			if (containsAnyMultilingualDocs && GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()) {
-				appendComment("creates an xml element with selected contained data but only selected languages in multilingual attributes");
+				appendComment("creates a xml element with selected contained data but only selected languages in multilingual attributes");
 				appendStatement("XMLNode export"+doc.getMultiple()+"ToXML(String[] languages,List<"+doc.getName()+"> list"+doc.getMultiple()+")" + throwsClause);
 	    	}
 
@@ -383,13 +383,13 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 
 
 
-		appendComment("creates an xml element with all contained data.");
+		appendComment("creates a xml element with all contained data.");
 		appendStatement("XMLNode exportToXML()"+throwsClause);
 		
 		emptyline();
 	    
 	    if (containsAnyMultilingualDocs && GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()){
-	    	appendComment("creates an xml element with all contained data but only selected languages in multilingual attributes.");
+	    	appendComment("creates a xml element with all contained data but only selected languages in multilingual attributes.");
 	    	appendStatement("XMLNode exportToXML(String[] languages)"+throwsClause);
 	    }
 
