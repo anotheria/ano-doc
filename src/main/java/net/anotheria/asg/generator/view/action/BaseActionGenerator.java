@@ -370,6 +370,8 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		localizationBundleSpecificTranslation.setPath("asgLocalizationBundleSpecificTranslationView");
 		MetaCustomSection localizationBundlesDifference = new MetaCustomSection("LocBundle Difference");
 		localizationBundlesDifference.setPath("asgLocalizationBundlesDifferenceView");
+        MetaCustomSection localizationBundleCompare = new MetaCustomSection("LocBundle Compare");
+        localizationBundleCompare.setPath("asgLocalizationBundleCompareView");
 		toolsView.addSection(localizationBundleExport);
 		toolsView.addSection(localizationBundleImport);
 		toolsView.addSection(localizationBundleMakeParents);
