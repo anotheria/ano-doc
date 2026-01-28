@@ -378,6 +378,7 @@ public class BaseActionGenerator extends AbstractActionGenerator {
 		toolsView.addSection(localizationBundleTranslation);
 		toolsView.addSection(localizationBundleSpecificTranslation);
 		toolsView.addSection(localizationBundlesDifference);
+        toolsView.addSection(localizationBundleCompare);
         views.add(toolsView);
 		for (int i=0; i<views.size(); i++){
 			MetaView view = views.get(i);
