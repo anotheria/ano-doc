@@ -2125,7 +2125,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
 		appendString("for (String domain :config.getDomains()) {");
 		increaseIdent();
-		appendString("Response clientResponse = client.target(domain + \"/api/" + doc.getName().toLowerCase() + "\")");
+		appendString("Response clientResponse = client.target(domain + \"/asg-api/" + doc.getName().toLowerCase() + "\")");
 		appendString(" 		.request(MediaType.APPLICATION_JSON)");
 		appendString(" 		.post(Entity.entity(data.toString(), MediaType.APPLICATION_JSON));");
 		emptyline();

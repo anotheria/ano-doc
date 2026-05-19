@@ -681,7 +681,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 					appendStatement("final StreamDataBodyPart filePart = new StreamDataBodyPart(\"file\", new ByteArrayInputStream(temporaryFileHolder.getData()), temporaryFileHolder.getFileName())");
 					appendStatement("FormDataMultiPart formDataMultiPart = new FormDataMultiPart()");
 					appendStatement("final FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart.bodyPart(filePart)");
-					appendStatement("final WebTarget target = client.target(domain + \"/api/asgimage/upload\")");
+					appendStatement("final WebTarget target = client.target(domain + \"/asg-api/asgimage/upload\")");
 					appendStatement("final Response response = target.request().post(Entity.entity(multipart, multipart.getMediaType()))");
 					appendStatement("String responseResult = response.readEntity(String.class)");
 					appendStatement("log.info(responseResult)");
