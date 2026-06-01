@@ -15,7 +15,7 @@
     <name>ano-doc build aggregator</name>
     <description>
         Build aggregator for ano-doc and its Maven plugin.
-        Not intended to be depended upon directly — use ano-doc or maven-ano-doc-plugin.
+        Not intended to be depended upon directly — use ano-doc or ano-doc-maven-plugin.
     </description>
 
     <modules>
