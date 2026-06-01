@@ -55,7 +55,6 @@
 			<groupId>net.anotheria</groupId>
 			<artifactId>ano-doc</artifactId>
 			<version>${project.version}</version>
-			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
