@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class ActionUtils {
 
-	private static final List<String> ITEMS_ON_PAGE_SELECTOR = java.util.Arrays.asList(new String[]{"5","10","20","25","50","100","500","1000", "2000"});
+	private static final List<String> ITEMS_ON_PAGE_SELECTOR = java.util.Arrays.asList(new String[]{"20","50","100","500","1000", "2000"});
 
 	public static final <T> List<T> sliceDataAndSavePagingInformation(HttpServletRequest req, List<T> incomingData){
 		// paging
@@ -25,7 +25,8 @@ public class ActionUtils {
 			pageNumber = Integer.parseInt(req.getParameter("pageNumber"));
 		}catch(Exception ignored){}
 		Integer lastItemsOnPage = (Integer)req.getSession().getAttribute("currentItemsOnPage");
-		int itemsOnPage = lastItemsOnPage == null ? 20 : lastItemsOnPage;
+        //default is now 100.
+		int itemsOnPage = lastItemsOnPage == null ? 100 : lastItemsOnPage;
 		try{
 			itemsOnPage = Integer.parseInt(req.getParameter("itemsOnPage"));
 		}catch(Exception ignored){}
