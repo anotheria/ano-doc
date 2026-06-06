@@ -54,9 +54,11 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 		//timer.stopExecution(mod.getName()+"-Interface");
 		//timer.startExecution(mod.getName()+"-Exception");
 		ret.add(new FileEntry(generateException(mod)));
-		List<GeneratedClass> itemNotFoundExceptions = generateItemNotFoundExceptions(mod);
+        // REMOVED FOLLOWING THREE LINES; BECAUSE THOSE EXCEPTION WERE NEVER USED - Leon 2026-06-06
+		/*List<GeneratedClass> itemNotFoundExceptions = generateItemNotFoundExceptions(mod);
 		for (GeneratedClass c : itemNotFoundExceptions)
-			ret.add(new FileEntry(c));
+			ret.add(new FileEntry(c));*/
+        //END Leon .- 2026-06-06
 		//timer.stopExecution(mod.getName()+"-Exception");
 		
 		//add in memory genererator
