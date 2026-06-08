@@ -47,6 +47,7 @@ public class JspGenerator extends AbstractJSPGenerator implements IGenerator{
 			if (!(s instanceof MetaModuleSection))
 				continue;
 			MetaModuleSection section = (MetaModuleSection)s;
+			currentSection = section;
 			files.add(new FileEntry(new ShowPageJspGenerator().generate(section, view)));
 			//files.add(new FileEntry(generateCSVExport(section, view)));
 			//files.add(new FileEntry(generateXMLExport(section, view)));
