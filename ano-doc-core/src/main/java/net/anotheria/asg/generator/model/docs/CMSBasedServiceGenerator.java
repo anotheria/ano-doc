@@ -18,6 +18,9 @@ import net.anotheria.asg.generator.model.DataFacadeGenerator;
 import net.anotheria.asg.generator.model.ServiceGenerator;
 import net.anotheria.asg.util.filestorage.FileStorage;
 import net.anotheria.asg.util.filestorage.TemporaryFileHolder;
+import net.anotheria.util.datatable.DataHeader;
+import net.anotheria.util.datatable.DataRow;
+import net.anotheria.util.datatable.DataTable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -215,6 +218,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 	        clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
 	        clazz.addImport(DataFacadeGenerator.getXMLHelperImport(context, doc));
+            clazz.addImport(DataFacadeGenerator.getCSVHelperImport(context, doc));
 	        clazz.addImport(DocumentGenerator.getDocumentImport(context, doc));
 
 	        String listDecl = "List<"+doc.getName()+">";
@@ -827,7 +831,30 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 		appendStatement("return ret");
 		closeBlock("executeQueryOnAllObjects");
 		emptyline();
-		
+
+        //generate export as CSV function
+        //generate export function
+        emptyline();
+        clazz.addImport(DataTable.class);
+        clazz.addImport(DataHeader.class);
+        clazz.addImport(DataRow.class);
+        for (MetaDocument d : docs) {
+            appendString("public DataTable export" + d.getMultiple() + "ToCSV(){");
+            increaseIdent();
+            appendStatement("DataTable ret = new DataTable()");
+            appendStatement("ret.setHeader("+DataFacadeGenerator.getCSVHelperName(d)+".buildHeader())");
+            appendStatement("List<" + d.getName() + "> list = get" + d.getMultiple() + "()");
+            appendString("for (" + d.getName() + " object : list){");
+            increaseIdent();
+            appendStatement("DataRow row = "+DataFacadeGenerator.getCSVHelperName(d)+".buildRow(object)");
+            appendStatement("ret.addRow(row)");
+            decreaseIdent();
+            closeBlockNEW();
+            appendStatement("return ret");
+            closeBlockNEW();
+            emptyline();
+        }
+
 	    //generate export function
 	    emptyline();
 	    for (MetaDocument d : docs){

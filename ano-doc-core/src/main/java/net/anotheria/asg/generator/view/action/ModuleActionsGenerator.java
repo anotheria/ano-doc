@@ -53,6 +53,7 @@ import net.anotheria.asg.util.helper.cmsview.CMSViewHelperRegistry;
 import net.anotheria.asg.util.helper.cmsview.CMSViewHelperUtil;
 import net.anotheria.util.ExecutionTimer;
 import net.anotheria.util.StringUtils;
+import net.anotheria.util.datatable.DataTable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -115,7 +116,9 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		files.add(new FileEntry(generateDeleteAction(section)));
 		files.add(new FileEntry(generateDuplicateAction(section)));
 		files.add(new FileEntry(generateVersionInfoAction(section)));
-		files.add(new FileEntry(generateExportAction(section)));
+		//files.add(new FileEntry(generateExportAction(section))); // this action got replaced.
+        files.add(new FileEntry(generateXMLExportAction(section)));
+        files.add(new FileEntry(generateCSVExportAction(section)));
 		files.add(new FileEntry(generateTransferAction(section)));
 
 		if (section.getModule().getStorageType() == StorageType.CMS) {
@@ -392,7 +395,113 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		return clazz;
 	}
 
-	/**
+    /**
+     * Generates standalone export actions!
+     * Should differs from simple List actions due to decorator ussages! - etc!
+     *
+     * @param section
+     * @return GeneratedArtefact entity
+     */
+    private GeneratedArtefact generateXMLExportAction(MetaModuleSection section) {
+        GeneratedClass clazz = new GeneratedClass();
+        startNewJob(clazz);
+        MetaDocument doc = section.getDocument();
+        List<MetaViewElement> elements = section.getElements();
+
+        clazz.setPackageName(getPackage(section.getModule()));
+
+        clazz.addImport("java.util.List");
+        clazz.addImport("java.util.ArrayList");
+        clazz.addImport("net.anotheria.util.xml.XMLNode");
+        addStandardActionImports(clazz);
+        clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
+
+        clazz.addImport(ActionUtils.class);
+
+        clazz.addImport("org.slf4j.Logger");
+        clazz.addImport("org.slf4j.LoggerFactory");
+
+
+        for (MetaViewElement element : elements) {
+            if (element instanceof MetaFieldElement) {
+                MetaFieldElement field = (MetaFieldElement) element;
+                MetaProperty p = doc.getField(field.getName());
+                if (p instanceof MetaEnumerationProperty) {
+                    MetaEnumerationProperty enumeration = (MetaEnumerationProperty) p;
+                    EnumerationType type = (EnumerationType) GeneratorDataRegistry.getInstance().getType(enumeration.getEnumeration());
+                    clazz.addImport(EnumTypeGenerator.getEnumImport(type));
+                }
+            }
+        }
+
+        clazz.setName(getXMLExportActionName(section));
+        clazz.setParent(getBaseActionName(section));
+        startClassBody();
+
+        appendStatement("private static final Logger log = LoggerFactory.getLogger("+getXMLExportActionName(section)+".class)");
+
+        appendString(getExecuteDeclaration());
+        increaseIdent();
+
+        appendStatement("XMLNode node = " + getServiceGetterCall(section.getModule()) + ".export" + doc.getMultiple() + "ToXML()");
+        appendStatement("ActionUtils.writeXMLExportToStream(res, node)");
+        emptyline();
+
+
+        appendStatement("return null");
+        closeBlockNEW();
+        emptyline();
+
+
+        return clazz;
+    }
+
+    /**
+     * Generates standalone export to CSV action.
+     *
+     * @param section
+     * @return GeneratedArtefact entity
+     */
+    private GeneratedArtefact generateCSVExportAction(MetaModuleSection section) {
+        GeneratedClass clazz = new GeneratedClass();
+        startNewJob(clazz);
+        MetaDocument doc = section.getDocument();
+        clazz.setPackageName(getPackage(section.getModule()));
+
+        clazz.addImport("java.util.List");
+        clazz.addImport("java.util.ArrayList");
+        clazz.addImport(DataTable.class);
+        addStandardActionImports(clazz);
+        clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
+
+        clazz.addImport(ActionUtils.class);
+
+        clazz.addImport("org.slf4j.Logger");
+        clazz.addImport("org.slf4j.LoggerFactory");
+
+        clazz.setName(getCSVExportActionName(section));
+        clazz.setParent(getBaseActionName(section));
+        startClassBody();
+
+        appendStatement("private static final Logger log = LoggerFactory.getLogger("+getCSVExportActionName(section)+".class)");
+
+        appendString(getExecuteDeclaration());
+        increaseIdent();
+
+        appendStatement("DataTable table = " + getServiceGetterCall(section.getModule()) + ".export" + doc.getMultiple() + "ToCSV()");
+        appendStatement("ActionUtils.writeCSVExportToStream(res, table, "+quote(doc.getMultiple())+")");
+        emptyline();
+
+
+        appendStatement("return null");
+        closeBlockNEW();
+        emptyline();
+
+
+        return clazz;
+    }
+
+    /**
 	 * Returns the name of the base action for the given section.
 	 *
 	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
@@ -453,6 +562,12 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		return "Export"+section.getDocument().getMultiple()+"Action";
 	}
 
+    public static String getXMLExportActionName(MetaModuleSection section){
+        return "ExportXML"+section.getDocument().getMultiple()+"Action";
+    }
+    public static String getCSVExportActionName(MetaModuleSection section){
+        return "ExportCSV"+section.getDocument().getMultiple()+"Action";
+    }
 	/**
 	 * <p>getSearchActionName.</p>
 	 *

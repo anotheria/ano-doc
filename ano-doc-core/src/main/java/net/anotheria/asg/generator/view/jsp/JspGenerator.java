@@ -48,8 +48,8 @@ public class JspGenerator extends AbstractJSPGenerator implements IGenerator{
 				continue;
 			MetaModuleSection section = (MetaModuleSection)s;
 			files.add(new FileEntry(new ShowPageJspGenerator().generate(section, view)));
-			files.add(new FileEntry(generateCSVExport(section, view)));
-			files.add(new FileEntry(generateXMLExport(section, view)));
+			//files.add(new FileEntry(generateCSVExport(section, view)));
+			//files.add(new FileEntry(generateXMLExport(section, view)));
 
 			FileEntry linksToThisFile = new FileEntry(new LinksToMePageJspGenerator().generate(section, view));
 			linksToThisFile.setType(".jsp");
@@ -127,54 +127,6 @@ public class JspGenerator extends AbstractJSPGenerator implements IGenerator{
 	}
 	
 
-	
-	
-
-	
-	
-	private GeneratedJSPFile generateCSVExport(MetaModuleSection section, MetaView view){
-		
-		GeneratedJSPFile jsp = new GeneratedJSPFile();
-		startNewJob(jsp);
-		jsp.setName(getExportAsCSVPageName(section.getDocument()));
-		jsp.setPackage(getContext().getJspPackageName(section.getModule()));
-		
-		ident = 0;
-		append(getBaseCSVHeader());
-		
-		currentSection = section;
-		MetaDocument doc = section.getDocument();
-
-		String entryName = doc.getName().toLowerCase();
-		List<MetaViewElement> elements = createMultilingualList(section.getElements(),doc);
-
-		String headerLine = "";
-		for (MetaViewElement element : elements){
-			String lang = getElementLanguage(element);
-			boolean multilangEl = element instanceof MultilingualFieldElement;
-			String tag = multilangEl && lang != null ? doc.getField(element.getName()).getName(lang) : generateTag(element);
-			if (tag==null)
-				continue;
-			headerLine += tag+";";
-		}
-		appendString(headerLine);
-
-		appendString("<ano:iterate name="+quote(doc.getMultiple().toLowerCase()+ModuleActionsGenerator.exportCSVSufix)+" type="+quote(GeneratorDataRegistry.getInstance().getContext().getDataPackageName(doc)+"."+doc.getName())+" id="+quote(entryName)+"><%--");
-		String bodyLine = "--%>";
-
-		for (MetaViewElement element : elements) {
-			String lang = getElementLanguage(element);
-			boolean multilangEl = element instanceof MultilingualFieldElement;
-			String tag = multilangEl && lang != null ? doc.getField(element.getName()).getName(lang) : generateTag(element);
-			if (tag==null)
-				continue;
-			bodyLine += "<ano:write filter=\"false\" name=" + quote(entryName) + " property=\"" + tag + "\"/>;";
-		}
-		appendString(bodyLine);
-		appendString("</ano:iterate>");
-		return jsp;
-	}
-
 
 	private String generateTag(MetaViewElement elem){
 		if (!(elem instanceof MetaFieldElement))
@@ -183,27 +135,7 @@ public class JspGenerator extends AbstractJSPGenerator implements IGenerator{
 		
 	}
 	
-	private GeneratedJSPFile generateXMLExport(MetaModuleSection section, MetaView view){
-		
-		GeneratedJSPFile jsp = new GeneratedJSPFile();
-		startNewJob(jsp);
-		jsp.setName(getExportAsXMLPageName(section.getDocument()));
-		jsp.setPackage(getContext().getJspPackageName(section.getModule()));
-		
-		ident = 0;
-		append(getBaseXMLHeader());
-		
-		currentSection = section;
-		MetaDocument doc = section.getDocument();
 
-		appendString("<?xml version=\"1.0\" encoding="+quote(getContext().getEncoding())+"?>");
-		appendString("<ano-xml:xml_write name="+quote(doc.getMultiple().toLowerCase()+ModuleActionsGenerator.exportXMLSufix)+"/>");
-		return jsp;
-	}
-	
-	
-
-	
 	private GeneratedJSPFile generateSearchPage(){
 		
 		

@@ -10,13 +10,12 @@ import net.anotheria.asg.generator.GeneratorDataRegistry;
 import net.anotheria.asg.generator.IGenerateable;
 import net.anotheria.asg.generator.IGenerator;
 import net.anotheria.asg.generator.TypeOfClass;
-import net.anotheria.asg.generator.meta.MetaContainerProperty;
-import net.anotheria.asg.generator.meta.MetaDocument;
-import net.anotheria.asg.generator.meta.MetaGenericProperty;
-import net.anotheria.asg.generator.meta.MetaListProperty;
-import net.anotheria.asg.generator.meta.MetaProperty;
-import net.anotheria.asg.generator.meta.MetaTableProperty;
+import net.anotheria.asg.generator.meta.*;
 import net.anotheria.util.StringUtils;
+import net.anotheria.util.datatable.DataCell;
+import net.anotheria.util.datatable.DataHeader;
+import net.anotheria.util.datatable.DataRow;
+import net.anotheria.util.datatable.DataTable;
 
 /**
  * This generator generates the data facade - the interface which defines the behaviour of the document and its attributes. It also generates the
@@ -44,6 +43,7 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 		ret.add(new FileEntry(generateDocument(doc)));
 		ret.add(new FileEntry(generateSortType(doc)));
 		ret.add(new FileEntry(generateXMLHelper(doc)));
+        ret.add(new FileEntry(generateCSVHelper(doc)));
 		ret.add(new FileEntry(generateBuilder(doc)));
 		return ret;
 	}
@@ -72,7 +72,15 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 	public static String getXMLHelperName(MetaDocument doc){
 		return doc.getName()+"XMLHelper";
 	}
-	
+
+    public static String getCSVHelperName(MetaDocument doc){
+        return doc.getName()+"CSVHelper";
+    }
+
+    public static String getJSONHelperName(MetaDocument doc){
+        return doc.getName()+"JSONHelper";
+    }
+
 	private GeneratedClass generateBuilder(MetaDocument doc){
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
@@ -170,7 +178,85 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 
 		return clazz;
 	}
-	
+
+    private GeneratedClass generateCSVHelper(MetaDocument doc){
+        GeneratedClass clazz = new GeneratedClass();
+        startNewJob(clazz);
+
+        clazz.addImport("java.util.List");
+        clazz.addImport(DataCell.class);
+        clazz.addImport(DataHeader.class);
+        clazz.addImport(DataTable.class);
+        clazz.addImport(DataRow.class);
+
+        clazz.setPackageName(getPackageName(doc));
+
+        clazz.setName(getCSVHelperName(doc));
+
+        startClassBody();
+        increaseIdent();
+
+        appendString("public static DataHeader buildHeader(){");
+        increaseIdent();
+        appendStatement("DataHeader header =  new DataHeader()");
+        appendStatement("header.addHeader("+quote("id")+")");
+        for (MetaProperty p : doc.getProperties()){
+            if (p.isMultilingual()){
+                for (String l : GeneratorDataRegistry.getInstance().getContext().getLanguages()){
+                    appendStatement("header.addHeader("+quote(p.getName(l))+")");
+                }
+            }else{
+                appendStatement("header.addHeader("+quote(p.getName())+")");
+            }
+        }
+        for (MetaProperty link : doc.getLinks()){
+            if (link.isMultilingual()){
+                for (String l : GeneratorDataRegistry.getInstance().getContext().getLanguages()){
+                    appendStatement("header.addHeader("+quote(link.getName(l))+")");
+                }
+            }else{
+                appendStatement("header.addHeader("+quote(link.getName())+")");
+            }
+        }
+
+
+        appendStatement("return header");
+        emptyline();
+        closeBlockNEW();
+
+        appendString("public static DataRow buildRow("+doc.getName()+" document){");
+        increaseIdent();
+        appendStatement("DataRow row = new DataRow()");
+        appendStatement("row.addCell(new DataCell(document.getId()))");
+        for (MetaProperty p : doc.getProperties()){
+            if (p.isMultilingual()){
+                for (String l : GeneratorDataRegistry.getInstance().getContext().getLanguages()){
+                    appendStatement("row.addCell(new DataCell(document.get"+p.getAccesserName(l)+"()))");
+                }
+            }else{
+                appendStatement("row.addCell(new DataCell(document.get"+p.getAccesserName()+"()))");
+            }
+        }
+        for (MetaProperty link : doc.getLinks()){
+            if (link.isMultilingual()){
+                for (String l : GeneratorDataRegistry.getInstance().getContext().getLanguages()){
+                    appendStatement("row.addCell(new DataCell(document.get"+link.getAccesserName(l)+"()))");
+                }
+            }else{
+                appendStatement("row.addCell(new DataCell(document.get"+link.getAccesserName()+"()))");
+            }
+        }
+        appendStatement("return row");
+        emptyline();
+        closeBlockNEW();
+
+        //ret += generatePropertyAccessMethods(doc);
+        //ret += generateAdditionalMethods(doc);
+        return clazz;
+
+
+    }
+
 	private GeneratedClass generateXMLHelper(MetaDocument doc){
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
@@ -674,6 +760,10 @@ public class DataFacadeGenerator extends AbstractDataObjectGenerator implements 
 	public static final String getXMLHelperImport(Context context, MetaDocument doc){
 		return context.getDataPackageName(doc)+"."+getXMLHelperName(doc);
 	}
+
+    public static final String getCSVHelperImport(Context context, MetaDocument doc){
+        return context.getDataPackageName(doc)+"."+getCSVHelperName(doc);
+    }
 
 	private void generateAdditionalMethods(MetaDocument doc){
 		List<MetaProperty> properties = doc.getProperties();

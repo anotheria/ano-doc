@@ -22,6 +22,7 @@ import net.anotheria.asg.generator.model.fixture.FixtureServiceGenerator;
 import net.anotheria.asg.generator.model.inmemory.InMemoryServiceGenerator;
 import net.anotheria.asg.generator.model.rmi.RMIServiceGenerator;
 import net.anotheria.util.ExecutionTimer;
+import net.anotheria.util.datatable.DataTable;
 import net.anotheria.util.sorter.SortType;
 
 import java.util.ArrayList;
@@ -346,12 +347,17 @@ public class ServiceGenerator extends AbstractGenerator implements IGenerator{
 				containsAnyMultilingualDocs = true;
 			}
 
-			appendComment("Creates a xml element with selected contained data.");
+            appendComment("Creates a xml element with all documents of type "+doc.getName()+".");
+            appendStatement("XMLNode export"+doc.getMultiple()+"ToXML() "+throwsClause);
+            appendComment("Creates a xml element with selected contained data.");
 			appendStatement("XMLNode export"+doc.getMultiple()+"ToXML(List<"+doc.getName()+"> list"+doc.getMultiple()+") "+throwsClause);
 			if (containsAnyMultilingualDocs && GeneratorDataRegistry.getInstance().getContext().areLanguagesSupported()) {
 				appendComment("creates a xml element with selected contained data but only selected languages in multilingual attributes");
 				appendStatement("XMLNode export"+doc.getMultiple()+"ToXML(String[] languages,List<"+doc.getName()+"> list"+doc.getMultiple()+")" + throwsClause);
 	    	}
+            clazz.addImport(DataTable.class);
+            appendComment("Creates a csv table with all documents of type "+doc.getName()+".");
+            appendStatement("DataTable export"+doc.getMultiple()+"ToCSV() "+throwsClause);
 
 			emptyline();
 			appendComment("Create json object list dependencies for this " + doc.getName() + " document.");

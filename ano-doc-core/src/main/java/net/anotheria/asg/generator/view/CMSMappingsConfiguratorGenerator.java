@@ -75,7 +75,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		EXPORTtoCSV("Export.csv", "Show", OperationType.SINGLE, true){
 			@Override
 			public String getClassName(MetaModuleSection section){
-				return "Export" + section.getDocument().getName(true) + "Action";
+				return "ExportCSV" + section.getDocument().getName(true) + "Action";
 			}
 			@Override
 			public String getViewName(MetaModuleSection section){
@@ -86,7 +86,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		EXPORTtoXML("Export.xml", "Show", OperationType.SINGLE, true){
 			@Override
 			public String getClassName(MetaModuleSection section){
-				return "Export" + section.getDocument().getName(true) + "Action";
+				return "ExportXML" + section.getDocument().getName(true) + "Action";
 			}
 			@Override
 			public String getViewName(MetaModuleSection section){

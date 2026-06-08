@@ -26,6 +26,7 @@ import net.anotheria.asg.service.BaseFixtureService;
 import net.anotheria.asg.service.IFixtureService;
 import net.anotheria.util.ExecutionTimer;
 import net.anotheria.util.StringUtils;
+import net.anotheria.util.datatable.DataTable;
 
 /**
  * <p>FixtureServiceGenerator class.</p>
@@ -506,7 +507,16 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 			closeBlockNEW();
 			emptyline();
 
-	    	if (GeneratorDataRegistry.hasLanguageCopyMethods(d)){
+            clazz.addImport(DataTable.class);
+            appendComment("Creates a csv table with all documents of type "+d.getName()+".");
+            appendString("public DataTable export"+d.getMultiple()+"ToCSV() "+throwsClause+"{");
+            increaseIdent();
+            appendStatement("throw new AssertionError("+quote("not implemented")+")");
+            closeBlockNEW();
+            emptyline();
+
+
+            if (GeneratorDataRegistry.hasLanguageCopyMethods(d)){
 				containsAnyMultilingualDocs = true;
 				appendCommentLine("This method is not very fast, since it makes an update (eff. save) after each doc.");
 				appendString("public void copyMultilingualAttributesInAll"+d.getMultiple()+"(String sourceLanguage, String targetLanguage){");

@@ -21,6 +21,7 @@ import net.anotheria.asg.generator.meta.MetaProperty;
 import net.anotheria.asg.generator.model.AbstractServiceGenerator;
 import net.anotheria.asg.generator.model.DataFacadeGenerator;
 import net.anotheria.asg.generator.model.ServiceGenerator;
+import net.anotheria.util.datatable.DataTable;
 
 /**
  * Generator for the FederationService.
@@ -452,6 +453,12 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 			closeBlockNEW();
 			emptyline();
 
+            appendString("public XMLNode export" + doc.getMultiple() + "ToXML(){");
+            increaseIdent();
+            appendStatement("return new XMLNode(" + quote("unimplemented_federated_export_" + module.getName()) + ")");
+            closeBlockNEW();
+            emptyline();
+
 			emptyline();
 			appendString("public XMLNode export" + doc.getMultiple() + "ToXML(String[] languages,List<" + doc.getName() + "> list" + doc.getMultiple() +")" + throwsClause + "{");
 			increaseIdent();
@@ -459,7 +466,16 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 			closeBlockNEW();
 			emptyline();
 
-			//start fetch document with dependencies function
+            clazz.addImport(DataTable.class);
+            appendComment("Creates a csv table with all documents of type "+doc.getName()+".");
+            appendString("public DataTable export"+doc.getMultiple()+"ToCSV() "+throwsClause+"{");
+            increaseIdent();
+            appendStatement("throw new AssertionError("+quote("not implemented")+")");
+            closeBlockNEW();
+            emptyline();
+
+
+            //start fetch document with dependencies function
 			appendString("@Override");
 			appendString("public void fetch" + doc.getName() + "(final String id, Set<String> addedDocuments, JSONArray data) " + throwsClause +" {");
 
