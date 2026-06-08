@@ -9,7 +9,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ano-doc-build</artifactId>
     <packaging>pom</packaging>
-    <version>5.0.2-SNAPSHOT</version>
+    <version>5.0.2</version>
     <name>ano-doc build aggregator</name>
     <description>
         Build aggregator for ano-doc and its Maven plugin.
