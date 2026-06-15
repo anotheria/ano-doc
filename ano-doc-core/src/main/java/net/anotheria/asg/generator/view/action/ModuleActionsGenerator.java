@@ -122,11 +122,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
         files.add(new FileEntry(generateCSVExportAction(section)));
 		files.add(new FileEntry(generateTransferAction(section)));
 
-		if (section.getModule().getStorageType() == StorageType.CMS) {
-			files.add(new FileEntry(generateTransferAction(section)));
-			files.add(new FileEntry(generateRestAction(section)));
-		}
-
 		timer.stopExecution(section.getModule().getName()+"-view");
 		try{
 			if (section.getDialogs().size()>0){
@@ -718,17 +713,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	 */
 	public static String getTransferActionName(MetaModuleSection section){
 		return "Transfer"+getActionSuffix(section);
-	}
-
-	/**
-	 * <p>getResourceActionName.</p>
-	 *
-	 * @param section a {@link net.anotheria.asg.generator.view.meta.MetaModuleSection} object.
-	 * @return a {@link java.lang.String} object.
-	 * @since 2.6.3
-	 */
-	public static String getResourceActionName(MetaModuleSection section){
-		return section.getDocument().getName() + "RestResource";
 	}
 
 	/**
@@ -2040,131 +2024,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	}
 
 	/**
-	 * Generates REST receive action.
-	 * @param section
-	 * @return
-	 */
-	private GeneratedClass generateRestAction(MetaModuleSection section) {
-
-		GeneratedClass clazz = new GeneratedClass();
-
-		startNewJob(clazz);
-		MetaDocument doc = section.getDocument();
-		clazz.setPackageName(getPackageRest(section.getModule()));
-		String moduleName = section.getModule().getName();
-
-		clazz.addImport("java.util.List");
-		clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactory");
-		clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactoryException");
-		clazz.addImport("jakarta.ws.rs.Consumes");
-		clazz.addImport("jakarta.ws.rs.Produces");
-		clazz.addImport("jakarta.ws.rs.POST");
-		clazz.addImport("jakarta.ws.rs.GET");
-		clazz.addImport("jakarta.ws.rs.Path");
-		clazz.addImport("jakarta.ws.rs.PathParam");
-		clazz.addImport("jakarta.ws.rs.core.Response");
-		clazz.addImport("com.google.gson.Gson");
-		clazz.addImport("com.google.gson.GsonBuilder");
-		clazz.addImport("org.codehaus.jettison.json.JSONArray");
-		clazz.addImport("net.anotheria.anosite.gen.shared.util.ParserUtilService");
-		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".data." + doc.getName());
-		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".service.I" + moduleName + "Service");
-		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".service." + moduleName + "ServiceException");
-        clazz.addImport("io.swagger.v3.oas.annotations.tags.Tag");
-		clazz.addImport("org.slf4j.Logger");
-		clazz.addImport("org.slf4j.LoggerFactory");
-
-		clazz.addAnnotation("@Path(\"/" + doc.getName().toLowerCase() + "\")");
-        clazz.addAnnotation("@Tag(name =\"Legacy CMS "+doc.getName()+ " API\", description = \"API for basic modification of "+doc.getFullName()+"\")");
-
-		clazz.setName(getResourceActionName(section));
-		startClassBody();
-
-		appendStatement("private static final Logger LOGGER = LoggerFactory.getLogger(" + getResourceActionName(section) + ".class)");
-		appendStatement("private I" + moduleName + "Service " + moduleName.toLowerCase() + "Service");
-		appendStatement("private Gson gson");
-		appendStatement("private GsonBuilder builder");
-		emptyline();
-		append("	public " + getResourceActionName(section) + "() {");
-		emptyline();
-		increaseIdent();
-		appendStatement("builder = new GsonBuilder()");
-		appendStatement("builder.setPrettyPrinting()");
-		//appendStatement("builder.registerTypeAdapter(" + doc.getName() + ".class, new " + doc.getName() + "InstanceCreator())");
-		appendStatement("gson = builder.create()");
-		emptyline();
-		openTry();
-		appendStatement(moduleName.toLowerCase() + "Service = MetaFactory.get(I" + moduleName + "Service.class)");
-		appendCatch("MetaFactoryException");
-		appendStatement("LOGGER.error(\"Unable to create service: I " + moduleName + "Service\", e)");
-		appendStatement("throw new RuntimeException(\"Unable to create service\", e)");
-		closeBlockNEW();
-		closeBlockNEW();
-
-		emptyline();
-		append("	@GET");
-		emptyline();
-		append("	@Produces(\"application/json;charset=utf-8\")");
-		emptyline();
-		append("	public Response getObjects() {");
-		emptyline();
-		increaseIdent();
-		emptyline();
-		appendStatement("List<" + doc.getName() + "> result = null");
-		openTry();
-		appendStatement("result = " + moduleName.toLowerCase() + "Service.get" + doc.getName() + "s()");
-		appendCatch(moduleName + "ServiceException");
-		appendStatement("LOGGER.error(\"Unable to get" + doc.getName() + "s\", e)");
-		appendStatement("return Response.status(500).build()");
-		closeBlockNEW();
-		emptyline();
-		appendStatement("return Response.status(201).entity(gson.toJson(result)).build()");
-
-		closeBlockNEW();
-
-		emptyline();
-		append("	@GET");
-		emptyline();
-		append("	@Path(\"/{id}\")");
-		emptyline();
-		append("	@Produces(\"application/json;charset=utf-8\")");
-		emptyline();
-		append("	public Response getObject(@PathParam(\"id\") String id) {");
-		emptyline();
-		increaseIdent();
-		emptyline();
-		appendStatement(doc.getName() + " result = null");
-		openTry();
-		appendStatement("result = " + moduleName.toLowerCase() + "Service.get" + doc.getName() + "(id)");
-		appendCatch(moduleName + "ServiceException");
-		appendStatement("LOGGER.error(\"Unable to get" + doc.getName() + " by id\", e)");
-		appendStatement("return Response.status(500).build()");
-		closeBlockNEW();
-		emptyline();
-		appendStatement("return Response.status(201).entity(gson.toJson(result)).build()");
-
-		closeBlockNEW();
-
-		emptyline();
-		appendString("@POST");
-		appendString("@Consumes(\"application/json;charset=utf-8\")");
-		appendString("public Response createTransferredObject(String input) {");
-		emptyline();
-		increaseIdent();
-		openTry();
-		appendStatement("JSONArray array = new JSONArray(input)");
-		appendStatement("ParserUtilService.getInstance().addToQueueParsingDocuments(array)");
-		appendCatch("Exception");
-		appendStatement("LOGGER.error(\"Unable to parsing transferred objects\", e)");
-		appendStatement("return Response.status(500).build()");
-		closeBlockNEW();
-		appendStatement("return Response.status(201).build()");
-		closeBlockNEW();
-
-		return clazz;
-	}
-
-	/**
 	 * Generates the transfer action which send document to production.
 	 * @param section
 	 * @return
@@ -3158,17 +3017,6 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	 */
 	public static String getPackage(MetaModule module){
 	    return getPackage(GeneratorDataRegistry.getInstance().getContext(), module);
-	}
-
-	/**
-	 * <p>getPackageRest.</p>
-	 *
-	 * @param module a {@link net.anotheria.asg.generator.meta.MetaModule} object.
-	 * @return a {@link java.lang.String} object.
-	 * @since 2.6.3
-	 */
-	public static String getPackageRest(MetaModule module){
-		return GeneratorDataRegistry.getInstance().getContext().getPackageName(module) + ".rest";
 	}
 
 	/**
