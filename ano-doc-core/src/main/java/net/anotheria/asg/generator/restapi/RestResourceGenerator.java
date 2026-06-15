@@ -71,7 +71,7 @@ public class RestResourceGenerator extends AbstractGenerator implements IGenerat
         }
 
         clazz.addAnnotation("@Path(\"/api/" + module.getName().toLowerCase() + "\")");
-        clazz.addAnnotation("@Tag(name = \"" + module.getName() + " API\", description = \"CRUD operations for the " + module.getName() + " module\")");
+        clazz.addAnnotation("@Tag(name = \"CMS " + module.getName() + " API\", description = \"CRUD operations for the " + module.getName() + " module\")");
 
         startClassBody();
         appendGenerationPoint("generateResource");
