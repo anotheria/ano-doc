@@ -77,10 +77,6 @@ public class ViewGenerator extends AbstractAnoDocGenerator {
 			files.addAll(new JspGenerator().generate(view));
 			timer.stopExecution("v-" + view.getName() + "-Jsp");
 
-			// timer.startExecution("v-"+view.getName()+"-JspQueries");
-			// files.addAll(new JspMafQueriesGenerator().generate(view));
-			// timer.stopExecution("v-"+view.getName()+"-JspQueries");
-
 			timer.stopExecution("view-" + view.getName());
 		}
 		timer.stopExecution("views");

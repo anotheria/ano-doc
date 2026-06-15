@@ -2069,10 +2069,12 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".data." + doc.getName());
 		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".service.I" + moduleName + "Service");
 		clazz.addImport("net.anotheria.anosite.gen." + moduleName.toLowerCase() + ".service." + moduleName + "ServiceException");
+        clazz.addImport("io.swagger.v3.oas.annotations.tags.Tag");
 		clazz.addImport("org.slf4j.Logger");
 		clazz.addImport("org.slf4j.LoggerFactory");
 
 		clazz.addAnnotation("@Path(\"/" + doc.getName().toLowerCase() + "\")");
+        clazz.addAnnotation("@Tag(name =\""+doc.getName()+ " API\", description = \"API for basic modification of "+doc.getFullName()+"\")");
 
 		clazz.setName(getResourceActionName(section));
 		startClassBody();
