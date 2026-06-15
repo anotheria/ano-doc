@@ -206,7 +206,7 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 	        	}
 	        	
 	        	//add lastupdate copy:
-	        	appendStatement("(("+FederationVOGenerator.getDocumentImplName(doc)+")ret).set"+lastUpdate.getAccesserName()+"(d.get"+lastUpdate.getAccesserName()+"())");
+	        	appendStatement("(("+FederationVOGenerator.getDocumentImplName(doc)+")ret).set"+lastUpdate.getAccesserName()+"(d.getObjectInfo().getLastChangeTimestamp())");
 	        	
 	        	appendStatement("return ret");
 	        	closeBlockNEW();
