@@ -1388,7 +1388,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
             appendStatement(propertyCopy);
         }
 
-		appendStatement("bean.setDocumentLastUpdateTimestamp(NumberUtils.makeISO8601TimestampString("+doc.getVariableName()+".getLastUpdateTimestamp()))");
+		appendStatement("bean.setDocumentLastUpdateTimestamp(NumberUtils.makeISO8601TimestampString("+doc.getVariableName()+".getObjectInfo().getLastChangeTimestamp()))");
 
 	    appendStatement("return bean");
 	    closeBlockNEW();
@@ -1683,7 +1683,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		//autoUnlocking!
 		if (StorageType.CMS.equals(doc.getParentModule().getStorageType()))
 			appendStatement("check" + doc.getMultiple() + "(" + doc.getVariableName() + ", req)");
-		appendStatement("long timestamp = "+doc.getVariableName()+".getLastUpdateTimestamp()");
+		appendStatement("long timestamp = "+doc.getVariableName()+".getObjectInfo().getLastChangeTimestamp()");
 		appendStatement("String lastUpdateDate = NumberUtils.makeDigitalDateStringLong(timestamp)");
 		appendStatement("lastUpdateDate += \" \"+NumberUtils.makeTimeString(timestamp)");
 

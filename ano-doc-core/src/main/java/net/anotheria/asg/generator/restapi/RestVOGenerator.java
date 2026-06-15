@@ -152,21 +152,9 @@ public class RestVOGenerator extends AbstractGenerator implements IGenerator {
         closeBlockNEW();
         emptyline();
 
-        appendString("@Override public long getLastUpdateTimestamp() {");
-        increaseIdent();
-        appendStatement("return 0L");
-        closeBlockNEW();
-        emptyline();
-
         appendString("@Override public XMLNode toXMLNode() {");
         increaseIdent();
         appendStatement("return new XMLNode(", quote(getVOName(doc)), ")");
-        closeBlockNEW();
-        emptyline();
-
-        appendString("@Override public String getFootprint() {");
-        increaseIdent();
-        appendStatement("return id == null ? \"\" : id");
         closeBlockNEW();
         emptyline();
 

@@ -47,28 +47,14 @@ public interface DataObject extends Cloneable{
 	String getDefinedParentName();
 
 	/**
-	 * Returns the timestamp (time in ms since 1970) of the last change.
-	 *
-	 * @return timestamp
-	 */
-	long getLastUpdateTimestamp();
-
-	/**
 	 * Creates an XMLNode for this document for XML export.
 	 *
 	 * @return created XMLSNode
 	 */
 	XMLNode toXMLNode();
-	
+
 	//public void copyAttributesFrom(DataObject object);
-	
-	/**
-	 * Returns the footprint of the document. The footprint is the unique code which identifies a document state. The footprint is calculates from the values of
-	 * all attributes.
-	 *
-	 * @return footprint
-	 */
-	String getFootprint();
+
 	/**
 	 * Returns the object info about this data object.
 	 *

@@ -10,8 +10,7 @@ import net.anotheria.util.xml.XMLNode;
  */
 public abstract class AbstractVO implements DataObject{
 
-	/** {@inheritDoc} */
-	@Override public long getLastUpdateTimestamp() {
+	public long getLastUpdateTimestamp() {
 		return getDaoUpdated() == 0 ? 
 				getDaoCreated() : getDaoUpdated();
 	}

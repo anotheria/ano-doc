@@ -37,7 +37,7 @@ public class ContentChangeTrackerListener implements IServiceListener{
 		dc.setAction(action);
 		dc.setDocumentName(doc.getDefinedName());
 		dc.setParentName(doc.getDefinedParentName().toLowerCase());
-		dc.setTimestamp(doc.getLastUpdateTimestamp());
+		dc.setTimestamp(doc.getObjectInfo().getLastChangeTimestamp());
 		dc.setUserName(doc.getObjectInfo().getAuthor());
 		dc.setId(doc.getId());
 		

@@ -36,6 +36,8 @@ public abstract class AbstractASGDocument extends Document implements DataObject
 		super(toClone);
 	}
 
+	public abstract String getFootprint();
+
 	/** {@inheritDoc} */
 	@Override public ObjectInfo getObjectInfo(){
 		ObjectInfo ret = new ObjectInfo(this);

@@ -50,8 +50,6 @@ public class ObjectInfo {
 	 */
 	public ObjectInfo(DataObject object){
 		setId(object.getId());
-		setLastChangeTimestamp(object.getLastUpdateTimestamp());
-		setFootprint(object.getFootprint());
 		setType(object.getDefinedName());
 	}
 
