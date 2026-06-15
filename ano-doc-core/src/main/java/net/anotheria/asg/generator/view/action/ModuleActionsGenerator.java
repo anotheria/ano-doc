@@ -30,6 +30,7 @@ import net.anotheria.asg.generator.meta.StorageType;
 import net.anotheria.asg.generator.model.AbstractDataObjectGenerator;
 import net.anotheria.asg.generator.model.DataFacadeGenerator;
 import net.anotheria.asg.generator.model.ServiceGenerator;
+import net.anotheria.asg.generator.restapi.RestVOGenerator;
 import net.anotheria.asg.generator.types.EnumTypeGenerator;
 import net.anotheria.asg.generator.types.meta.EnumerationType;
 import net.anotheria.asg.generator.util.DirectLink;
@@ -2074,7 +2075,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("org.slf4j.LoggerFactory");
 
 		clazz.addAnnotation("@Path(\"/" + doc.getName().toLowerCase() + "\")");
-        clazz.addAnnotation("@Tag(name =\""+doc.getName()+ " API\", description = \"API for basic modification of "+doc.getFullName()+"\")");
+        clazz.addAnnotation("@Tag(name =\"Legacy CMS "+doc.getName()+ " API\", description = \"API for basic modification of "+doc.getFullName()+"\")");
 
 		clazz.setName(getResourceActionName(section));
 		startClassBody();
@@ -2172,34 +2173,37 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		GeneratedClass clazz = new GeneratedClass();
 		startNewJob(clazz);
 		MetaDocument doc = section.getDocument();
-		clazz.setPackageName(getPackage(section.getModule()));
+		MetaModule module = section.getModule();
+		clazz.setPackageName(getPackage(module));
 
-		//write imports...
 		addStandardActionImports(clazz);
-		clazz.addImport("java.util.HashSet");
 		clazz.addImport("java.io.IOException");
 		clazz.addImport("java.io.PrintWriter");
-		clazz.addImport(ServiceGenerator.getExceptionImport(section.getModule()));
+		clazz.addImport("com.fasterxml.jackson.databind.ObjectMapper");
+		clazz.addImport(ServiceGenerator.getExceptionImport(module));
+		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
+		clazz.addImport(RestVOGenerator.getVOImport(doc));
+		clazz.addImport("net.anotheria.asg.util.rest.ReplyObject");
 		clazz.addImport("net.anotheria.anosite.config.DocumentTransferConfig");
 		clazz.addImport("org.configureme.ConfigurationManager");
 		clazz.addImport("org.json.JSONException");
 		clazz.addImport("net.anotheria.maf.json.JSONResponse");
-
-		clazz.addImport("org.codehaus.jettison.json.JSONArray");
 		clazz.addImport("jakarta.ws.rs.client.Client");
 		clazz.addImport("jakarta.ws.rs.client.Entity");
 		clazz.addImport("jakarta.ws.rs.core.MediaType");
 		clazz.addImport("jakarta.ws.rs.core.Response");
 		clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
+
 		clazz.setName(getTransferActionName(section));
 		clazz.setParent(getBaseActionName(section));
 
 		startClassBody();
 		emptyline();
-		appendStatement("private static final int STATUS_OK = 201");
 		appendStatement("private static final String ERROR = \"error\"");
+		appendStatement("private static final String REST_PATH = \"/api/" + module.getName().toLowerCase() + "/" + doc.getName().toLowerCase() + "/\"");
 		emptyline();
-		appendStatement("private DocumentTransferConfig config = DocumentTransferConfig.getInstance()");
+		appendStatement("private final DocumentTransferConfig config = DocumentTransferConfig.getInstance()");
+		appendStatement("private final ObjectMapper mapper = new ObjectMapper()");
 		emptyline();
 		generateTransferActionMethod(clazz, section, "anoDocExecute");
 
@@ -2208,53 +2212,72 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 
 	/**
 	 * Generates the working part of the transfer action.
-	 * @param section
-	 * @return
+	 * Uses the REST resource PUT endpoint to transfer the document to target environments.
 	 */
 	private void generateTransferActionMethod(GeneratedClass clazz, MetaModuleSection section, String methodName) {
 		appendGenerationPoint("generateTransferActionMethod");
 
 		MetaDocument doc = section.getDocument();
+		String voName = RestVOGenerator.getVOName(doc);
+
 		appendString(getExecuteDeclaration(methodName));
 		increaseIdent();
 		emptyline();
-
 		appendStatement("JSONResponse response = new JSONResponse()");
+		emptyline();
 
-		append("		if (ConfigurationManager.INSTANCE.getDefaultEnvironment().expandedStringForm().equals(\"prod\")) {");
+		appendString("if (ConfigurationManager.INSTANCE.getDefaultEnvironment().expandedStringForm().equals(\"prod\")) {");
 		increaseIdent();
-		emptyline();
-		appendStatement("response.addError(ERROR, \"Environment is prod\")");
+		appendStatement("response.addError(ERROR, \"Transfer is not allowed in prod environment\")");
 		appendStatement("writeTextToResponse(res, response)");
 		appendStatement("return null");
 		closeBlockNEW();
 		emptyline();
+
 		appendStatement("String id = getStringParameter(req, PARAM_ID)");
-		appendStatement("JSONArray data = new JSONArray()");
+		appendStatement(doc.getName() + " doc");
 		openTry();
-		appendStatement(getServiceGetterCall(section.getModule()) + ".fetch" + doc.getName() + "(id, new HashSet<String>(), data)");
+		appendStatement("doc = " + getServiceGetterCall(section.getModule()) + ".get" + doc.getName() + "(id)");
 		appendCatch(ServiceGenerator.getExceptionName(section.getModule()));
-		appendStatement("response.addError(ERROR, \"Problem occurred when fetching info about documents -\" + e.getMessage())");
+		appendStatement("response.addError(ERROR, \"Failed to load document: \" + e.getMessage())");
 		appendStatement("writeTextToResponse(res, response)");
 		appendStatement("return null");
 		closeBlockNEW();
 		emptyline();
-		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
-		appendString("for (String domain :config.getDomains()) {");
-		increaseIdent();
-		appendString("Response clientResponse = client.target(domain + \"/asg-api/" + doc.getName().toLowerCase() + "\")");
-		appendString(" 		.request(MediaType.APPLICATION_JSON)");
-		appendString(" 		.post(Entity.entity(data.toString(), MediaType.APPLICATION_JSON));");
-		emptyline();
-		appendString("if (clientResponse.getStatus() != STATUS_OK) {");
-		increaseIdent();
-		appendStatement("clientResponse.close()");
-		appendStatement("response.addError(ERROR, \"Couldn't save transferred objects, status expected 201, got status - \" + clientResponse.getStatus())");
+
+		appendStatement(voName + " vo = " + voName + ".from(doc)");
+		appendStatement("String body");
+		openTry();
+		appendStatement("body = mapper.writeValueAsString(vo)");
+		appendCatch("Exception");
+		appendStatement("response.addError(ERROR, \"Failed to serialize document: \" + e.getMessage())");
 		appendStatement("writeTextToResponse(res, response)");
+		appendStatement("return null");
 		closeBlockNEW();
 		emptyline();
+
+		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
+		appendString("for (String domain : config.getDomains()) {");
+		increaseIdent();
+		appendStatement("Response clientResponse = client.target(domain + REST_PATH + id).request(MediaType.APPLICATION_JSON).put(Entity.entity(body, MediaType.APPLICATION_JSON))");
+		openTry();
+		appendStatement("ReplyObject reply = mapper.readValue(clientResponse.readEntity(String.class), ReplyObject.class)");
+		appendString("if (!reply.isSuccess()) {");
+		increaseIdent();
+		appendStatement("response.addError(ERROR, \"Transfer to \" + domain + \" failed: \" + reply.getMessage())");
+		appendStatement("writeTextToResponse(res, response)");
+		appendStatement("return null");
+		closeBlockNEW();
+		appendCatch("Exception");
+		appendStatement("response.addError(ERROR, \"Failed to read response from \" + domain + \": \" + e.getMessage())");
+		appendStatement("writeTextToResponse(res, response)");
+		appendStatement("return null");
+		appendString("} finally {");
+		increaseIdent();
 		appendStatement("clientResponse.close()");
 		closeBlockNEW();
+		closeBlockNEW();
+
 		appendStatement("return null");
 		closeBlockNEW();
 		emptyline();
