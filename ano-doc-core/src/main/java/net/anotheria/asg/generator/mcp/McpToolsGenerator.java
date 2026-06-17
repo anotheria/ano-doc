@@ -85,13 +85,13 @@ public class McpToolsGenerator extends AbstractGenerator implements IGenerator {
         appendString("// ===================== ", docName, " =====================");
         emptyline();
 
-        generateListTool(doc, moduleLower, docName, multipleName, context, simpleProps);
+        generateListTool(moduleLower, docName, multipleName, simpleProps);
         generateGetTool(doc, moduleLower, docName, context, simpleProps);
         generateUpdateTool(doc, moduleLower, docName, serviceInterface, context, simpleProps);
     }
 
-    private void generateListTool(MetaDocument doc, String moduleLower, String docName,
-                                  String multipleName, Context context, List<MetaProperty> simpleProps) {
+    private void generateListTool(String moduleLower, String docName,
+                                  String multipleName, List<MetaProperty> simpleProps) {
         String toolName = moduleLower + "_list_" + multipleName.toLowerCase();
         String className = "List" + multipleName;
 
@@ -117,9 +117,7 @@ public class McpToolsGenerator extends AbstractGenerator implements IGenerator {
 
         MetaProperty nameField = findNameField(simpleProps);
         if (nameField != null) {
-            String getter = nameField.isMultilingual() && context.areLanguagesSupported()
-                    ? "get" + nameField.getAccesserName(context.getLanguages().get(0)) + "()"
-                    : "get" + nameField.getAccesserName() + "()";
+            String getter = "get" + nameField.getAccesserName() + "()";
             appendStatement("sb.append(doc.getId()).append(\"  \").append(doc.", getter, ").append(\"\\n\")");
         } else {
             appendStatement("sb.append(doc.getId()).append(\"\\n\")");
