@@ -10,6 +10,7 @@ import net.anotheria.asg.generator.parser.XMLPreprocessor;
 import net.anotheria.asg.generator.parser.XMLTypesParser;
 import net.anotheria.asg.generator.parser.XMLValidatorsParser;
 import net.anotheria.asg.generator.parser.XMLViewParser;
+import net.anotheria.asg.generator.mcp.McpAPIGenerator;
 import net.anotheria.asg.generator.restapi.RestAPIGenerator;
 import net.anotheria.asg.generator.types.TypesGenerator;
 import net.anotheria.asg.generator.types.meta.DataType;
@@ -107,7 +108,7 @@ public class Generator {
             tg.generate("java", types);
             GeneratorDataRegistry.getInstance().addTypes(types);
             //System.out.println(types);
-        }catch(Exception e){}
+        }catch(Exception e){ System.err.println("WARN: skipping datatypes.xml: " + e.getMessage()); }
 
         long s4 = System.currentTimeMillis();
         try{
@@ -116,8 +117,7 @@ public class Generator {
             validateXML("decorators-def",decoratorsContent,null);
             List<MetaDecorator> decorators = XMLDecoratorsParser.parseDecorators(decoratorsContent);
             GeneratorDataRegistry.getInstance().addDecorators(decorators);
-            //System.out.println(decorators);
-        }catch(Exception e){}
+        }catch(Exception e){ System.err.println("WARN: skipping decorators-def.xml: " + e.getMessage()); }
 
         long s5 = System.currentTimeMillis();
         try{
@@ -125,10 +125,8 @@ public class Generator {
             // validating filters-def.xml
             validateXML("filters-def",filtersContent,null);
             List<MetaFilter> filters = XMLFiltersParser.parseFilters(filtersContent);
-            //System.out.println("parsed filters: "+filters);
             GeneratorDataRegistry.getInstance().addFilters(filters);
-            //System.out.println(filters);
-        }catch(Exception e){}
+        }catch(Exception e){ System.err.println("WARN: skipping filters-def.xml: " + e.getMessage()); }
 
         long s6 = System.currentTimeMillis();
         try{
@@ -137,7 +135,7 @@ public class Generator {
             validateXML("validators-def",validatorsContent,null);
             List<MetaValidator> filters = XMLValidatorsParser.parseValidators(validatorsContent);
             GeneratorDataRegistry.getInstance().addValidators(filters);
-        }catch(Exception e){}
+        }catch(Exception e){ System.err.println("WARN: skipping validators-def.xml: " + e.getMessage()); }
 
         long s7 = System.currentTimeMillis();
 
@@ -169,6 +167,9 @@ public class Generator {
         }else{
             System.out.println("VIEW_CONTENT = NULL");
         }
+
+        McpAPIGenerator mcpAPIGenerator = new McpAPIGenerator();
+        mcpAPIGenerator.generate("java", modules);
 
         System.out.println("DONE.");
         printTime("Total ", s9, s1);
