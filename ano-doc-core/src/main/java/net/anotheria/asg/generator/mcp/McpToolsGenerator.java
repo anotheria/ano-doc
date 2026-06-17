@@ -44,6 +44,8 @@ public class McpToolsGenerator extends AbstractGenerator implements IGenerator {
         clazz.setPackageName(getPackageName(module));
         clazz.setName(className);
 
+        clazz.addImport("java.util.ArrayList");
+        clazz.addImport("java.util.List");
         clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactory");
         clazz.addImport("net.anotheria.anosite.cms.mcp.McpTool");
         clazz.addImport("org.codehaus.jettison.json.JSONArray");
@@ -71,6 +73,9 @@ public class McpToolsGenerator extends AbstractGenerator implements IGenerator {
             emptyline();
             generateDocumentTools(doc, module, context);
         }
+
+        emptyline();
+        generateBundleMethods(module);
 
         return clazz;
     }
@@ -257,6 +262,33 @@ public class McpToolsGenerator extends AbstractGenerator implements IGenerator {
 
         decreaseIdent();
         appendString("}");
+        emptyline();
+    }
+
+    private void generateBundleMethods(MetaModule module) {
+        appendString("// ===================== Bundles =====================");
+        emptyline();
+
+        for (MetaDocument doc : module.getDocuments()) {
+            String multipleName = doc.getMultiple();
+            String docName = doc.getName();
+            openFun("public static List<McpTool> all" + multipleName + "()");
+            appendStatement("return List.of(",
+                    "new List" + multipleName + "(), ",
+                    "new Get" + docName + "(), ",
+                    "new Update" + docName + "()",
+                    ")");
+            closeBlockNEW();
+            emptyline();
+        }
+
+        openFun("public static List<McpTool> all()");
+        appendStatement("List<McpTool> tools = new ArrayList<>()");
+        for (MetaDocument doc : module.getDocuments()) {
+            appendStatement("tools.addAll(all", doc.getMultiple(), "())");
+        }
+        appendStatement("return tools");
+        closeBlockNEW();
         emptyline();
     }
 
