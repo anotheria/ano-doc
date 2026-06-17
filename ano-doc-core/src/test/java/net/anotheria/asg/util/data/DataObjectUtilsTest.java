@@ -35,7 +35,6 @@ public class DataObjectUtilsTest {
 			return "TestDataObject";
 		}
 
-		@Override
 		public String getFootprint() {
 			StringBuilder footprint = new StringBuilder();
 			footprint.append(getProperty1());
@@ -47,11 +46,6 @@ public class DataObjectUtilsTest {
 		@Override
 		public String getId() {
 			return id;
-		}
-
-		@Override
-		public long getLastUpdateTimestamp() {
-			return 0;
 		}
 
 		@Override

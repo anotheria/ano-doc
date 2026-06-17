@@ -44,21 +44,9 @@ public class MissingTranslationFilterTest {
 		}
 
 		@Override
-		public String getFootprint() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public String getId() {
 			// TODO Auto-generated method stub
 			return null;
-		}
-
-		@Override
-		public long getLastUpdateTimestamp() {
-			// TODO Auto-generated method stub
-			return 0;
 		}
 
 		@Override

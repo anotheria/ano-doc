@@ -37,11 +37,6 @@ class DataObjectAdapter extends Document implements DataObject {
 	}
 
 	@Override
-	public String getFootprint() {
-		return null;
-	}
-
-	@Override
 	public ObjectInfo getObjectInfo() {
 		return null;
 	}
