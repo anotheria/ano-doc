@@ -70,7 +70,7 @@ public class RestResourceGenerator extends AbstractGenerator implements IGenerat
             clazz.addImport(RestVOGenerator.getVOImport(doc));
         }
 
-        clazz.addAnnotation("@Path(\"/api/" + module.getName().toLowerCase() + "\")");
+        clazz.addAnnotation("@Path(\"/" + module.getName().toLowerCase() + "\")");
         clazz.addAnnotation("@Tag(name = \"CMS " + module.getName() + " API\", description = \"CRUD operations for the " + module.getName() + " module\")");
 
         startClassBody();
