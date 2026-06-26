@@ -29,7 +29,7 @@ public class GeneratorMojo extends AbstractMojo {
 			Generator.generate();
 			log("Generation complete");
 		} catch (Exception e) {
-			log("Error: " + e.getMessage());
+			throw new MojoExecutionException("ano-doc generation failed: " + e.getMessage(), e);
 		}
 	}
 

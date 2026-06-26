@@ -41,10 +41,8 @@ public class XMLValidatorsParser {
 				ret.add(parseValidator(d));
 			}
 	
-		}catch(JDOMException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
+		}catch(JDOMException | IOException e){
+			throw new RuntimeException("Failed to parse validator definitions: " + e.getMessage(), e);
 		}
 		return ret;
 	}

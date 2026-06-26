@@ -32,8 +32,7 @@ public class CMSFilterGenerator extends AbstractGenerator{
 		try{
 			ret.add(new FileEntry(generateCMSFilter()));
 		}catch(Exception e){
-			System.out.println("CMSFilterGenerator error: " + e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException("CMSFilterGenerator failed: " + e.getMessage(), e);
 		}
 		return ret;
 	}

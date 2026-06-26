@@ -46,10 +46,8 @@ public final class XMLFormParser {
 				ret.add(parseForm(form));
 			}
 		
-		}catch(JDOMException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
+		}catch(JDOMException | IOException e){
+			throw new RuntimeException("Failed to parse form definitions: " + e.getMessage(), e);
 		}
 		//System.out.println("Parsed forms: "+ret);
 		return ret;

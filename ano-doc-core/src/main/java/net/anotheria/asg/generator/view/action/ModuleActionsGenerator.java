@@ -161,9 +161,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 				timer.stopExecution(section.getModule().getName()+"-dialog-container");
 			}
 
-		}catch(Exception ignored){
-			System.out.println("Exception occured in generation of section "+section);
-			ignored.printStackTrace();
+		}catch(Exception e){
+			throw new RuntimeException("Failed to generate actions for section "+section+": "+e.getMessage(), e);
 		}
 
 		timer.startExecution(section.getModule().getName()+"-additional");

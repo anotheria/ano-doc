@@ -41,10 +41,8 @@ public final class XMLDecoratorsParser {
 				ret.add(parseDecorator(d));
 			}
 	
-		}catch(JDOMException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
+		}catch(JDOMException | IOException e){
+			throw new RuntimeException("Failed to parse decorator definitions: " + e.getMessage(), e);
 		}
 		//System.out.println("Parsed forms: "+ret);
 		return ret;

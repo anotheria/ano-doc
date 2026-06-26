@@ -99,43 +99,54 @@ public class Generator {
 
         long s3 = System.currentTimeMillis();
 
-        try{
-            String typesContent = XMLPreprocessor.loadFile(new File(BASE_DIR+"etc/def/datatypes.xml"),null);
+        File datatypesFile = new File(BASE_DIR+"etc/def/datatypes.xml");
+        if (datatypesFile.exists()){
+            String typesContent = XMLPreprocessor.loadFile(datatypesFile,null);
             // validating datatypes.xml
             validateXML("datatypes",typesContent,null);
             List<DataType> types = XMLTypesParser.parseTypes(typesContent);
             TypesGenerator tg = new TypesGenerator();
             tg.generate("java", types);
             GeneratorDataRegistry.getInstance().addTypes(types);
-            //System.out.println(types);
-        }catch(Exception e){ System.err.println("WARN: skipping datatypes.xml: " + e.getMessage()); }
+        }else{
+            System.err.println("WARN: skipping datatypes.xml: not present");
+        }
 
         long s4 = System.currentTimeMillis();
-        try{
-            String decoratorsContent = XMLPreprocessor.loadFile(new File(BASE_DIR+"etc/def/decorators-def.xml"),null);
+        File decoratorsFile = new File(BASE_DIR+"etc/def/decorators-def.xml");
+        if (decoratorsFile.exists()){
+            String decoratorsContent = XMLPreprocessor.loadFile(decoratorsFile,null);
             // validating decorators-def.xml
             validateXML("decorators-def",decoratorsContent,null);
             List<MetaDecorator> decorators = XMLDecoratorsParser.parseDecorators(decoratorsContent);
             GeneratorDataRegistry.getInstance().addDecorators(decorators);
-        }catch(Exception e){ System.err.println("WARN: skipping decorators-def.xml: " + e.getMessage()); }
+        }else{
+            System.err.println("WARN: skipping decorators-def.xml: not present");
+        }
 
         long s5 = System.currentTimeMillis();
-        try{
-            String filtersContent = XMLPreprocessor.loadFile(new File(BASE_DIR+"etc/def/filters-def.xml"),null);
+        File filtersFile = new File(BASE_DIR+"etc/def/filters-def.xml");
+        if (filtersFile.exists()){
+            String filtersContent = XMLPreprocessor.loadFile(filtersFile,null);
             // validating filters-def.xml
             validateXML("filters-def",filtersContent,null);
             List<MetaFilter> filters = XMLFiltersParser.parseFilters(filtersContent);
             GeneratorDataRegistry.getInstance().addFilters(filters);
-        }catch(Exception e){ System.err.println("WARN: skipping filters-def.xml: " + e.getMessage()); }
+        }else{
+            System.err.println("WARN: skipping filters-def.xml: not present");
+        }
 
         long s6 = System.currentTimeMillis();
-        try{
-            String validatorsContent = XMLPreprocessor.loadFile(new File(BASE_DIR+"etc/def/validators-def.xml"),null);
+        File validatorsFile = new File(BASE_DIR+"etc/def/validators-def.xml");
+        if (validatorsFile.exists()){
+            String validatorsContent = XMLPreprocessor.loadFile(validatorsFile,null);
             // validating validators-def.xml
             validateXML("validators-def",validatorsContent,null);
             List<MetaValidator> filters = XMLValidatorsParser.parseValidators(validatorsContent);
             GeneratorDataRegistry.getInstance().addValidators(filters);
-        }catch(Exception e){ System.err.println("WARN: skipping validators-def.xml: " + e.getMessage()); }
+        }else{
+            System.err.println("WARN: skipping validators-def.xml: not present");
+        }
 
         long s7 = System.currentTimeMillis();
 

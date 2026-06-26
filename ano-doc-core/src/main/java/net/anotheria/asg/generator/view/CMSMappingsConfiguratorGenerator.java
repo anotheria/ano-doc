@@ -247,8 +247,7 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 		try{
 			ret.add(new FileEntry(generateCMSMapping(views)));
 		}catch(Exception e){
-			System.out.println("CMSMappingsConfiguratorGenerator error: " + e.getMessage());
-			e.printStackTrace();
+			throw new RuntimeException("CMSMappingsConfiguratorGenerator failed: " + e.getMessage(), e);
 		}
 
 		return ret;

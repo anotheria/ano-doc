@@ -77,10 +77,8 @@ public final class XMLContextParser {
 				ret.setOptions(OptionsParser.parseOptions(options));
 			}
 			
-		}catch(JDOMException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
+		}catch(JDOMException | IOException e){
+			throw new RuntimeException("Failed to parse generation context: " + e.getMessage(), e);
 		}
 		return ret;
 	}

@@ -85,7 +85,7 @@ public class FileWriter {
 			fOut = new FileOutputStream(f);
 			fOut.write(content.getBytes());
 		}catch(IOException e){
-			e.printStackTrace();
+			throw new RuntimeException("Failed to write file "+f+": "+e.getMessage(), e);
 		}finally{
 			IOUtils.closeIgnoringException(fOut);
 		}

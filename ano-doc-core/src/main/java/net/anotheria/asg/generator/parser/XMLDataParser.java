@@ -53,14 +53,12 @@ public final class XMLDataParser {
 				Element elem = (Element)modules.get(i);
 				ret.add(parseModule(elem));
 			}
-		}catch(JDOMException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
+		}catch(JDOMException | IOException e){
+			throw new RuntimeException("Failed to parse module definitions: " + e.getMessage(), e);
 		}
 		return ret;
 	}
-	
+
 	private static final MetaModule parseModule(Element m){
 		//System.out.println("Parsing "+m.getName());
 		String name = m.getAttributeValue("name");
@@ -81,8 +79,8 @@ public final class XMLDataParser {
 			if (storageKey!=null){
 				mod.setStorageKey(storageKey);
 			}
-		}catch(Exception ignored){
-			ignored.printStackTrace();
+		}catch(Exception e){
+			throw new RuntimeException("Failed to parse attributes of module '" + name + "': " + e.getMessage(), e);
 		}
 		@SuppressWarnings("unchecked")List<Element> childs = m.getChildren("document");
 		for (int i=0; i<childs.size(); i++)

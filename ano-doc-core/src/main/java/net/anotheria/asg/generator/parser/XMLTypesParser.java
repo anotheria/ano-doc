@@ -42,10 +42,8 @@ public final class XMLTypesParser {
 				ret.add(parseType(elem));
 			}
 		
-		}catch(JDOMException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
+		}catch(JDOMException | IOException e){
+			throw new RuntimeException("Failed to parse type definitions: " + e.getMessage(), e);
 		}
 		return ret;
 	}

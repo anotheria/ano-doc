@@ -44,10 +44,8 @@ public final class XMLFiltersParser {
 				ret.add(parseFilter(d));
 			}
 	
-		}catch(JDOMException e){
-			e.printStackTrace();
-		}catch(IOException e){
-			e.printStackTrace();
+		}catch(JDOMException | IOException e){
+			throw new RuntimeException("Failed to parse filter definitions: " + e.getMessage(), e);
 		}
 		return ret;
 	}
