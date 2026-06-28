@@ -20,7 +20,7 @@ import java.util.StringJoiner;
 
 /**
  * Generates one {Module}McpTools.java per module.
- * Each document in the module gets three inner static classes: List, Get, Update.
+ * Each document in the module gets four inner static classes: List, Get, Create, Update.
  * All classes implement McpTool — register only those relevant to your use case.
  */
 public class McpToolsGenerator extends AbstractGenerator implements IGenerator {
@@ -57,6 +57,7 @@ public class McpToolsGenerator extends AbstractGenerator implements IGenerator {
 
         for (MetaDocument doc : module.getDocuments()) {
             clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
+            clazz.addImport(DataFacadeGenerator.getDocumentFactoryImport(context, doc));
         }
 
         startClassBody();
@@ -92,6 +93,7 @@ public class McpToolsGenerator extends AbstractGenerator implements IGenerator {
 
         generateListTool(moduleLower, docName, multipleName, simpleProps);
         generateGetTool(doc, moduleLower, docName, context, simpleProps);
+        generateCreateTool(doc, moduleLower, docName, serviceInterface, context, simpleProps);
         generateUpdateTool(doc, moduleLower, docName, serviceInterface, context, simpleProps);
     }
 
@@ -196,6 +198,88 @@ public class McpToolsGenerator extends AbstractGenerator implements IGenerator {
         emptyline();
     }
 
+    private void generateCreateTool(MetaDocument doc, String moduleLower, String docName,
+                                    String serviceInterface, Context context, List<MetaProperty> simpleProps) {
+        String toolName = moduleLower + "_create_" + docName.toLowerCase();
+        String className = "Create" + docName;
+        String docFactoryName = DataFacadeGenerator.getDocumentFactoryName(doc);
+        String fieldList = buildFieldList(doc, simpleProps, context);
+
+        appendString("public static class ", className, " implements McpTool {");
+        increaseIdent();
+
+        appendString("@Override public String name() { return ", quote(toolName), "; }");
+        appendString("@Override public String description() { return ",
+                quote("Create a new " + docName + ". Fields: " + fieldList), "; }");
+        emptyline();
+
+        openFun("@Override public JSONObject inputSchema() throws JSONException");
+        appendStatement("JSONObject props = new JSONObject()");
+        for (MetaProperty p : simpleProps) {
+            if (p.isMultilingual() && context.areLanguagesSupported()) {
+                for (String lang : context.getLanguages()) {
+                    appendStatement("props.put(", quote(p.getName(lang)),
+                            ", new JSONObject().put(\"type\", \"string\"))");
+                }
+            } else {
+                appendStatement("props.put(", quote(p.getName()),
+                        ", new JSONObject().put(\"type\", \"string\"))");
+            }
+        }
+        for (MetaProperty link : doc.getLinks()) {
+            if (link.isMultilingual() && context.areLanguagesSupported()) {
+                for (String lang : context.getLanguages()) {
+                    appendStatement("props.put(", quote(link.getName(lang)),
+                            ", new JSONObject().put(\"type\", \"string\"))");
+                }
+            } else {
+                appendStatement("props.put(", quote(link.getName()),
+                        ", new JSONObject().put(\"type\", \"string\"))");
+            }
+        }
+        appendStatement("return new JSONObject()",
+                "    .put(\"type\", \"object\")",
+                "    .put(\"properties\", props)",
+                "    .put(\"required\", new JSONArray())");
+        closeBlockNEW();
+        emptyline();
+
+        openFun("@Override public String execute(JSONObject args) throws Exception");
+        appendStatement(serviceInterface, " svc = service()");
+        appendStatement(docName, " doc = ", docFactoryName, ".create", docName, "()");
+
+        for (MetaProperty p : simpleProps) {
+            if (p.isMultilingual() && context.areLanguagesSupported()) {
+                for (String lang : context.getLanguages()) {
+                    appendStatement("if (args.has(", quote(p.getName(lang)), ")) doc.set",
+                            p.getAccesserName(lang), "(", parseConversion(p, "args.getString(" + quote(p.getName(lang)) + ")"), ")");
+                }
+            } else {
+                appendStatement("if (args.has(", quote(p.getName()), ")) doc.set",
+                        p.getAccesserName(), "(", parseConversion(p, "args.getString(" + quote(p.getName()) + ")"), ")");
+            }
+        }
+        for (MetaProperty link : doc.getLinks()) {
+            if (link.isMultilingual() && context.areLanguagesSupported()) {
+                for (String lang : context.getLanguages()) {
+                    appendStatement("if (args.has(", quote(link.getName(lang)), ")) doc.set",
+                            link.getAccesserName(lang), "(args.getString(", quote(link.getName(lang)), "))");
+                }
+            } else {
+                appendStatement("if (args.has(", quote(link.getName()), ")) doc.set",
+                        link.getAccesserName(), "(args.getString(", quote(link.getName()), "))");
+            }
+        }
+
+        appendStatement(docName, " created = svc.create", docName, "(doc)");
+        appendStatement("return \"Created " + docName + " \" + created.getId()");
+        closeBlockNEW();
+
+        decreaseIdent();
+        appendString("}");
+        emptyline();
+    }
+
     private void generateUpdateTool(MetaDocument doc, String moduleLower, String docName,
                                     String serviceInterface, Context context, List<MetaProperty> simpleProps) {
         String toolName = moduleLower + "_update_" + docName.toLowerCase();
@@ -276,6 +360,7 @@ public class McpToolsGenerator extends AbstractGenerator implements IGenerator {
             appendStatement("return List.of(",
                     "new List" + multipleName + "(), ",
                     "new Get" + docName + "(), ",
+                    "new Create" + docName + "(), ",
                     "new Update" + docName + "()",
                     ")");
             closeBlockNEW();
