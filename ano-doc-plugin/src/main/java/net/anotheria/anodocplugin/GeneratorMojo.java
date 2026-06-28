@@ -21,11 +21,15 @@ public class GeneratorMojo extends AbstractMojo {
 	@Parameter
 	private String outputDir;
 
+    @Parameter
+    private String definitionsFolder = "src/main/definitions";
+
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		try {
 			log("Starting generation with " + Generator.getProductString() + " into: " + outputDir + " from: " + baseDir);
 			FileWriter.setBaseDir(outputDir);
 			Generator.setBaseDir(baseDir + File.separatorChar);
+            Generator.setDefDir(definitionsFolder);
 			Generator.generate();
 			log("Generation complete");
 		} catch (Exception e) {

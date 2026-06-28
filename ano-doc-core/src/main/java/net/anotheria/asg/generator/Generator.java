@@ -38,6 +38,14 @@ public class Generator {
 
     private static String BASE_DIR = "";
 
+    /** Maven-style default location for the definition files. */
+    static final String DEFAULT_DEF_DIR = "src/main/definitions/";
+
+    /** Legacy location, kept as a deprecated fallback. Will be removed in the next major release. */
+    static final String LEGACY_DEF_DIR = "etc/def/";
+
+    private static String DEF_DIR = DEFAULT_DEF_DIR;
+
 
     /**
      * <p>setBaseDir.</p>
@@ -46,6 +54,32 @@ public class Generator {
      */
     public static void setBaseDir(String dir){
         BASE_DIR = dir;
+    }
+
+    public static void setDefDir(String dir){
+        DEF_DIR = dir.replace('\\', '/');
+        if (!DEF_DIR.endsWith("/")) {
+            DEF_DIR = DEF_DIR + "/";
+        }
+    }
+
+    /**
+     * Resolves the definitions directory when the default location is in effect. If the new default
+     * {@value #DEFAULT_DEF_DIR} is absent but the legacy {@value #LEGACY_DEF_DIR} exists, falls back to
+     * the legacy location and emits a deprecation warning. An explicitly configured location is honoured
+     * as-is and never overridden.
+     */
+    private static void resolveDefDir(){
+        if (!DEF_DIR.equals(DEFAULT_DEF_DIR))
+            return;
+        if (new File(BASE_DIR + DEFAULT_DEF_DIR).isDirectory())
+            return;
+        if (new File(BASE_DIR + LEGACY_DEF_DIR).isDirectory()){
+            System.err.println("WARN: ano-doc definition files were found in the deprecated location '" + LEGACY_DEF_DIR
+                    + "'. Move them to '" + DEFAULT_DEF_DIR + "' or set <definitionsFolder> explicitly. "
+                    + "This fallback will be removed in the next major release.");
+            DEF_DIR = LEGACY_DEF_DIR;
+        }
     }
 
     /**
@@ -64,10 +98,12 @@ public class Generator {
      */
     public static void generate() throws Exception{
 
+        resolveDefDir();
+
         long s1 = System.currentTimeMillis();
         IncludedDocuments includedDocuments = new IncludedDocuments();
 
-        String dataContent = XMLPreprocessor.loadFile(new File(BASE_DIR+"etc/def/datadef.xml"),includedDocuments);
+        String dataContent = XMLPreprocessor.loadFile(new File(BASE_DIR+DEF_DIR+"datadef.xml"),includedDocuments);
         // validating datadef.xml
         validateXML("datadef",dataContent,includedDocuments);
 
@@ -77,7 +113,7 @@ public class Generator {
         long s2 = System.currentTimeMillis();
         ///*
         try{
-            viewContent = XMLPreprocessor.loadFile(new File(BASE_DIR+"etc/def/editview_def.xml"),includedDocuments);
+            viewContent = XMLPreprocessor.loadFile(new File(BASE_DIR+DEF_DIR+"editview_def.xml"),includedDocuments);
         }catch(IOException ignored){
             ignored.printStackTrace();
         }
@@ -89,7 +125,7 @@ public class Generator {
 
 
 
-        String contextContent = XMLPreprocessor.loadFile(new File(BASE_DIR+"etc/def/context.xml"),null);
+        String contextContent = XMLPreprocessor.loadFile(new File(BASE_DIR+DEF_DIR+"context.xml"),null);
 
         //validating context.xml
         validateXML("context",contextContent,null);
@@ -99,7 +135,7 @@ public class Generator {
 
         long s3 = System.currentTimeMillis();
 
-        File datatypesFile = new File(BASE_DIR+"etc/def/datatypes.xml");
+        File datatypesFile = new File(BASE_DIR+DEF_DIR+"datatypes.xml");
         if (datatypesFile.exists()){
             String typesContent = XMLPreprocessor.loadFile(datatypesFile,null);
             // validating datatypes.xml
@@ -113,7 +149,7 @@ public class Generator {
         }
 
         long s4 = System.currentTimeMillis();
-        File decoratorsFile = new File(BASE_DIR+"etc/def/decorators-def.xml");
+        File decoratorsFile = new File(BASE_DIR+DEF_DIR+"decorators-def.xml");
         if (decoratorsFile.exists()){
             String decoratorsContent = XMLPreprocessor.loadFile(decoratorsFile,null);
             // validating decorators-def.xml
@@ -125,7 +161,7 @@ public class Generator {
         }
 
         long s5 = System.currentTimeMillis();
-        File filtersFile = new File(BASE_DIR+"etc/def/filters-def.xml");
+        File filtersFile = new File(BASE_DIR+DEF_DIR+"filters-def.xml");
         if (filtersFile.exists()){
             String filtersContent = XMLPreprocessor.loadFile(filtersFile,null);
             // validating filters-def.xml
@@ -137,7 +173,7 @@ public class Generator {
         }
 
         long s6 = System.currentTimeMillis();
-        File validatorsFile = new File(BASE_DIR+"etc/def/validators-def.xml");
+        File validatorsFile = new File(BASE_DIR+DEF_DIR+"validators-def.xml");
         if (validatorsFile.exists()){
             String validatorsContent = XMLPreprocessor.loadFile(validatorsFile,null);
             // validating validators-def.xml
@@ -217,7 +253,7 @@ public class Generator {
      * @return a {@link java.lang.String} object.
      */
     public static String getVersionString(){
-        return "4.2.2";
+        return "5.0.6";
     }
 
     /**
