@@ -63,6 +63,7 @@ public class RestResourceGenerator extends AbstractGenerator implements IGenerat
         clazz.addImport(ReplyObject.class);
         clazz.addImport(ServiceGenerator.getInterfaceImport(module));
         clazz.addImport(ServiceGenerator.getExceptionImport(module));
+        clazz.addImport("net.anotheria.moskito.aop.annotation.Monitor");
 
         for (MetaDocument doc : module.getDocuments()) {
             clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
@@ -72,6 +73,7 @@ public class RestResourceGenerator extends AbstractGenerator implements IGenerat
 
         clazz.addAnnotation("@Path(\"/" + module.getName().toLowerCase() + "\")");
         clazz.addAnnotation("@Tag(name = \"CMS " + module.getName() + " API\", description = \"CRUD operations for the " + module.getName() + " module\")");
+        clazz.addAnnotation("@Monitor()");
 
         startClassBody();
         appendGenerationPoint("generateResource");
