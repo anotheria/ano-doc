@@ -60,6 +60,8 @@ public class RestResourceGenerator extends AbstractGenerator implements IGenerat
         clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactoryException");
         clazz.addImport("io.swagger.v3.oas.annotations.Operation");
         clazz.addImport("io.swagger.v3.oas.annotations.tags.Tag");
+        clazz.addImport("org.codehaus.jettison.json.JSONArray");
+        clazz.addImport("net.anotheria.anosite.gen.shared.util.ParserUtilService");
         clazz.addImport(ReplyObject.class);
         clazz.addImport(ServiceGenerator.getInterfaceImport(module));
         clazz.addImport(ServiceGenerator.getExceptionImport(module));
@@ -193,6 +195,24 @@ public class RestResourceGenerator extends AbstractGenerator implements IGenerat
         appendStatement("LOG.error(\"Failed to delete " + docName + " with id: \" + id, e)");
         appendStatement("return ReplyObject.error(e)");
         closeBlockNEW();
+        closeBlockNEW();
+        emptyline();
+
+        //TRANSFER
+        appendString("@POST");
+        appendString("@Path(\"" + docPath + "/transfer\")");
+        appendString("@Consumes(\"application/json;charset=utf-8\")");
+        appendString("@Produces(MediaType.APPLICATION_JSON)");
+        appendString("@Operation(summary = \"Create new objects according to transfer " + docName + " process\")");
+        appendString("public ReplyObject transfer" + docName + "AndLinkedObjects(String input) {");
+        increaseIdent();
+        openTry();
+        appendStatement("ParserUtilService.getInstance().addToQueueParsingDocuments(new JSONArray(input))");
+        appendCatch("Exception");
+        appendStatement("LOG.error(\"Unable to parsing transferred objects for " + docName + "\", e)");
+        appendStatement("return ReplyObject.error(e)");
+        closeBlockNEW();
+        appendStatement("return ReplyObject.success()");
         closeBlockNEW();
     }
 
