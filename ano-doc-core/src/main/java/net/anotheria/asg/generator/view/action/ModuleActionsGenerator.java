@@ -2051,6 +2051,8 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.addImport("jakarta.ws.rs.core.MediaType");
 		clazz.addImport("jakarta.ws.rs.core.Response");
 		clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
+		clazz.addImport("org.codehaus.jettison.json.JSONArray");
+		clazz.addImport("java.util.HashSet");
 
 		clazz.setName(getTransferActionName(section));
 		clazz.setParent(getBaseActionName(section));
@@ -2058,7 +2060,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		startClassBody();
 		emptyline();
 		appendStatement("private static final String ERROR = \"error\"");
-		appendStatement("private static final String REST_PATH = \"/api/" + module.getName().toLowerCase() + "/" + doc.getName().toLowerCase() + "/\"");
+		appendStatement("private static final String REST_PATH = \"/asg-api/" + module.getName().toLowerCase() + "/" + doc.getName().toLowerCase() + "/\"");
 		emptyline();
 		appendStatement("private final DocumentTransferConfig config = DocumentTransferConfig.getInstance()");
 		appendStatement("private final ObjectMapper mapper = new ObjectMapper()");
@@ -2093,22 +2095,11 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		emptyline();
 
 		appendStatement("String id = getStringParameter(req, PARAM_ID)");
-		appendStatement(doc.getName() + " doc");
+		appendStatement("JSONArray data = new JSONArray()");
 		openTry();
-		appendStatement("doc = " + getServiceGetterCall(section.getModule()) + ".get" + doc.getName() + "(id)");
+		appendStatement(getServiceGetterCall(section.getModule()) + ".fetch" + doc.getName() + "(id, new HashSet<>(), data)");
 		appendCatch(ServiceGenerator.getExceptionName(section.getModule()));
 		appendStatement("response.addError(ERROR, \"Failed to load document: \" + e.getMessage())");
-		appendStatement("writeTextToResponse(res, response)");
-		appendStatement("return null");
-		closeBlockNEW();
-		emptyline();
-
-		appendStatement(voName + " vo = " + voName + ".from(doc)");
-		appendStatement("String body");
-		openTry();
-		appendStatement("body = mapper.writeValueAsString(vo)");
-		appendCatch("Exception");
-		appendStatement("response.addError(ERROR, \"Failed to serialize document: \" + e.getMessage())");
 		appendStatement("writeTextToResponse(res, response)");
 		appendStatement("return null");
 		closeBlockNEW();
@@ -2117,7 +2108,7 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
 		appendString("for (String domain : config.getDomains()) {");
 		increaseIdent();
-		appendStatement("Response clientResponse = client.target(domain + REST_PATH + id).request(MediaType.APPLICATION_JSON).put(Entity.entity(body, MediaType.APPLICATION_JSON))");
+		appendStatement("Response clientResponse = client.target(domain + REST_PATH + \"transfer\").request(MediaType.APPLICATION_JSON).post(Entity.entity(data.toString(), MediaType.APPLICATION_JSON))");
 		openTry();
 		appendStatement("ReplyObject reply = mapper.readValue(clientResponse.readEntity(String.class), ReplyObject.class)");
 		appendString("if (!reply.isSuccess()) {");
