@@ -308,12 +308,17 @@ public abstract class AbstractJSPGenerator extends AbstractGenerator{
 	/**
 	 * <p>getContainerPageName.</p>
 	 *
+	 * The "Container" part is needed to keep this name apart from the show page of a document,
+	 * which is "Show"+multiple. Without it a document named ParentContainerElement would produce
+	 * the same page name as the container "elements" of the document Parent and silently
+	 * overwrite it (both pages live in the jsp package of the same module).
+	 *
 	 * @param doc a {@link net.anotheria.asg.generator.meta.MetaDocument} object.
 	 * @param table a {@link net.anotheria.asg.generator.meta.MetaContainerProperty} object.
 	 * @return a {@link java.lang.String} object.
 	 */
 	public static String getContainerPageName(MetaDocument doc, MetaContainerProperty table){
-		return "Show"+doc.getName()+StringUtils.capitalize(table.getName());
+		return "Show"+doc.getName()+"Container"+StringUtils.capitalize(table.getName());
 	}
 	
 	/**
