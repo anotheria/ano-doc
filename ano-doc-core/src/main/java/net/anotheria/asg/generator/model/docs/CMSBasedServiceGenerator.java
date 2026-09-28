@@ -1,6 +1,5 @@
 package net.anotheria.asg.generator.model.docs;
 
-import net.anotheria.anodoc.util.mapper.ObjectMapperUtil;
 import net.anotheria.asg.generator.CommentGenerator;
 import net.anotheria.asg.generator.Context;
 import net.anotheria.asg.generator.FileEntry;
@@ -9,21 +8,16 @@ import net.anotheria.asg.generator.GeneratorDataRegistry;
 import net.anotheria.asg.generator.IGenerateable;
 import net.anotheria.asg.generator.IGenerator;
 import net.anotheria.asg.generator.meta.MetaDocument;
-import net.anotheria.asg.generator.meta.MetaLink;
-import net.anotheria.asg.generator.meta.MetaListProperty;
 import net.anotheria.asg.generator.meta.MetaModule;
 import net.anotheria.asg.generator.meta.MetaProperty;
 import net.anotheria.asg.generator.model.AbstractServiceGenerator;
 import net.anotheria.asg.generator.model.DataFacadeGenerator;
 import net.anotheria.asg.generator.model.ServiceGenerator;
-import net.anotheria.asg.util.filestorage.FileStorage;
-import net.anotheria.asg.util.filestorage.TemporaryFileHolder;
 import net.anotheria.util.datatable.DataHeader;
 import net.anotheria.util.datatable.DataRow;
 import net.anotheria.util.datatable.DataTable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -126,10 +120,8 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 		clazz.setTypeComment(CommentGenerator.generateJavaTypeComment(getImplementationName(module),"The implementation of the "+getInterfaceName(module)+"."));
 		clazz.setPackageName(getPackageName(module));
 
-		clazz.addImport("java.nio.charset.Charset");
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
-		clazz.addImport("java.util.Set");
 		clazz.addImport("net.anotheria.anodoc.data.Module");
 		clazz.addImport("net.anotheria.anodoc.data.Property");
 		clazz.addImport("net.anotheria.anodoc.data.NoSuchPropertyException");
@@ -153,13 +145,6 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 		clazz.addImport("net.anotheria.asg.util.listener.IModuleListener");
 
-		clazz.addImport("org.codehaus.jettison.json.JSONObject");
-		clazz.addImport("org.codehaus.jettison.json.JSONArray");
-		clazz.addImport("org.codehaus.jettison.json.JSONException");
-		clazz.addImport("com.fasterxml.jackson.core.JsonProcessingException");
-		clazz.addImport("java.io.IOException");
-		clazz.addImport(ObjectMapperUtil.class);
-		clazz.addImport("net.anotheria.anosite.gen.shared.util.DocumentName");
 				
 	    clazz.setName(getImplementationName(module));
 	    clazz.setParent("BasicCMSService");
@@ -597,144 +582,6 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 			// end get elements Segment with SORTING, FILTER
 
 			String throwsClause = " throws "+ ServiceGenerator.getExceptionName(module)+" ";
-			//start fetch document with dependencies
-			appendString("@Override");
-			appendString("public void fetch" + doc.getName() + "(final String id, Set<String> addedDocuments, JSONArray data)" + throwsClause + "{");
-			increaseIdent();
-			appendString("if (id.isEmpty() || addedDocuments.contains(\"" + doc.getName() + "\" + id))");
-			increaseIdent();
-			appendStatement("return");
-			decreaseIdent();
-			emptyline();
-			openTry();
-			appendStatement("final " + doc.getName() + "Document " + doc.getVariableName() + " = " + getModuleGetterCall(module)+".get"+doc.getName()+"(id)");
-			appendStatement("addedDocuments.add(\"" + doc.getName() + "\" + id)");
-			emptyline();
-			Set<MetaModule> metaModules = new HashSet<>();
-			for (MetaProperty property: doc.getLinks()) {
-				if (property.isLinked()) {
-					MetaLink link = (MetaLink) property;
-					MetaModule targetModule = link.getLinkTarget().indexOf('.') == -1 ? doc.getParentModule() : GeneratorDataRegistry.getInstance().getModule(link.getTargetModuleName());
-					if (targetModule == null) {
-						throw new RuntimeException("Can`t resolve link: " + property + " in document " + doc.getName());
-					}
-					metaModules.add(targetModule);
-
-					appendString("if (!StringUtils.isEmpty(" + doc.getVariableName() + ".get" + link.getAccesserName() + "()))");
-					increaseIdent();
-					appendStatement("get"+ targetModule.getName() + "Service().fetch" + link.getTargetDocumentName() +
-							"(" + doc.getVariableName() + ".get" + link.getAccesserName() + "(), addedDocuments, data)");
-					decreaseIdent();
-				}
-			}
-			emptyline();
-			for (MetaProperty property: doc.getProperties()) {
-				if (property instanceof MetaListProperty) {
-					MetaListProperty listProperty = (MetaListProperty) property;
-					if (listProperty.getContainedProperty().isLinked()) {
-						MetaLink link = (MetaLink) listProperty.getContainedProperty();
-						MetaModule targetModule = link.getLinkTarget().indexOf('.') == -1 ? doc.getParentModule() : GeneratorDataRegistry.getInstance().getModule(link.getTargetModuleName());
-						if (targetModule == null) {
-							throw new RuntimeException("Can`t resolve link: " + property + " in document " + doc.getName());
-						}
-						metaModules.add(targetModule);
-						MetaDocument targetDocument = targetModule.getDocumentByName(link.getTargetDocumentName());
-
-						appendString("if (!" + doc.getVariableName() + ".get" + listProperty.getAccesserName() +"().isEmpty()) {");
-						increaseIdent();
-						appendString("for (String a" + listProperty.getAccesserName() +"Id: " + doc.getVariableName() + ".get" + listProperty.getAccesserName() + "()) {");
-						increaseIdent();
-						appendStatement("get" + targetModule.getName() + "Service().fetch" + targetDocument.getName() + "(a" + listProperty.getAccesserName() +"Id, addedDocuments, data)");
-						closeBlockNEW();
-						closeBlockNEW();
-					}
-				}
-			}
-			emptyline();
-			appendStatement("JSONObject dataObject = new JSONObject()");
-			appendStatement("String jsonObject = ObjectMapperUtil.getMapperInstance().writeValueAsString(" + doc.getVariableName() + ")");
-			appendStatement("dataObject.put(\"object\", jsonObject)");
-			appendStatement("dataObject.put(\"service\", \"" + module.getName() + "\")");
-			appendStatement("dataObject.put(\"document\", \"" + module.getName() + "_" + doc.getName() + "\")");
-			emptyline();
-			appendStatement("data.put(dataObject)");
-			emptyline();
-
-			for (MetaProperty p: doc.getProperties()) {
-				if (p.getType() == MetaProperty.Type.IMAGE || (p.getType() == MetaProperty.Type.LIST && ((MetaListProperty) p).getContainedProperty().getType() == MetaProperty.Type.IMAGE)) {
-					clazz.addImport(FileStorage.class);
-					clazz.addImport(TemporaryFileHolder.class);
-					clazz.addImport("java.io.ByteArrayInputStream");
-					clazz.addImport("java.io.IOException");
-					clazz.addImport("jakarta.ws.rs.client.Client");
-					clazz.addImport("jakarta.ws.rs.client.Entity");
-					clazz.addImport("jakarta.ws.rs.client.WebTarget");
-					clazz.addImport("jakarta.ws.rs.core.MediaType");
-					clazz.addImport("jakarta.ws.rs.core.Response");
-					clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
-					clazz.addImport("net.anotheria.anosite.config.DocumentTransferConfig");
-					clazz.addImport("org.glassfish.jersey.media.multipart.FormDataMultiPart");
-					clazz.addImport("org.glassfish.jersey.media.multipart.file.StreamDataBodyPart");
-
-
-					appendStatement("TemporaryFileHolder temporaryFileHolder = FileStorage.loadFile(" + doc.getVariableName()  + "." + p.toBeanGetter() + "())");
-					appendStatement("Client client = JerseyClientUtil.getClientInstance()");
-					appendString("for (String domain :DocumentTransferConfig.getInstance().getDomains()) {");
-					increaseIdent();
-
-					appendStatement("final StreamDataBodyPart filePart = new StreamDataBodyPart(\"file\", new ByteArrayInputStream(temporaryFileHolder.getData()), temporaryFileHolder.getFileName())");
-					appendStatement("FormDataMultiPart formDataMultiPart = new FormDataMultiPart()");
-					appendStatement("final FormDataMultiPart multipart = (FormDataMultiPart) formDataMultiPart.bodyPart(filePart)");
-					appendStatement("final WebTarget target = client.target(domain + \"/asg-api/asgimage/upload\")");
-					appendStatement("final Response response = target.request().post(Entity.entity(multipart, multipart.getMediaType()))");
-					appendStatement("String responseResult = response.readEntity(String.class)");
-					appendStatement("log.info(responseResult)");
-					appendStatement("formDataMultiPart.close()");
-					appendStatement("multipart.close()");
-					closeBlockNEW();
-				}
-			}
-
-			boolean attachedDocumentExists = metaModules.size() != 0;
-			if(attachedDocumentExists) {
-				Iterator<MetaModule> moduleIteratorFetch = metaModules.iterator();
-				while (moduleIteratorFetch.hasNext()) {
-					MetaModule metaModule = moduleIteratorFetch.next();
-					clazz.addImport(ServiceGenerator.getExceptionImport(metaModule));
-					appendCatch(ServiceGenerator.getExceptionName(metaModule));
-					appendStatement("throw new " + ServiceGenerator.getExceptionName(module) + "(\"Problem with getting document from " + metaModule.getName() + "\" + e.getMessage())");
-				}
-			}
-			appendCatch("IOException");
-			appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + " (\"Problem with fetching data for this " + doc.getName() + " instance object:\" + e.getMessage())");
-			appendCatch("JSONException");
-			appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + " (\"Problem with fetching data for this " + doc.getName() + " instance in json :\" + e.getMessage())");
-
-
-			closeBlockNEW();
-			closeBlockNEW();
-			emptyline();
-			//end fetch document with dependencies
-
-			//start parse document with dependencies
-			appendString("private void saveTransferred" + doc.getName() + "(final JSONObject data)" + throwsClause + "{");
-			increaseIdent();
-			openTry();
-			appendStatement("String objectData = data.getString(\"object\")");
-			appendStatement(doc.getName() + " " + doc.getVariableName() + " = ObjectMapperUtil.getMapperInstance().readValue(objectData.getBytes(Charset.forName(\"UTF-8\")), " + doc.getName() + "Document.class)");
-			emptyline();
-			openTry();
-			appendStatement("update" + doc.getName() + "(" + doc.getVariableName() + ")");
-			appendCatch("Exception");
-			appendStatement("import" + doc.getName() + "(" + doc.getVariableName() + ")");
-			closeBlockNEW();
-			appendCatch("JSONException");
-			appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + "(\"Problem with getting data from json " + doc.getName() + " instance :\" + e.getMessage())");
-			appendCatch("IOException");
-			appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + "(\"Problem with parsing data for this " + doc.getName() + " instance :\" + e.getMessage())");
-			closeBlockNEW();
-			closeBlockNEW();
-			emptyline();
 
 			if (GeneratorDataRegistry.hasLanguageCopyMethods(doc)){
 				containsAnyMultilingualDocs = true;
@@ -785,27 +632,6 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 		for (MetaDocument doc: docs){
 			appendStatement("purgeLanguageFrom"+doc.getMultiple()+"(language)");
 		}
-		closeBlockNEW();
-		emptyline();
-
-
-		appendString("public void executeParsingForDocument (final DocumentName documentName, final JSONObject data) throws " + ServiceGenerator.getExceptionName(module)+ " {");
-		increaseIdent();
-		appendString("switch(documentName) {");
-		increaseIdent();
-		for (MetaDocument doc: docs) {
-			appendString("case DOCUMENT_" + module.getName().toUpperCase() +"_" + doc.getName().toUpperCase() + ":");
-			increaseIdent();
-			appendStatement("saveTransferred" + doc.getName() + "(data)");
-			appendStatement("break");
-			decreaseIdent();
-		}
-		appendString("default:");
-		increaseIdent();
-		appendStatement("log.info(\"There is no correct document: \" + documentName + \"in this service\")");
-		appendStatement("throw new " + ServiceGenerator.getExceptionName(module) + "(\"No such document\")");
-		decreaseIdent();
-		closeBlockNEW();
 		closeBlockNEW();
 		emptyline();
 

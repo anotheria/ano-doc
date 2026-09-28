@@ -1044,9 +1044,15 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 				".nextAction.value='close'; if (validateForm()) { FormatTime('datetime');  document."+CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)+".submit(); } return false\"><span><ano:write name=\"save.label.prefix\"/></span></a>\n";
 	}
 
+	/**
+	 * Transfer button of the edit dialog. Opens the same dialog as the transfer icon in the list, so a document
+	 * is published the same way no matter where the editor started from.
+	 */
 	private String getTransferFunction(MetaDocument doc, MetaFunctionElement element){
 		String path = CMSMappingsConfiguratorGenerator.getPath(doc, CMSMappingsConfiguratorGenerator.ACTION_TRANSFER);
-		return "<a href=\"#\" class=\"button\" onClick=\"$.post('" + path + "', {pId:'" + "<ano:write name=" + quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)) + " property=\"id\"/>" + "'}, function (response){if (response.errors != undefined && response.errors.length != 0){notification(response.errors.error);}else{notificationAutoClose('Done!');}})\"><span><ano:write name=\"transfer.label.prefix\"/></span></a>\n" ;
+		String id = "<ano:write name=" + quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, doc)) + " property=\"id\"/>";
+		return "<a href=\"#\" class=\"button\" onClick=\"return lightboxTransfer('" + path + "', '" + doc.getName() + "', '" + id + "')\">" +
+				"<span><ano:write name=\"transfer.label.prefix\"/></span></a>\n" ;
 	}
 
 	private String getSortTextDataFunction(MetaDocument doc){

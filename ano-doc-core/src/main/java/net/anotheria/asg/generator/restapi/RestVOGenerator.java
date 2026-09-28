@@ -7,10 +7,10 @@ import net.anotheria.asg.generator.GeneratedClass;
 import net.anotheria.asg.generator.GeneratorDataRegistry;
 import net.anotheria.asg.generator.IGenerateable;
 import net.anotheria.asg.generator.IGenerator;
-import net.anotheria.asg.generator.meta.MetaContainerProperty;
 import net.anotheria.asg.generator.meta.MetaDocument;
 import net.anotheria.asg.generator.meta.MetaModule;
 import net.anotheria.asg.generator.meta.MetaProperty;
+import net.anotheria.asg.generator.meta.MetaTableProperty;
 import net.anotheria.asg.generator.model.DataFacadeGenerator;
 
 import java.util.ArrayList;
@@ -19,7 +19,10 @@ import java.util.List;
 /**
  * Generates a REST VO (value object / DTO) for a document.
  * The VO implements DataObject but does not expose the underlying document implementation.
- * Only publicly meaningful fields (simple properties and links) are included.
+ *
+ * <p>It carries everything that makes up the document's content: simple properties, list properties (lists of
+ * values as well as lists of links), the columns of table properties and links. That completeness is what the
+ * document transfer rests on - a VO that dropped a field would publish a document that silently lost it.
  */
 public class RestVOGenerator extends AbstractGenerator implements IGenerator {
 
@@ -42,10 +45,18 @@ public class RestVOGenerator extends AbstractGenerator implements IGenerator {
         clazz.setName(getVOName(doc));
         clazz.addInterface("DataObject");
 
+        clazz.addImport("java.util.List");
+        clazz.addImport("com.fasterxml.jackson.annotation.JsonIgnore");
+        clazz.addImport("com.fasterxml.jackson.annotation.JsonIgnoreProperties");
         clazz.addImport("net.anotheria.asg.data.DataObject");
         clazz.addImport("net.anotheria.asg.data.ObjectInfo");
         clazz.addImport("net.anotheria.util.xml.XMLNode");
         clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
+
+        //a VO travels between instances that are not necessarily on the same build. A field the sender knows
+        //and the receiver doesn't must not fail the whole document - it is content the receiver can't use yet,
+        //not a broken request.
+        clazz.addAnnotation("@JsonIgnoreProperties(ignoreUnknown = true)");
 
         startClassBody();
         appendGenerationPoint("generateVO");
@@ -53,8 +64,8 @@ public class RestVOGenerator extends AbstractGenerator implements IGenerator {
         appendStatement("private String id");
         emptyline();
 
-        List<MetaProperty> simpleProps = simpleProperties(doc);
-        for (MetaProperty p : simpleProps) {
+        List<MetaProperty> properties = voProperties(doc);
+        for (MetaProperty p : properties) {
             if (p.isMultilingual() && context.areLanguagesSupported()) {
                 for (String lang : context.getLanguages()) {
                     appendStatement("private ", p.toJavaType(), " ", p.getName(lang));
@@ -88,7 +99,7 @@ public class RestVOGenerator extends AbstractGenerator implements IGenerator {
         emptyline();
 
         // property getters/setters
-        for (MetaProperty p : simpleProps) {
+        for (MetaProperty p : properties) {
             if (p.isMultilingual() && context.areLanguagesSupported()) {
                 for (String lang : context.getLanguages()) {
                     generateGetterSetter(p.toJavaType(), p.getName(lang), p.getAccesserName(lang));
@@ -111,7 +122,7 @@ public class RestVOGenerator extends AbstractGenerator implements IGenerator {
         openFun("public static " + getVOName(doc) + " from(" + doc.getName() + " doc)");
         appendStatement(getVOName(doc), " vo = new ", getVOName(doc), "()");
         appendStatement("vo.setId(doc.getId())");
-        for (MetaProperty p : simpleProps) {
+        for (MetaProperty p : properties) {
             if (p.isMultilingual() && context.areLanguagesSupported()) {
                 for (String lang : context.getLanguages()) {
                     appendStatement("vo.set", p.getAccesserName(lang), "(doc.get", p.getAccesserName(lang), "())");
@@ -133,31 +144,39 @@ public class RestVOGenerator extends AbstractGenerator implements IGenerator {
         closeBlockNEW();
         emptyline();
 
-        // DataObject interface stubs
+        // DataObject interface stubs.
+        // They are @JsonIgnore'd on purpose: they are getters, so jackson would serialize them as fields of
+        // the document, but nothing can read them back - they have no setters. A VO that carried them would
+        // not survive its own round trip, which is exactly what a document transfer does.
+        appendString("@JsonIgnore");
         appendString("@Override public Object getPropertyValue(String propertyName) {");
         increaseIdent();
         appendStatement("return null");
         closeBlockNEW();
         emptyline();
 
+        appendString("@JsonIgnore");
         appendString("@Override public String getDefinedName() {");
         increaseIdent();
         appendStatement("return ", quote(doc.getName()));
         closeBlockNEW();
         emptyline();
 
+        appendString("@JsonIgnore");
         appendString("@Override public String getDefinedParentName() {");
         increaseIdent();
         appendStatement("return ", quote(module.getName()));
         closeBlockNEW();
         emptyline();
 
+        appendString("@JsonIgnore");
         appendString("@Override public XMLNode toXMLNode() {");
         increaseIdent();
         appendStatement("return new XMLNode(", quote(getVOName(doc)), ")");
         closeBlockNEW();
         emptyline();
 
+        appendString("@JsonIgnore");
         appendString("@Override public ObjectInfo getObjectInfo() {");
         increaseIdent();
         appendStatement("return new ObjectInfo(this)");
@@ -184,12 +203,21 @@ public class RestVOGenerator extends AbstractGenerator implements IGenerator {
         emptyline();
     }
 
-    static List<MetaProperty> simpleProperties(MetaDocument doc) {
+    /**
+     * The document's properties as the VO carries them: simple properties and list properties as they are,
+     * table properties flattened into their columns, which is how the document facade exposes them too.
+     *
+     * @param doc document to describe
+     * @return properties to generate a VO field for, in declaration order
+     */
+    static List<MetaProperty> voProperties(MetaDocument doc) {
         List<MetaProperty> result = new ArrayList<>();
         for (MetaProperty p : doc.getProperties()) {
-            if (!(p instanceof MetaContainerProperty)) {
-                result.add(p);
+            if (p instanceof MetaTableProperty) {
+                result.addAll(((MetaTableProperty) p).getColumns());
+                continue;
             }
+            result.add(p);
         }
         return result;
     }

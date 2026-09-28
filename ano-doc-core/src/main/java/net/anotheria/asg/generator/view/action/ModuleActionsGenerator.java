@@ -30,7 +30,6 @@ import net.anotheria.asg.generator.meta.StorageType;
 import net.anotheria.asg.generator.model.AbstractDataObjectGenerator;
 import net.anotheria.asg.generator.model.DataFacadeGenerator;
 import net.anotheria.asg.generator.model.ServiceGenerator;
-import net.anotheria.asg.generator.restapi.RestVOGenerator;
 import net.anotheria.asg.generator.types.EnumTypeGenerator;
 import net.anotheria.asg.generator.types.meta.EnumerationType;
 import net.anotheria.asg.generator.util.DirectLink;
@@ -2023,9 +2022,15 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 	}
 
 	/**
-	 * Generates the transfer action which send document to production.
-	 * @param section
-	 * @return
+	 * Generates the transfer action, which publishes the document to another instance.
+	 *
+	 * <p>The action knows which document it belongs to and nothing else. Whether this instance may transfer at
+	 * all, which targets there are, which documents belong to the transfer and what came back is the same
+	 * question for every document type, and it is answered once, in
+	 * {@code net.anotheria.anosite.transfer.DocumentTransferHandler}.
+	 *
+	 * @param section section the action belongs to
+	 * @return the generated class
 	 */
 	private GeneratedClass generateTransferAction(MetaModuleSection section) {
 		GeneratedClass clazz = new GeneratedClass();
@@ -2035,118 +2040,21 @@ public class ModuleActionsGenerator extends AbstractGenerator implements IGenera
 		clazz.setPackageName(getPackage(module));
 
 		addStandardActionImports(clazz);
-		clazz.addImport("java.io.IOException");
-		clazz.addImport("java.io.PrintWriter");
-		clazz.addImport("com.fasterxml.jackson.databind.ObjectMapper");
-		clazz.addImport(ServiceGenerator.getExceptionImport(module));
-		clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
-		clazz.addImport(RestVOGenerator.getVOImport(doc));
-		clazz.addImport("net.anotheria.asg.util.rest.ReplyObject");
-		clazz.addImport("net.anotheria.anosite.config.DocumentTransferConfig");
-		clazz.addImport("org.configureme.ConfigurationManager");
-		clazz.addImport("org.json.JSONException");
-		clazz.addImport("net.anotheria.maf.json.JSONResponse");
-		clazz.addImport("jakarta.ws.rs.client.Client");
-		clazz.addImport("jakarta.ws.rs.client.Entity");
-		clazz.addImport("jakarta.ws.rs.core.MediaType");
-		clazz.addImport("jakarta.ws.rs.core.Response");
-		clazz.addImport("net.anotheria.anosite.util.staticutil.JerseyClientUtil");
+		clazz.addImport("net.anotheria.anosite.transfer.DocumentTransferHandler");
 
 		clazz.setName(getTransferActionName(section));
 		clazz.setParent(getBaseActionName(section));
 
 		startClassBody();
+		appendGenerationPoint("generateTransferAction");
 		emptyline();
-		appendStatement("private static final String ERROR = \"error\"");
-		appendStatement("private static final String REST_PATH = \"/api/" + module.getName().toLowerCase() + "/" + doc.getName().toLowerCase() + "/\"");
-		emptyline();
-		appendStatement("private final DocumentTransferConfig config = DocumentTransferConfig.getInstance()");
-		appendStatement("private final ObjectMapper mapper = new ObjectMapper()");
-		emptyline();
-		generateTransferActionMethod(clazz, section, "anoDocExecute");
+
+		appendString(getExecuteDeclaration());
+		increaseIdent();
+		appendStatement("return DocumentTransferHandler.handle(req, res, ", quote(module.getName()), ", ", quote(doc.getName()), ")");
+		closeBlockNEW();
 
 		return clazz;
-	}
-
-	/**
-	 * Generates the working part of the transfer action.
-	 * Uses the REST resource PUT endpoint to transfer the document to target environments.
-	 */
-	private void generateTransferActionMethod(GeneratedClass clazz, MetaModuleSection section, String methodName) {
-		appendGenerationPoint("generateTransferActionMethod");
-
-		MetaDocument doc = section.getDocument();
-		String voName = RestVOGenerator.getVOName(doc);
-
-		appendString(getExecuteDeclaration(methodName));
-		increaseIdent();
-		emptyline();
-		appendStatement("JSONResponse response = new JSONResponse()");
-		emptyline();
-
-		appendString("if (ConfigurationManager.INSTANCE.getDefaultEnvironment().expandedStringForm().equals(\"prod\")) {");
-		increaseIdent();
-		appendStatement("response.addError(ERROR, \"Transfer is not allowed in prod environment\")");
-		appendStatement("writeTextToResponse(res, response)");
-		appendStatement("return null");
-		closeBlockNEW();
-		emptyline();
-
-		appendStatement("String id = getStringParameter(req, PARAM_ID)");
-		appendStatement(doc.getName() + " doc");
-		openTry();
-		appendStatement("doc = " + getServiceGetterCall(section.getModule()) + ".get" + doc.getName() + "(id)");
-		appendCatch(ServiceGenerator.getExceptionName(section.getModule()));
-		appendStatement("response.addError(ERROR, \"Failed to load document: \" + e.getMessage())");
-		appendStatement("writeTextToResponse(res, response)");
-		appendStatement("return null");
-		closeBlockNEW();
-		emptyline();
-
-		appendStatement(voName + " vo = " + voName + ".from(doc)");
-		appendStatement("String body");
-		openTry();
-		appendStatement("body = mapper.writeValueAsString(vo)");
-		appendCatch("Exception");
-		appendStatement("response.addError(ERROR, \"Failed to serialize document: \" + e.getMessage())");
-		appendStatement("writeTextToResponse(res, response)");
-		appendStatement("return null");
-		closeBlockNEW();
-		emptyline();
-
-		appendStatement("Client client = JerseyClientUtil.getClientInstance()");
-		appendString("for (String domain : config.getDomains()) {");
-		increaseIdent();
-		appendStatement("Response clientResponse = client.target(domain + REST_PATH + id).request(MediaType.APPLICATION_JSON).put(Entity.entity(body, MediaType.APPLICATION_JSON))");
-		openTry();
-		appendStatement("ReplyObject reply = mapper.readValue(clientResponse.readEntity(String.class), ReplyObject.class)");
-		appendString("if (!reply.isSuccess()) {");
-		increaseIdent();
-		appendStatement("response.addError(ERROR, \"Transfer to \" + domain + \" failed: \" + reply.getMessage())");
-		appendStatement("writeTextToResponse(res, response)");
-		appendStatement("return null");
-		closeBlockNEW();
-		appendCatch("Exception");
-		appendStatement("response.addError(ERROR, \"Failed to read response from \" + domain + \": \" + e.getMessage())");
-		appendStatement("writeTextToResponse(res, response)");
-		appendStatement("return null");
-		appendString("} finally {");
-		increaseIdent();
-		appendStatement("clientResponse.close()");
-		closeBlockNEW();
-		closeBlockNEW();
-
-		appendStatement("return null");
-		closeBlockNEW();
-		emptyline();
-
-		append("	private void writeTextToResponse(final HttpServletResponse res, final JSONResponse jsonResponse) throws IOException, JSONException {\n" +
-				"		res.setCharacterEncoding(\"UTF-8\");\n" +
-				"		res.setContentType(\"application/json\");\n" +
-				"		PrintWriter writer = res.getWriter();\n" +
-				"		writer.write(jsonResponse.toString());\n" +
-				"		writer.flush();\n" +
-				"	}\n");
 	}
 
 	/**

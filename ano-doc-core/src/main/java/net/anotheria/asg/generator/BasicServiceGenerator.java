@@ -47,10 +47,6 @@ public class BasicServiceGenerator extends AbstractGenerator{
 		clazz.addImport("org.slf4j.Logger");
 		clazz.addImport("org.slf4j.LoggerFactory");
 		clazz.addImport("org.slf4j.MarkerFactory");
-		clazz.addImport("org.codehaus.jettison.json.JSONObject");
-		clazz.addImport("net.anotheria.anosite.gen.shared.util.ModuleName");
-		clazz.addImport("net.anotheria.anosite.gen.shared.util.DocumentName");
-		clazz.addImport("net.anotheria.asg.exception.ASGRuntimeException");
 		for(MetaModule m: modules) {
 			clazz.addImport(ServiceGenerator.getInterfaceImport(m));
 		}

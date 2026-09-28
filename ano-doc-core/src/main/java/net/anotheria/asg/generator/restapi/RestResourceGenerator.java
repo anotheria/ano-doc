@@ -7,6 +7,7 @@ import net.anotheria.asg.generator.GeneratedClass;
 import net.anotheria.asg.generator.GeneratorDataRegistry;
 import net.anotheria.asg.generator.IGenerateable;
 import net.anotheria.asg.generator.IGenerator;
+import net.anotheria.asg.generator.meta.MetaContainerProperty;
 import net.anotheria.asg.generator.meta.MetaDocument;
 import net.anotheria.asg.generator.meta.MetaModule;
 import net.anotheria.asg.generator.meta.MetaProperty;
@@ -64,6 +65,7 @@ public class RestResourceGenerator extends AbstractGenerator implements IGenerat
         clazz.addImport(ServiceGenerator.getInterfaceImport(module));
         clazz.addImport(ServiceGenerator.getExceptionImport(module));
         clazz.addImport("net.anotheria.moskito.aop.annotation.Monitor");
+        clazz.addImport("net.anotheria.anodoc.data.NoSuchDocumentException");
 
         for (MetaDocument doc : module.getDocuments()) {
             clazz.addImport(DataFacadeGenerator.getDocumentImport(doc));
@@ -161,20 +163,29 @@ public class RestResourceGenerator extends AbstractGenerator implements IGenerat
         closeBlockNEW();
         emptyline();
 
-        // PUT update
+        // PUT upsert
         appendString("@PUT");
         appendString("@Path(\"" + docPath + "/{id}\")");
         appendString("@Consumes(MediaType.APPLICATION_JSON)");
         appendString("@Produces(MediaType.APPLICATION_JSON)");
-        appendString("@Operation(summary = \"Update an existing " + docName + "\")");
+        appendString("@Operation(summary = \"Create or replace the " + docName + " with the given id\")");
         openFun("public ReplyObject update" + docName + "(@PathParam(\"id\") String id, " + voName + " vo)");
         openTry();
-        appendStatement(docName, " doc = service.get", docName, "(id)");
+        appendStatement(docName, " doc");
+        appendStatement("boolean exists = true");
+        openTry();
+        appendStatement("doc = service.get", docName, "(id)");
+        appendCatch("NoSuchDocumentException");
+        //a put names the document it writes, so it can create it under that very id. That is what keeps ids
+        //stable across instances, and with them every link pointing at this document.
+        appendStatement("doc = ", docFactoryName, ".create", docName, "ForImport(id)");
+        appendStatement("exists = false");
+        closeBlockNEW();
         appendCopyVOToDoc(doc, "vo", "doc", context);
-        appendStatement(docName, " updated = service.update", docName, "(doc)");
-        appendStatement("return ReplyObject.success(", itemKey, ", ", voName, ".from(updated))");
+        appendStatement(docName, " saved = exists ? service.update", docName, "(doc) : service.import", docName, "(doc)");
+        appendStatement("return ReplyObject.success(", itemKey, ", ", voName, ".from(saved))");
         appendCatch("Exception");
-        appendStatement("LOG.error(\"Failed to update " + docName + " with id: \" + id, e)");
+        appendStatement("LOG.error(\"Failed to write " + docName + " with id: \" + id, e)");
         appendStatement("return ReplyObject.error(e)");
         closeBlockNEW();
         closeBlockNEW();
@@ -196,27 +207,43 @@ public class RestResourceGenerator extends AbstractGenerator implements IGenerat
         closeBlockNEW();
     }
 
+    /**
+     * Copies every field the VO carries onto the document.
+     *
+     * <p>Collections are only copied when the payload actually has them. A caller that leaves a list out of
+     * the json means "I am not talking about this list", and handing the document a null instead of a list is
+     * how you get a NullPointerException three layers down, on read, long after the request is gone.
+     */
     private void appendCopyVOToDoc(MetaDocument doc, String voVar, String docVar, Context context) {
-        for (MetaProperty p : RestVOGenerator.simpleProperties(doc)) {
-            if (p.isReadonly()) continue;
-            if (p.isMultilingual() && context.areLanguagesSupported()) {
-                for (String lang : context.getLanguages()) {
-                    appendStatement(docVar, ".set", p.getAccesserName(lang), "(", voVar, ".get", p.getAccesserName(lang), "())");
-                }
-            } else {
-                appendStatement(docVar, ".set", p.getAccesserName(), "(", voVar, ".get", p.getAccesserName(), "())");
-            }
+        for (MetaProperty p : RestVOGenerator.voProperties(doc))
+            appendCopyProperty(p, voVar, docVar, context);
+
+        for (MetaProperty link : doc.getLinks())
+            appendCopyProperty(link, voVar, docVar, context);
+    }
+
+    private void appendCopyProperty(MetaProperty p, String voVar, String docVar, Context context) {
+        if (p.isReadonly())
+            return;
+
+        if (p.isMultilingual() && context.areLanguagesSupported()) {
+            for (String lang : context.getLanguages())
+                appendCopyAccesser(p, p.getAccesserName(lang), voVar, docVar);
+            return;
         }
-        for (MetaProperty link : doc.getLinks()) {
-            if (link.isReadonly()) continue;
-            if (link.isMultilingual() && context.areLanguagesSupported()) {
-                for (String lang : context.getLanguages()) {
-                    appendStatement(docVar, ".set", link.getAccesserName(lang), "(", voVar, ".get", link.getAccesserName(lang), "())");
-                }
-            } else {
-                appendStatement(docVar, ".set", link.getAccesserName(), "(", voVar, ".get", link.getAccesserName(), "())");
-            }
+
+        appendCopyAccesser(p, p.getAccesserName(), voVar, docVar);
+    }
+
+    private void appendCopyAccesser(MetaProperty p, String accesserName, String voVar, String docVar) {
+        boolean collection = p instanceof MetaContainerProperty || p.getType() == MetaProperty.Type.LIST;
+        if (collection) {
+            appendString("if (", voVar, ".get", accesserName, "() != null)");
+            appendIncreasedStatement(docVar + ".set" + accesserName + "(" + voVar + ".get" + accesserName + "())");
+            return;
         }
+
+        appendStatement(docVar, ".set", accesserName, "(", voVar, ".get", accesserName, "())");
     }
 
     public static String getResourceName(MetaModule module) {

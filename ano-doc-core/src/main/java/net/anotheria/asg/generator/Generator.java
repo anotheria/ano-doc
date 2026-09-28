@@ -12,6 +12,7 @@ import net.anotheria.asg.generator.parser.XMLValidatorsParser;
 import net.anotheria.asg.generator.parser.XMLViewParser;
 import net.anotheria.asg.generator.mcp.McpAPIGenerator;
 import net.anotheria.asg.generator.restapi.RestAPIGenerator;
+import net.anotheria.asg.generator.transfer.TransferAPIGenerator;
 import net.anotheria.asg.generator.types.TypesGenerator;
 import net.anotheria.asg.generator.types.meta.DataType;
 import net.anotheria.asg.generator.util.IncludedDocuments;
@@ -211,6 +212,10 @@ public class Generator {
             //now lets generate info for the views and the new rest api.
             RestAPIGenerator restAPIGenerator = new RestAPIGenerator();
             restAPIGenerator.generate("java", modules, views);
+
+            //the document transfer builds on the rest api: it sends the rest VOs to the rest paths.
+            TransferAPIGenerator transferAPIGenerator = new TransferAPIGenerator();
+            transferAPIGenerator.generate("java", modules);
         }else{
             System.out.println("VIEW_CONTENT = NULL");
         }

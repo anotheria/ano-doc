@@ -80,17 +80,13 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 	    clazz.addImport("java.util.List");
 	    clazz.addImport("java.util.ArrayList");
 	    clazz.addImport("java.util.HashMap");
-		clazz.addImport("java.util.Set");
 		clazz.addImport("java.io.IOException");
 	    clazz.addImport("net.anotheria.util.sorter.SortType");
 	    clazz.addImport("net.anotheria.util.sorter.StaticQuickSorter");
 	    clazz.addImport("net.anotheria.util.StringUtils");
 	    clazz.addImport("net.anotheria.util.slicer.Segment");
 		emptyline();
-		clazz.addImport("org.codehaus.jettison.json.JSONObject");
-		clazz.addImport("org.codehaus.jettison.json.JSONArray");
 		clazz.addImport("org.codehaus.jettison.json.JSONException");
-		clazz.addImport("net.anotheria.anosite.gen.shared.util.DocumentName");
 	    
 	    Context context = GeneratorDataRegistry.getInstance().getContext();
 	    
@@ -475,40 +471,6 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
             emptyline();
 
 
-            //start fetch document with dependencies function
-			appendString("@Override");
-			appendString("public void fetch" + doc.getName() + "(final String id, Set<String> addedDocuments, JSONArray data) " + throwsClause +" {");
-
-			increaseIdent();
-			emptyline();
-			appendString("if (id.isEmpty() || addedDocuments.contains(\"" + doc.getName() + "\" + id))");
-			increaseIdent();
-			appendStatement("return");
-			decreaseIdent();
-			emptyline();
-			openTry();
-			appendStatement(doc.getName() + " a" + doc.getName() + " = get"+doc.getName()+"(id)");
-			appendStatement("addedDocuments.add(\"" + doc.getName() + "\" + id)");
-			appendStatement("String target" + doc.getName() + "Id = a" + doc.getName() + ".getId()");
-			emptyline();
-			for(FederatedDocumentMapping mapping: mappings) {
-				MetaDocument targetDoc = targetModules.get(mapping.getTargetKey()).getDocumentByName(mapping.getTargetDocument());
-				appendString("if (target" + doc.getName() + "Id.charAt(0) == '" + mapping.getTargetKey() + "')");
-				increaseIdent();
-				appendStatement("get" + targetDoc.getParentModule().getName() + "Service().fetch" + targetDoc.getName() + "(target" + doc.getName() + "Id.substring(2), addedDocuments, data)");
-				decreaseIdent();
-			}
-			emptyline();
-			for (FederatedDocumentMapping mapping: mappings) {
-				MetaDocument targetDoc = targetModules.get(mapping.getTargetKey()).getDocumentByName(mapping.getTargetDocument());
-				clazz.addImport(ServiceGenerator.getExceptionImport(targetDoc.getParentModule()));
-				appendCatch(ServiceGenerator.getExceptionName(targetDoc.getParentModule()));
-				appendStatement("throw new " + ServiceGenerator.getExceptionName(doc.getParentModule()) + " (\"Problem with getting " + targetDoc.getName() + " by id:\" + id + \".\" + e.getMessage())");
-			}
-			closeBlockNEW();
-			closeBlockNEW();
-			emptyline();
-		//end fetch document with dependencies function
 
 			//adding purge language #38
 			appendComment("Purges all attributes in the given language from documents of type #38"+doc.getName());
@@ -531,10 +493,6 @@ public class FederationServiceGenerator extends AbstractServiceGenerator impleme
 		emptyline();
 
 
-		appendString("public void executeParsingForDocument (final DocumentName documentName, final JSONObject data)" + throwsClause + "{");
-		increaseIdent();
-		appendStatement("throw new UnsupportedOperationException(\" not implemented and should not BE!\")");
-		closeBlockNEW();
 	    
 	    appendComment("Executes a query on all data objects (documents, vo) which are part of this module and managed by this service");
 		appendString("public QueryResult executeQueryOnAllObjects(DocumentQuery query)" + throwsClause + "{");

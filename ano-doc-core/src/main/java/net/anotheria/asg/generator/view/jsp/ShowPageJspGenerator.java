@@ -513,14 +513,14 @@ public class ShowPageJspGenerator extends AbstractJSPGenerator {
 
 
 	/**
-	 * Transfer to prod link for List show!
+	 * Transfer link of the list view. Opens the dialog that asks where and how much to transfer.
 	 */
 	private String getTransferFunction(String entryName, MetaFunctionElement element){
 		String path = CMSMappingsConfiguratorGenerator.getPath(((MetaModuleSection)currentSection).getDocument(), CMSMappingsConfiguratorGenerator.ACTION_TRANSFER);
 		String id = "<ano:write name="+quote(entryName)+" property=\"plainId\"/>";
 
-		return "<a href=\"#\" onClick=\"lightboxTransfer('" +path + "', '" + ((MetaModuleSection)currentSection).getDocument().getName() + "', '" + id+"')\">" +
-				"<img src=\"/cms_static/img/transfer.png\" alt=\"transfer document to prod\" title=\"transfer document to prod\"></a>" ;
+		return "<a href=\"#\" onClick=\"return lightboxTransfer('" +path + "', '" + ((MetaModuleSection)currentSection).getDocument().getName() + "', '" + id+"')\">" +
+				"<img src=\"/cms_static/img/transfer.png\" alt=\"transfer document\" title=\"transfer document\"></a>" ;
 	}
 
 	/*

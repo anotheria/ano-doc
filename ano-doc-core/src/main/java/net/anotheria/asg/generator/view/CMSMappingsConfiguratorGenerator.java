@@ -13,6 +13,7 @@ import net.anotheria.asg.generator.meta.MetaModule;
 import net.anotheria.asg.generator.meta.MetaProperty;
 import net.anotheria.asg.generator.meta.MetaTableProperty;
 import net.anotheria.asg.generator.meta.StorageType;
+import net.anotheria.asg.generator.transfer.TransferSupportGenerator;
 import net.anotheria.asg.generator.view.action.IndexPageActionGenerator;
 import net.anotheria.asg.generator.view.action.ModuleActionsGenerator;
 import net.anotheria.asg.generator.view.jsp.IndexPageJspGenerator;
@@ -338,6 +339,10 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
         appendStatement("mappings.addMapping(\"changePass\", net.anotheria.anosite.cms.action.ChangePassAction.class, new CommandForward(\"success\", \"/net/anotheria/anosite/cms/jsp/ChangePass.jsp\"))");
         appendStatement("mappings.addMapping(\"showUsages\", net.anotheria.anosite.bredcrambs.action.ShowUsagesOfDocumentAction.class)");
 		appendStatement("mappings.addMapping(\"sortTextData\", net.anotheria.anosite.cms.action.SortTextDataAction.class)");
+		appendStatement("mappings.addMapping(" + quote(ACTION_TRANSFER_TARGETS) + ", net.anotheria.anosite.cms.action.TransferTargetsAction.class)");
+		emptyline();
+		appendCommentLine("Hands the generated module transfer supports to the runtime, so documents can be published to other instances.");
+		appendStatement(TransferSupportGenerator.getRegistrarFullName() + ".registerAll()");
 
         generateSharedMappings(clazz);
 
@@ -512,6 +517,11 @@ public class CMSMappingsConfiguratorGenerator extends AbstractGenerator{
 	 * Transfers current document to prod.
 	 */
 	public static final String ACTION_TRANSFER = "transfer";
+
+	/**
+	 * Mapping the transfer dialog asks for the configured target groups and modes.
+	 */
+	public static final String ACTION_TRANSFER_TARGETS = "asgTransferTargets";
 	public static final String ACTION_SORT_TEXT_DATA = "sortTextData";
 
 	/**

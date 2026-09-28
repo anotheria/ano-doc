@@ -89,7 +89,6 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 	    clazz.setPackageName(getPackageName(module));
 	    	
 	    clazz.addImport("java.util.List");
-	    clazz.addImport("java.util.Set");
 	    clazz.addImport("net.anotheria.util.sorter.SortType");
 	    clazz.addImport("net.anotheria.util.sorter.StaticQuickSorter");
 	    clazz.addImport("net.anotheria.util.slicer.Segment");
@@ -102,9 +101,6 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 	    
 	    clazz.addImport("net.anotheria.util.xml.XMLNode");
 	    clazz.addImport("net.anotheria.util.xml.XMLAttribute");
-		clazz.addImport("org.codehaus.jettison.json.JSONArray");
-		clazz.addImport("org.codehaus.jettison.json.JSONObject");
-		clazz.addImport("net.anotheria.anosite.gen.shared.util.DocumentName");
 	    
 	    clazz.addImport(ServiceGenerator.getInterfaceImport(module));
 	    clazz.addImport(ServiceGenerator.getExceptionImport(module));
@@ -501,12 +497,6 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 	    	appendStatement("return ret");
 	    	closeBlockNEW();
 	    	emptyline();
-			appendString("public void fetch" + d.getName() + " (final String id, Set<String> addedDocuments, JSONArray data)" + throwsClause + "{");
-			increaseIdent();
-			appendStatement("throw new UnsupportedOperationException(\" not implemented and should not BE!\")");
-			closeBlockNEW();
-			emptyline();
-
             clazz.addImport(DataTable.class);
             appendComment("Creates a csv table with all documents of type "+d.getName()+".");
             appendString("public DataTable export"+d.getMultiple()+"ToCSV() "+throwsClause+"{");
@@ -529,12 +519,6 @@ public class FixtureServiceGenerator  extends AbstractServiceGenerator implement
 
 
 	    }
-
-		appendString("public void executeParsingForDocument (final DocumentName documentName, final JSONObject data)" + throwsClause + "{");
-		increaseIdent();
-		appendStatement("throw new UnsupportedOperationException(\" not implemented and should not BE!\")");
-		closeBlockNEW();
-		emptyline();
 
 	    if (containsAnyMultilingualDocs){
 			appendComment("Copies all multilingual fields from sourceLanguage to targetLanguage in all data objects (documents, vo) which are part of this module and managed by this service");
