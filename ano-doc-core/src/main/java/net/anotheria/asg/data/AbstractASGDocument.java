@@ -17,6 +17,15 @@ public abstract class AbstractASGDocument extends Document implements DataObject
 	
 	/** Constant <code>INT_PROPERTY_MULTILINGUAL_DISABLED="ml-disabled"</code> */
 	protected static final String INT_PROPERTY_MULTILINGUAL_DISABLED = "ml-disabled";
+
+	/**
+	 * Name of the internal property the timestamp of the last transfer to another instance is kept under.
+	 *
+	 * <p>It is an internal property and not a generated one for two reasons: it is not content, so it must not
+	 * change the document's footprint, and it is not an edit, so writing it must not look like one. See
+	 * {@link #setLastTransferTimestamp(long)}.
+	 */
+	protected static final String INT_PROPERTY_LAST_TRANSFER = "last-transfer";
 	
 	/**
 	 * <p>Constructor for AbstractASGDocument.</p>
@@ -38,6 +47,35 @@ public abstract class AbstractASGDocument extends Document implements DataObject
 
 	public abstract String getFootprint();
 
+	/**
+	 * When this document was last transferred to another instance.
+	 *
+	 * @return timestamp of the last transfer, 0 if the document was never transferred from here.
+	 */
+	public long getLastTransferTimestamp(){
+		try{
+			return ((LongProperty) getInternalProperty(INT_PROPERTY_LAST_TRANSFER)).getlong();
+		}catch(NoSuchPropertyException e){
+			return 0;
+		}
+	}
+
+	/**
+	 * Remembers that this document went out to another instance.
+	 *
+	 * <p>Deliberately not an edit: it leaves the last update timestamp, the author and the footprint alone, so
+	 * the footer keeps telling the editor when the document was last <i>changed</i> next to when it was last
+	 * <i>published</i>. The transfer engine writes it through
+	 * {@code ASGService.markDocumentsTransferred(Map, long)}, which stores the document without firing an
+	 * update event - firing one would send the document out again, which would write the timestamp again,
+	 * forever.
+	 *
+	 * @param aTimestamp timestamp of the transfer.
+	 */
+	public void setLastTransferTimestamp(long aTimestamp){
+		setInternalProperty(new LongProperty(INT_PROPERTY_LAST_TRANSFER, aTimestamp));
+	}
+
 	/** {@inheritDoc} */
 	@Override public ObjectInfo getObjectInfo(){
 		ObjectInfo ret = new ObjectInfo(this);
@@ -45,6 +83,7 @@ public abstract class AbstractASGDocument extends Document implements DataObject
 		ret.setAuthor(getAuthor());
 		ret.setLastChangeTimestamp(getLastUpdateTimestamp());
 		ret.setFootprint(getFootprint());
+		ret.setLastTransferTimestamp(getLastTransferTimestamp());
 		return ret;
 	}
 	

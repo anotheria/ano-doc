@@ -82,6 +82,7 @@ public class TransferSupportGenerator extends AbstractGenerator implements IGene
         clazz.addImport("java.util.ArrayList");
         clazz.addImport("java.util.Arrays");
         clazz.addImport("java.util.List");
+        clazz.addImport("java.util.Map");
         clazz.addImport("net.anotheria.anoprise.metafactory.MetaFactory");
         clazz.addImport(RUNTIME_PACKAGE + ".AbstractModuleTransferSupport");
         clazz.addImport(RUNTIME_PACKAGE + ".DocumentKey");
@@ -132,6 +133,14 @@ public class TransferSupportGenerator extends AbstractGenerator implements IGene
         appendStatement("throw new IllegalArgumentException(", quote("Module " + module.getName() + " has no document "), " + documentName)");
         closeBlockNEW();
 
+        emptyline();
+        appendComment("Hands the timestamp to the module's service, which stores it on the documents without\n"
+                + "touching their last update timestamp, their author or their footprint.");
+        appendString("@Override");
+        openFun("public void markTransferred(Map<String, List<String>> idsByDocumentName, long timestamp) throws Exception");
+        appendStatement("service().markDocumentsTransferred(idsByDocumentName, timestamp)");
+        closeBlockNEW();
+
         for (MetaDocument doc : module.getDocuments()) {
             emptyline();
             generateLoadDocument(module, doc);
@@ -156,7 +165,7 @@ public class TransferSupportGenerator extends AbstractGenerator implements IGene
         appendStatement("List<String> files = new ArrayList<>()");
         appendFiles(doc, var);
         appendStatement("return new DocumentSnapshot(new DocumentKey(", quote(module.getName()), ", ",
-                quote(doc.getName()), ", id), ", quote(getRestPath(module, doc)), ", ",
+                quote(doc.getName()), ", id), getRestPath(", quote(doc.getName()), "), ",
                 RestVOGenerator.getVOName(doc), ".from(", var, "), references, files)");
         closeBlockNEW();
     }
@@ -292,18 +301,6 @@ public class TransferSupportGenerator extends AbstractGenerator implements IGene
         closeBlockNEW();
 
         return clazz;
-    }
-
-    /**
-     * Path of a document's rest collection, relative to the api base. Mirrors the {@code @Path} the rest
-     * resource is generated with.
-     *
-     * @param module the document's module
-     * @param doc    the document
-     * @return e.g. {@code asresourcedata/localizationbundle}
-     */
-    private String getRestPath(MetaModule module, MetaDocument doc) {
-        return module.getName().toLowerCase() + "/" + doc.getName().toLowerCase();
     }
 
     public static String getSupportName(MetaModule module) {

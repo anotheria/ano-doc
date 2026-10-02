@@ -122,6 +122,7 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 
 		clazz.addImport("java.util.List");
 		clazz.addImport("java.util.ArrayList");
+		clazz.addImport("java.util.Map");
 		clazz.addImport("net.anotheria.anodoc.data.Module");
 		clazz.addImport("net.anotheria.anodoc.data.Property");
 		clazz.addImport("net.anotheria.anodoc.data.NoSuchPropertyException");
@@ -635,6 +636,8 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 		closeBlockNEW();
 		emptyline();
 
+		generateMarkDocumentsTransferred(module, docs);
+
 		if (containsAnyMultilingualDocs){
 			appendComment("Copies all multilingual fields from sourceLanguage to targetLanguage in all data objects (documents, vo) which are part of this module and managed by this service");
 			appendString("public void copyMultilingualAttributesInAllObjects(String sourceLanguage, String targetLanguage){");
@@ -757,6 +760,54 @@ public class CMSBasedServiceGenerator extends AbstractServiceGenerator implement
 		    closeBlockNEW();
 	    }
 	    return clazz;
+	}
+
+	/**
+	 * Generates the write back of the transfer timestamp.
+	 *
+	 * <p>Deliberately not expressed through {@code update<Document>}: that would set a new last update
+	 * timestamp and author, so a published document would look edited, and it would fire an update event,
+	 * which the auto transfer listens to - the transfer would write the timestamp, the write would start the
+	 * next transfer, and so on. Writing the documents' internal property and storing the module does neither.
+	 *
+	 * <p>The whole transfer is stamped in one call and the module is stored once, because storing it means
+	 * writing all of it - a deep transfer of a few hundred documents would otherwise write the module a few
+	 * hundred times.
+	 *
+	 * @param module the module
+	 * @param docs   its documents
+	 */
+	private void generateMarkDocumentsTransferred(MetaModule module, List<MetaDocument> docs){
+		appendComment("Remembers on documents that they were transferred to another instance.\nWrites nothing but the timestamp: no new last update timestamp, no new author, no update event.");
+		appendString("@Override");
+		appendString("public void markDocumentsTransferred(Map<String, List<String>> idsByDocumentName, long timestamp){");
+		increaseIdent();
+		appendStatement(module.getModuleClassName()+" module = "+getModuleGetterCall(module));
+		appendStatement("boolean stamped = false");
+		appendString("for (Map.Entry<String, List<String>> entry : idsByDocumentName.entrySet()){");
+		increaseIdent();
+		for (MetaDocument doc : docs){
+			appendString("if ("+quote(doc.getName())+".equals(entry.getKey())){");
+			increaseIdent();
+			appendString("for (String id : entry.getValue()){");
+			increaseIdent();
+			appendStatement(DocumentGenerator.getDocumentName(doc)+" document = module.get"+doc.getName()+"(id)");
+			appendString("if (document != null){");
+			increaseIdent();
+			appendStatement("document.setLastTransferTimestamp(timestamp)");
+			appendStatement("stamped = true");
+			closeBlockNEW();
+			closeBlockNEW();
+			appendStatement("continue");
+			closeBlockNEW();
+		}
+		appendStatement("log.warn("+quote("markDocumentsTransferred: module "+module.getName()+" has no document ")+" + entry.getKey())");
+		closeBlockNEW();
+		emptyline();
+		appendString("if (stamped)");
+		appendIncreasedStatement("updateModule(module)");
+		closeBlockNEW();
+		emptyline();
 	}
 
 	private String getModuleGetterMethod(MetaModule module){

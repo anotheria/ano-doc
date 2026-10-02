@@ -34,6 +34,14 @@ public class ObjectInfo {
 	private String footprint;
 
 	/**
+	 * The timestamp of the last time this document was transferred to another instance, 0 if it never was.
+	 *
+	 * <p>Not the same thing as the last change: a document that was edited after its last transfer is on this
+	 * instance only, and the editor can see that in the footer of the edit dialog instead of guessing.
+	 */
+	private long lastTransferTimestamp;
+
+	/**
 	 * The type of the document or vo.
 	 */
 	private String type;
@@ -107,10 +115,37 @@ public class ObjectInfo {
 	public void setFootprint(String footprint) {
 		this.footprint = footprint;
 	}
-	
+
+	/**
+	 * <p>Getter for the field <code>lastTransferTimestamp</code>.</p>
+	 *
+	 * @return a long, 0 if the document was never transferred.
+	 */
+	public long getLastTransferTimestamp() {
+		return lastTransferTimestamp;
+	}
+
+	/**
+	 * <p>Setter for the field <code>lastTransferTimestamp</code>.</p>
+	 *
+	 * @param lastTransferTimestamp a long.
+	 */
+	public void setLastTransferTimestamp(long lastTransferTimestamp) {
+		this.lastTransferTimestamp = lastTransferTimestamp;
+	}
+
+	/**
+	 * The last transfer as a timestamp an editor can read, or "never".
+	 *
+	 * @return iso 8601 timestamp of the last transfer, "never" if there was none.
+	 */
+	public String getLastTransferTimestampAsISO(){
+		return lastTransferTimestamp <= 0 ? "never" : NumberUtils.makeISO8601TimestampString(lastTransferTimestamp);
+	}
+
 	/** {@inheritDoc} */
 	@Override public String toString(){
-		return "Id: "+getId()+", Ts: "+getLastChangeTimestamp()+", Footprint: "+getFootprint()+", Author: "+getAuthor()+", IsoTs: "+NumberUtils.makeISO8601TimestampString(getLastChangeTimestamp());
+		return "Id: "+getId()+", Ts: "+getLastChangeTimestamp()+", Footprint: "+getFootprint()+", Author: "+getAuthor()+", IsoTs: "+NumberUtils.makeISO8601TimestampString(getLastChangeTimestamp())+", lastTransferTs: "+getLastTransferTimestampAsISO();
 	}
 
 	/**
@@ -144,6 +179,8 @@ public class ObjectInfo {
 		ret.addChildNode(getChildNode("timestamp", ""+getLastChangeTimestamp()));
 		ret.addChildNode(getChildNode("iso8601timestamp", NumberUtils.makeISO8601TimestampString(getLastChangeTimestamp())));
 		ret.addChildNode(getChildNode("footprint", getFootprint()));
+		ret.addChildNode(getChildNode("lasttransfertimestamp", ""+getLastTransferTimestamp()));
+		ret.addChildNode(getChildNode("iso8601lasttransfertimestamp", getLastTransferTimestampAsISO()));
 		return ret;
 	}
 	
