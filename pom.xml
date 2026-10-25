@@ -26,12 +26,12 @@
         Add any version property that is referenced by more than one module.
     -->
     <properties>
-        <ano-util.version>4.0.9</ano-util.version>
+        <ano-util.version>4.0.10</ano-util.version>
         <ano-maf.version>4.0.0</ano-maf.version>
         <ano-plass.version>4.0.0</ano-plass.version>
         <ano-prise.version>4.0.0</ano-prise.version>
         <configureme.version>4.0.0</configureme.version>
-        <moskito.version>4.0.7</moskito.version>
+        <moskito.version>5.0.2</moskito.version>
         <jdom.version>2.0.6.1</jdom.version>
         <google.cloud-version>26.44.0</google.cloud-version>
         <jackson.version>2.21.4</jackson.version>
