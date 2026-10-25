@@ -5,13 +5,13 @@ import net.anotheria.asg.generator.meta.MetaLink;
 import net.anotheria.asg.generator.meta.MetaModule;
 import net.anotheria.asg.generator.meta.MetaProperty;
 import net.anotheria.util.StringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import static junit.framework.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class XMLDataParserTest {
 	@Test public void testDataParser() throws Exception{
@@ -114,8 +114,7 @@ public class XMLDataParserTest {
 		return modules;
 	}
 	
-	@Test(expected=RuntimeException.class) public void brokenProperty() throws IOException{
-		List<MetaModule> modules = loadFile("broken-property.xml");
-		fail("the file is unparseable");
+	@Test public void brokenProperty() {
+		assertThrows(RuntimeException.class, () -> loadFile("broken-property.xml"), "the file is unparseable");
 	}
 }

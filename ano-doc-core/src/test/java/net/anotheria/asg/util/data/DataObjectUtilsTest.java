@@ -1,7 +1,7 @@
 package net.anotheria.asg.util.data;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,8 @@ import net.anotheria.asg.data.ObjectInfo;
 import net.anotheria.util.crypt.MD5Util;
 import net.anotheria.util.xml.XMLNode;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class DataObjectUtilsTest {
 	
@@ -110,7 +110,7 @@ public class DataObjectUtilsTest {
 	}
 	
 	private List<TestDataObject> testData;
-	@Before public void initTestData(){		
+	@BeforeEach public void initTestData(){		
 		System.out.println("Initing test data");
 		testData = new ArrayList<TestDataObject>();
 		for(int i = 0; i < 1000; i++){
@@ -123,38 +123,38 @@ public class DataObjectUtilsTest {
 	
 	@Test public void createMapByIdTest(){
 		Map<String,TestDataObject> resultMap = DataObjectUtils.createMapById(testData);
-		assertTrue("Wrong result Map by Id size: ", 1000 == resultMap.size());
+		assertTrue(1000 == resultMap.size(), "Wrong result Map by Id size: ");
 		for(TestDataObject d: testData)
-			assertEquals("Wrong mapping. ",d, resultMap.get(d.getId()));
+			assertEquals(d, resultMap.get(d.getId()), "Wrong mapping. ");
 	}
 	
 	@Test public void createMapByKeyPropertyTest(){
 		Map<String,TestDataObject> resultMap = DataObjectUtils.createMapByKeyProperty(TestDataObject.PROP_PROPERTY1, String.class, testData);
-//		assertEquals("Wrong result map size: ",testData.size(), resultMap.size());
-		assertTrue("Wrong result Map by Property1 size: ", 1000 == resultMap.size());
+//		assertEquals(testData.size(), resultMap.size(), "Wrong result map size: ");
+		assertTrue(1000 == resultMap.size(), "Wrong result Map by Property1 size: ");
 		for(TestDataObject d: testData)
-			assertEquals("Wrong mapping. ",d, resultMap.get(d.getProperty1()));
+			assertEquals(d, resultMap.get(d.getProperty1()), "Wrong mapping. ");
 		
 	}
 	
 	@Test public void createMapByPropertyTest(){
 		Map<String,TestDataObject[]> resultMap = DataObjectUtils.createMapByProperty(TestDataObject.PROP_PROPERTY1, String.class, testData);
-//		assertEquals("Wrong result map size: ",testData.size(), resultMap.size());
-		assertTrue("Wrong result Map by Property1 size: ", 1000 == resultMap.size());
+//		assertEquals(testData.size(), resultMap.size(), "Wrong result map size: ");
+		assertTrue(1000 == resultMap.size(), "Wrong result Map by Property1 size: ");
 		for(TestDataObject d: testData){
 			TestDataObject[] fromMap = resultMap.get(d.getProperty1());
 			assertTrue(fromMap.length == 1);
-			assertEquals("Wrong mapping. ",d, resultMap.get(d.getProperty1())[0]);
+			assertEquals(d, resultMap.get(d.getProperty1())[0], "Wrong mapping. ");
 		}
 		
 		
 		resultMap = DataObjectUtils.createMapByProperty(TestDataObject.PROP_PROPERTY2, String.class, testData);
-		assertTrue("Wrong result Map by Property2 size: ", 100 == resultMap.size());
+		assertTrue(100 == resultMap.size(), "Wrong result Map by Property2 size: ");
 		for(TestDataObject d: testData){
 			TestDataObject[] dataFromMap = resultMap.get(d.getProperty2());
 			assertTrue(dataFromMap.length == 10);
 			for(TestDataObject dFromMap:dataFromMap)
-			assertEquals("Wrong mapping. ",d.getProperty2(), dFromMap.getProperty2());
+			assertEquals(d.getProperty2(), dFromMap.getProperty2(), "Wrong mapping. ");
 		}
 	}
 	

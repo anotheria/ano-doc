@@ -3,7 +3,7 @@
     <parent>
         <groupId>net.anotheria</groupId>
         <artifactId>parent</artifactId>
-        <version>4.2</version>
+        <version>4.6</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -26,7 +26,7 @@
         Add any version property that is referenced by more than one module.
     -->
     <properties>
-        <ano-util.version>4.0.3</ano-util.version>
+        <ano-util.version>4.0.9</ano-util.version>
         <ano-maf.version>4.0.0</ano-maf.version>
         <ano-plass.version>4.0.0</ano-plass.version>
         <ano-prise.version>4.0.0</ano-prise.version>

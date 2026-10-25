@@ -1,7 +1,7 @@
 package net.anotheria.asg.generator.meta;
 
-import org.junit.Test;
-import static junit.framework.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaDocumentTest {
 	@Test public void testPropertyUniqueness(){
@@ -28,7 +28,7 @@ public class MetaDocumentTest {
 		}catch(IllegalArgumentException e){}
 		assertEquals(1, d.getProperties().size());
 		assertEquals(1, d.getLinks().size());
-		assertEquals("String representation of the object should remain the same", str, d.toString());
+		assertEquals(str, d.toString(), "String representation of the object should remain the same");
 	}
 	
 	@Test public void testFullName(){

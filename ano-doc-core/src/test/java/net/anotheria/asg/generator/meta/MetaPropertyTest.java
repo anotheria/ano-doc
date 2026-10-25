@@ -1,7 +1,7 @@
 package net.anotheria.asg.generator.meta;
 
-import org.junit.Test;
-import static junit.framework.Assert.*;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MetaPropertyTest {
 	@Test public void testNaming(){

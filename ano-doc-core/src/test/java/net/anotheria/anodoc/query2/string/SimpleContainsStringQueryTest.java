@@ -1,6 +1,6 @@
 package net.anotheria.anodoc.query2.string;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +9,7 @@ import net.anotheria.anodoc.data.StringProperty;
 import net.anotheria.anodoc.query2.DocumentQuery;
 import net.anotheria.anodoc.query2.QueryResultEntry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SimpleContainsStringQueryTest {
 

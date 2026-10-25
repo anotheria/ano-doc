@@ -3,15 +3,15 @@ package net.anotheria.asg.generator.parser;
 import net.anotheria.asg.generator.Context;
 import net.anotheria.asg.generator.ContextParameter;
 import net.anotheria.util.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class XMLContextParserTest {
 	@Test public void testContextParser() throws IOException{

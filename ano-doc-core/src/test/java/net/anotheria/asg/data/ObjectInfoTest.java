@@ -1,10 +1,10 @@
 package net.anotheria.asg.data;
 
 import net.anotheria.util.NumberUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests the line the cms prints under an edit dialog.
@@ -26,10 +26,10 @@ public class ObjectInfoTest {
 
         String footer = info.toString();
 
-        assertTrue(footer, footer.startsWith("Id: 7, Ts: 1789334489952, "
-                + "Footprint: 66D9CFFD16B6065F8DA0618E832883FD, Author: saenq, IsoTs: "));
-        assertTrue(footer, footer.endsWith(", lastTransferTs: "
-                + NumberUtils.makeISO8601TimestampString(1789334500000L)));
+        assertTrue(footer.startsWith("Id: 7, Ts: 1789334489952, "
+                + "Footprint: 66D9CFFD16B6065F8DA0618E832883FD, Author: saenq, IsoTs: "), footer);
+        assertTrue(footer.endsWith(", lastTransferTs: "
+                + NumberUtils.makeISO8601TimestampString(1789334500000L)), footer);
     }
 
     @Test
@@ -40,7 +40,7 @@ public class ObjectInfoTest {
         info.setId("7");
 
         assertEquals("never", info.getLastTransferTimestampAsISO());
-        assertTrue(info.toString(), info.toString().endsWith(", lastTransferTs: never"));
+        assertTrue(info.toString().endsWith(", lastTransferTs: never"), info.toString());
     }
 
     @Test
@@ -51,7 +51,7 @@ public class ObjectInfoTest {
 
         String xml = info.toXML().toString();
 
-        assertTrue(xml, xml.contains("lasttransfertimestamp"));
-        assertTrue(xml, xml.contains("iso8601lasttransfertimestamp"));
+        assertTrue(xml.contains("lasttransfertimestamp"), xml);
+        assertTrue(xml.contains("iso8601lasttransfertimestamp"), xml);
     }
 }

@@ -18,22 +18,22 @@ import net.anotheria.asg.generator.view.meta.MetaModuleSection;
 import net.anotheria.asg.generator.view.meta.MetaView;
 import net.anotheria.asg.generator.view.meta.MetaViewElement;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class JspViewGeneratorTest {
 	private static final String PACKAGE_NAME = "net.anotheria.anosite.gen.shared.data";
 	private static final String ENUM = "enum";
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		Context c = new Context();
 		c.setPackageName(PACKAGE_NAME);
 		GeneratorDataRegistry.getInstance().setContext(c);		
 	}
 
-	@Test @Ignore
+	@Test @Disabled
 	public void shouldViewWithEnumAsSelect() throws IOException {
 		// given
 		List<MetaViewElement> metaViewElements = new ArrayList<MetaViewElement>();

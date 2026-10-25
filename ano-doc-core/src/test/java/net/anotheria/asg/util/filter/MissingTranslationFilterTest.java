@@ -1,6 +1,6 @@
 package net.anotheria.asg.util.filter;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +12,8 @@ import net.anotheria.asg.data.DataObject;
 import net.anotheria.asg.data.ObjectInfo;
 import net.anotheria.util.xml.XMLNode;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class MissingTranslationFilterTest {
 
@@ -76,7 +76,7 @@ public class MissingTranslationFilterTest {
 		
 	}
 	
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		List<String> supportedLanguages = new ArrayList<String>();
 		supportedLanguages.add("EN");
