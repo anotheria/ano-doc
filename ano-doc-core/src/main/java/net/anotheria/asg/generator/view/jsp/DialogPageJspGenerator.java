@@ -811,7 +811,7 @@ public class DialogPageJspGenerator extends AbstractJSPGenerator {
 			ret += "checked</ano:equal>";
 		}
 		else {
-			ret += " value=\"<ano:write name="+quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, ((MetaModuleSection)currentSection).getDocument()))+" property="+quote(p.getName(lang)) + "/>\"";
+			ret += " value=\"<ano:write name="+quote(CMSMappingsConfiguratorGenerator.getDialogFormName(currentDialog, ((MetaModuleSection)currentSection).getDocument()))+" property="+quote(p.getName(lang)) + " filter=\"true\"/>\"";
 
 			// Required for DateTime widget
 			if (element.isDatetime()) {
